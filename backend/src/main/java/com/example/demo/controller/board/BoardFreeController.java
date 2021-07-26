@@ -25,7 +25,7 @@ public class BoardFreeController {
         }
 
         System.out.println("success");
-        return "Git Test3 ; 안녕하세요. 현재 서버시간은 " + new Date() + "입니다. \n";
+        return "안녕하세요. 현재 서버시간은 " + new Date() + "입니다. \n";
     }
 
     public ModelAndView test() {
