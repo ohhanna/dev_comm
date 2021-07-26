@@ -27,6 +27,7 @@ public class BoardFreeController {
         System.out.println("success"); 
         System.out.println("success2 - hanna_test"); 
         System.out.println("success2 - yeongwoo_test"); 
+        System.out.println("success2 - jinju_test"); 
         return "안녕하세요. 현재 서버시간은 " + new Date() + "입니다. \n";
     }
 
