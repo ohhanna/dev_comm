@@ -24,12 +24,13 @@ public class BoardFreeController {
             System.out.println(tt.toString());
         }
 
-        System.out.println("success");
+        System.out.println("success"); 
+        System.out.println("success2"); 
         return "안녕하세요. 현재 서버시간은 " + new Date() + "입니다. \n";
     }
 
     public ModelAndView test() {
-        ModelAndView mav = new ModelAndView();
+        ModelAndView mav = new ModelAndView(); 
 
         List<BoardFreeVo> testList = testService.selectTest();
         mav.addObject("list", testList);
