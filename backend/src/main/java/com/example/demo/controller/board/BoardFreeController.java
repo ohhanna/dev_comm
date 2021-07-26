@@ -29,7 +29,7 @@ public class BoardFreeController {
     }
 
     public ModelAndView test() {
-        ModelAndView mav = new ModelAndView();
+        ModelAndView mav = new ModelAndView(); 
 
         List<BoardFreeVo> testList = testService.selectTest();
         mav.addObject("list", testList);
