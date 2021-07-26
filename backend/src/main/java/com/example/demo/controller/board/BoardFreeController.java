@@ -24,7 +24,7 @@ public class BoardFreeController {
             System.out.println(tt.toString());
         }
 
-        System.out.println("success");
+        System.out.println("success"); 
         return "안녕하세요. 현재 서버시간은 " + new Date() + "입니다. \n";
     }
 
