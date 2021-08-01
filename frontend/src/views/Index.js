@@ -1,22 +1,4 @@
-/*!
-
-=========================================================
-* Paper Kit React - v1.3.0
-=========================================================
-
-* Product Page: https://www.creative-tim.com/product/paper-kit-react
-
-* Copyright 2021 Creative Tim (https://www.creative-tim.com)
-* Licensed under MIT (https://github.com/creativetimofficial/paper-kit-react/blob/main/LICENSE.md)
-
-* Coded by Creative Tim
-
-=========================================================
-
-* The above copyright notice and this permission notice shall be included in all copies or substantial portions of the Software.
-
-*/
-import React from "react";
+import React,{ useEffect, useState }  from "react";
 
 // reactstrap components
 
@@ -48,10 +30,22 @@ function Index() {
       document.body.classList.remove("index");
     };
   });
+
+
+  // core components
+  const [message, setMessage] = useState("");
+  useEffect(()=>{
+    fetch('/api/hello')
+      .then(response=>response.text())
+      .then(message=>{
+        setMessage(message);
+      })
+  },[]);
+
   return (
     <>
       <IndexNavbar />
-      <IndexHeader />
+      <IndexHeader /> 
       <div className="main">
         <SectionButtons />
         <SectionNavbars />
@@ -66,7 +60,7 @@ function Index() {
         <SectionLogin />
         <SectionExamples />
         <SectionDownload />
-        <DemoFooter />
+        <DemoFooter /> 
       </div>
     </>
   );

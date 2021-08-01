@@ -50,10 +50,6 @@
   },
   "description": "Paper Kit React is a free Bootstrap 4, React, React Hooks and Reactstrap UI Kit with pale colors, beautiful typography and thoughtful drawings. We've created it having paper and drawings in mind.",
   "main": "src/assets/scss/paper-kit.scss",
-  "repository": {
-    "type": "git",
-    "url": "git+https://github.com/creativetimofficial/paper-kit-react.git"
-  },
   "keywords": [
     "react",
     "reactstrap",
@@ -77,5 +73,6 @@
   "bugs": {
     "url": "https://github.com/creativetimofficial/paper-kit-react/issues"
   },
-  "homepage": "https://demos.creative-tim.com/paper-kit-react/#/index"
+  "homepage": "https://demos.creative-tim.com/paper-kit-react/#/index",
+  "proxy": "http://localhost:8080"
 }
