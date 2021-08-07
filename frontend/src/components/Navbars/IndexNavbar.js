@@ -72,7 +72,7 @@ function IndexNavbar() {
           <Nav navbar>
             <NavItem>
               <NavLink className="navbar-brand" to="/landing-page">
-                자유게시판
+                공지사항
               </NavLink>
             </NavItem>
             <NavItem>
@@ -82,7 +82,7 @@ function IndexNavbar() {
             </NavItem>
             <NavItem>
               <NavLink className="navbar-brand" to="/register-page">
-                공지사항
+                자유게시판
               </NavLink>
             </NavItem>
           </Nav>
