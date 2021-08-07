@@ -49,7 +49,7 @@ ReactDOM.render(
         render={(props) => <ProfilePage {...props} />}
       />
       <Route
-        path="/register-page"
+        path="/register-pages"
         render={(props) => <RegisterPage {...props} />}
       />
       <Redirect to="/index" />
