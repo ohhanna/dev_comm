@@ -1,34 +1,16 @@
-/*!
-
-=========================================================
-* Paper Kit React - v1.3.0
-=========================================================
-
-* Product Page: https://www.creative-tim.com/product/paper-kit-react
-
-* Copyright 2021 Creative Tim (https://www.creative-tim.com)
-* Licensed under MIT (https://github.com/creativetimofficial/paper-kit-react/blob/main/LICENSE.md)
-
-* Coded by Creative Tim
-
-=========================================================
-
-* The above copyright notice and this permission notice shall be included in all copies or substantial portions of the Software.
-
-*/
 import React from "react";
 // nodejs library that concatenates strings
 import classnames from "classnames";
+import { NavLink } from 'react-router-dom';
 // reactstrap components
 import {
-  Button,
   Collapse,
   NavbarBrand,
   Navbar,
   NavItem,
-  NavLink,
+  //NavLink,
   Nav,
-  Container,
+  Container
 } from "reactstrap";
 
 function IndexNavbar() {
@@ -79,10 +61,7 @@ function IndexNavbar() {
               toggled: navbarCollapse,
             })}
             onClick={toggleNavbarCollapse}
-          >
-            <span className="navbar-toggler-bar bar1" />
-            <span className="navbar-toggler-bar bar2" />
-            <span className="navbar-toggler-bar bar3" />
+          >right toggle
           </button>
         </div>
         <Collapse
@@ -92,22 +71,19 @@ function IndexNavbar() {
         >
           <Nav navbar>
             <NavItem>
-              <NavLink
-                href="https://demos.creative-tim.com/paper-kit-react/#/documentation?ref=pkr-index-navbar"
-                target="_blank"
-              >
-                <i className="nc-icon nc-book-bookmark" /> Documentation
+              <NavLink className="navbar-brand" to="/landing-page">
+                자유게시판
               </NavLink>
             </NavItem>
             <NavItem>
-              <Button
-                className="btn-round"
-                color="danger"
-                href="https://www.creative-tim.com/product/paper-kit-pro-react?ref=pkr-index-navbar"
-                target="_blank"
-              >
-                <i className="nc-icon nc-spaceship"></i> Upgrade to Pro
-              </Button>
+              <NavLink className="navbar-brand" to="/profile-page">
+                회원게시판
+              </NavLink>
+            </NavItem>
+            <NavItem>
+              <NavLink className="navbar-brand" to="/register-page">
+                공지사항
+              </NavLink>
             </NavItem>
           </Nav>
         </Collapse>
