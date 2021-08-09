@@ -40,7 +40,7 @@ function LandingPageHeader() {
       <div
         style={{
           backgroundImage:
-            "url(" + require("assets/img/daniel-olahh.jpg").default + ")",
+            "url(" + require("assets/img/uriel-soberanes.jpg").default + ")",
         }}
         className="page-header"
         data-parallax={true}
