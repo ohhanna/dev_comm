@@ -27,8 +27,7 @@ import "assets/demo/demo.css?v=1.3.0";
 // pages
 import Index from "views/Index.js";
 import NucleoIcons from "views/NucleoIcons.js";
-import LandingPage from "views/examples/LandingPage.js";
-import NoticePage from "views/noticeBoard/NoticeList.js";
+import NoticePage from "views/examples/NoticeBoard.js";
 import ProfilePage from "views/examples/ProfilePage.js";
 import RegisterPage from "views/examples/RegisterPage.js";
 // others
@@ -40,10 +39,6 @@ ReactDOM.render(
       <Route
         path="/nucleo-icons"
         render={(props) => <NucleoIcons {...props} />}
-      />
-      <Route
-        path="/landing-page"
-        render={(props) => <LandingPage {...props} />}
       />
       <Route
         path="/notice-page"
