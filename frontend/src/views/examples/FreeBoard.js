@@ -1,8 +1,5 @@
 import React from "react";
 
-// reactstrap components
-import { Button, Card, Form, Input, Container, Row, Col } from "reactstrap";
-
 // core components
 import IndexNavbar from "components/Navbars/IndexNavbar.js";
 import LandingPageHeader from "components/Headers/LandingPageHeader.js";
