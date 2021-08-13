@@ -1,4 +1,6 @@
-import React from "react";
+import React, { useState, useEffect } from "react";
+import { Link } from "react-router-dom";
+import Moment from 'react-moment';
 
 // reactstrap components
 import {
@@ -16,23 +18,35 @@ import {
   PaginationLink
 } from "reactstrap";
 
-// core components
-import IndexNavbar from "components/Navbars/IndexNavbar.js";
-import LandingPageHeader from "components/Headers/LandingPageHeader.js";
-import DemoFooter from "components/Footers/DemoFooter.js";
-import { useState } from "react/cjs/react.production.min";
+function useFetch(url){
+
+  const [data, setData] = useState([]);
+
+  console.log('list');
+  console.log(url);
+
+  async function fetchUrl(){
+    const response = await fetch(url);
+    const json = await response.json();
+
+    setData(json);
+  }
+
+  useEffect(()=>{
+    fetchUrl();
+  },[]);
+
+  return data;
+
+}
 
 function NoticeList() {
 
-  // let [변수, 변수변경] = useState();
+  const data = useFetch("/notice-page/list");
 
-  document.documentElement.classList.remove("nav-open");
-  React.useEffect(() => {
-    document.body.classList.add("profile-page");
-    return function cleanup() {
-      document.body.classList.remove("profile-page");
-    };
-  });
+  console.log('data');
+  console.log(data);
+
   return (
     <>
       <div className="main">
@@ -85,10 +99,11 @@ function NoticeList() {
           </Container>
         </div>
 
-        <Button type="button" id="notice_write" className="btn mr-1 float-right" color="default" outline
-          onClick={()=>{console.log('write')}}>
-          Write
-        </Button>
+        <Link to="/notice-page/write">
+          <Button type="button" id="notice_write" className="btn mr-1 float-right" color="default" outline>
+            Write
+          </Button>
+        </Link>
         <br/><br/><br/>
         <Table>
           <thead>
@@ -100,26 +115,17 @@ function NoticeList() {
             </tr>
           </thead>
           <tbody>
-            <tr>
-              <td>5</td>
-              <td>다섯번째 공지사항</td>
-              <td>2021.08.07</td>
-              <td>Manager</td>
-            </tr>
-            <tr>
-              <td>4</td>
-              <td>네번째 공지사항</td>
-              <td>2021.08.07</td>
-              <td>Manager</td>
-            </tr>
-            <tr>
-              <td>3</td>
-              <td>세번째 공지사항</td>
-              <td>2021.08.07</td>
-              <td>Manager</td>
-            </tr>
-            <NoticeBoardList/>
-            <NoticeBoardList/>
+            {data.map( data =>
+              <tr key={data.board_no}>
+                <td>{data.board_no}</td>
+                <td><Link to={`/notice-page/view/${data.board_no}`}>{data.board_ttl}</Link></td>
+                <td>
+                  <Moment format="YYYY/MM/DD">
+                    {data.crt_dt}
+                  </Moment></td>
+                <td>{data.reg_mem_id}</td>
+              </tr>
+              )}
           </tbody>
         </Table>
         <br/>
@@ -163,7 +169,6 @@ function NoticeList() {
         </Container>
       </div>
     </div>
-    <DemoFooter />
     </>
   );
 }
@@ -171,12 +176,22 @@ function NoticeList() {
 function NoticeBoardList(){
   return (
     <>
-      <tr>
-        <td>1</td>
-        <td>첫번째 공지사항</td>
-        <td>2021.08.07</td>
-        <td>Manager</td>
-      </tr>
+      {/* <Link to = {{
+
+      }}>
+        <tr>
+
+        </tr>
+      </Link>
+      <tr key={data.board_no}>
+        <td>{data.board_no}</td>
+        <td><Link to="/notice-page/view">{data.board_ttl}</Link></td>
+        <td>
+          <Moment format="YYYY/MM/DD">
+            {data.crt_dt}
+          </Moment></td>
+        <td>{data.reg_mem_id}</td>
+      </tr> */}
     </>
   )
 }
