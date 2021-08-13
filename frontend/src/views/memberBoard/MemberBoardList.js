@@ -77,8 +77,7 @@ function MemberBoardList() {
   }
 
   function goToDetail(boardNo){
-    console.log(boardNo);
-    history.push("/memberBoardEdit");
+    history.push("/memberBoardEdit/" + boardNo);
   }
 
   return (

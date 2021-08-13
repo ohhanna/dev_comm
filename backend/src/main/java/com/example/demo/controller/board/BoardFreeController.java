@@ -5,7 +5,6 @@ import java.util.List;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.GetMapping;
-import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RestController;
 import org.springframework.web.servlet.ModelAndView;
 
@@ -25,11 +24,17 @@ public class BoardFreeController {
             System.out.println(tt.toString());
         }
 
-        System.out.println("success"); 
-        System.out.println("success2 - hanna_test"); 
-        System.out.println("success2 - yeongwoo_test"); 
-        System.out.println("success2 - jinju_test"); 
+        // System.out.println("컨트롤러 - /api/hello"); 
+        // System.out.println("success2 - hanna_test"); 
+        // System.out.println("success2 - yeongwoo_test"); 
+        // System.out.println("success2 - jinju_test"); 
         return "안녕하세요. 현재 서버시간은 " + new Date() + "입니다. \n";
+    }
+
+    @GetMapping("/test")
+    public String hello(){
+        System.out.println("테스트~");
+        return "테스트";
     }
 
     public ModelAndView test() {
@@ -40,21 +45,4 @@ public class BoardFreeController {
 
         return mav;
     }
-
-    @GetMapping("/api/login")
-    public String loginGet(String email, String password) {
-        System.out.println("login test");
-        System.out.println(email);
-        System.out.println(password);
-        return "success";
-    }
-
-    @PostMapping("/api/login")
-    public String loginPost(String email, String password) {
-        System.out.println("login test");
-        System.out.println(email);
-        System.out.println(password);
-        return "success";
-    }
-
 }

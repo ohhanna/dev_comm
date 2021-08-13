@@ -18,4 +18,20 @@
       ORDER BY BOARD_NO
       LIMIT #{startPage}, #{pageSize}
     </select> 
+
+    <select id="selectBoardDtl" resultType="com.example.demo.vo.board.BoardMemberVo">
+        SELECT BOARD_NO
+              ,BOARD_TTL
+              ,BOARD_CNTN
+              ,CRT_DT
+              ,MOD_DT
+              ,REG_MEM_ID
+              ,IS_DEL
+              ,(SELECT COUNT(BOARD_NO)
+                  FROM BOARD_MEM
+                 WHERE IS_DEL = 'N')
+          FROM BOARD_MEM
+         WHERE IS_DEL = 'N'
+           AND BOARD_NO = #{boardNo}
+    </select>
 </mapper>

@@ -42,7 +42,7 @@ ReactDOM.render(
         render={(props) => <NucleoIcons {...props} />}
       />
       <Route
-        path="/notice-page"
+        path="/notice-page/:d"
         render={(props) => <NoticePage {...props} />}
       />
       <Route

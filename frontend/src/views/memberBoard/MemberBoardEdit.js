@@ -13,41 +13,63 @@ import ProfilePageHeader from "components/Headers/ProfilePageHeader.js";
 import DemoFooter from "components/Footers/DemoFooter.js";
 import ToastEditor from "views/toast/toast-editor.js";
 
-function MemberBoardEdit() {
+function MemberBoardEdit(prop) {
 
-  function getBoardList(option){
+  const [boardDtl, setBoardDtl] = React.useState();
+  const [isLoad, setIsLoad] = useState(false);
+  const [isEditor, setIsEditor] = useState(true);
+
+  getBoardDtl();
+  // axios function
+  function getBoardDtl(){
     const api = axios.create({
       baseURL: "/board/member"
     });
 
-    api.post('/list', null, { params : { pageIndex : option.data.pageIndex, pageSize : option.data.pageSize } }
-            ).then(function(response){
-              // SEARCH 전 기존 state 초기화
-              setBoardList([]);
-              // board list deep copy
-              var boardListState = response.data.map((item, i)=>{return item;});
-              // DB data set state
-              setBoardList(boardListState);
-              setTotCnt(boardListState[0].totCnt);
-            }).catch(function(error){
-              alert("System Error");
-            });
+    if (isLoad == false){
+      api.get('/getDetail', { params : {boardNo : prop.match.params.boardNo} }
+              ).then(function(response){
+                setIsLoad(true);
+
+                let boardDtlState = {...boardDtl};
+                boardDtlState = response.data;
+                setBoardDtl(boardDtlState);
+
+                console.log(boardDtl);
+              }).catch(function(error){
+                alert("System Error");
+                setIsLoad(true);
+              });
     }
+  }
+
+
 
   return (
     <>
       <IndexNavbar />
       <ProfilePageHeader />
       
-      <div className="section profile-content">
+      <div className="section profile-content" onLoad={()=>{getBoardDtl()}}>
         <Container className="ml-auto mr-auto" md="9">
           <h3 className="font-weight-bold">Member Board Edit</h3>
           <br/>
-          <ToastEditor/>
+          {
+            isLoad == true ? <ToastEditOrViewer prop={boardDtl, isEditor}/> : <div></div>
+          }
         </Container>
       </div>
       <DemoFooter />
     </>
+  );
+}
+
+function ToastEditOrViewer(prop){
+
+  console.log(">>> " + prop.boardDtl);
+
+  return(
+    <div></div>
   );
 }
 

@@ -123,7 +123,7 @@ function IndexNavbar() {
         >
           <Nav navbar>
             <NavItem>
-              <NavLink className="navbar-brand" to="/notice-page">
+              <NavLink className="navbar-brand" to="/notice-page/list">
                 공지사항
               </NavLink>
             </NavItem>
