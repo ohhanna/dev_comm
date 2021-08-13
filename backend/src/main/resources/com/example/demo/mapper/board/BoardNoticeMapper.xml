@@ -8,13 +8,6 @@
         WHERE board_no in (1, 2, 3, 4, 5, 6, 7, 8, 9, 10)
         AND is_del = 'N'
         ORDER BY board_no DESC
-<<<<<<< HEAD
-<<<<<<< HEAD
-        <!-- 페이징 필요 -->
-=======
->>>>>>> d03f666029320db2e0e25d9c7f5289b7902b094d
-=======
->>>>>>> d03f666029320db2e0e25d9c7f5289b7902b094d
     </select>
     
     <select id="selectOne" resultType="com.example.demo.vo.board.BoardNoticeVo"> 
