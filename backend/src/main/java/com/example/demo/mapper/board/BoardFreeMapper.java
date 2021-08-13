@@ -11,5 +11,7 @@ import org.springframework.stereotype.Repository;
 @Mapper
 public interface BoardFreeMapper {
 
-    List<BoardFreeVo> selectTest();
+    // List<BoardFreeVo> selectTest();
+
+    List<BoardFreeVo> BoardFreeList(int limit, int offset);
 }

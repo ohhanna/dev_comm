@@ -1,12 +1,11 @@
 package com.example.demo.controller.board;
 
-import java.util.Date;
 import java.util.List;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.GetMapping;
+import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RestController;
-import org.springframework.web.servlet.ModelAndView;
 
 import com.example.demo.service.board.BoardFreeService;
 import com.example.demo.vo.board.BoardFreeVo;
@@ -14,35 +13,35 @@ import com.example.demo.vo.board.BoardFreeVo;
 @RestController
 public class BoardFreeController {
     @Autowired
-    BoardFreeService testService;
+    BoardFreeService boardFreeService;
 
-    @GetMapping("/api/hello")
-    public String enter() {
-        List<BoardFreeVo> testList = testService.selectTest();
-
-        for (BoardFreeVo tt : testList) {
-            System.out.println(tt.toString());
-        }
-
-        // System.out.println("컨트롤러 - /api/hello"); 
-        // System.out.println("success2 - hanna_test"); 
-        // System.out.println("success2 - yeongwoo_test"); 
-        // System.out.println("success2 - jinju_test"); 
-        return "안녕하세요. 현재 서버시간은 " + new Date() + "입니다. \n";
+    @GetMapping("/api/login")
+    public String loginGet(String email, String password) {
+        System.out.println("login test");
+        System.out.println(email);
+        System.out.println(password);
+        return "success";
     }
 
-    @GetMapping("/test")
-    public String hello(){
-        System.out.println("테스트~");
-        return "테스트";
+    @PostMapping("/api/login")
+    public String loginPost(String email, String password) {
+        System.out.println("login test");
+        System.out.println(email);
+        System.out.println(password);
+        return "success";
     }
 
-    public ModelAndView test() {
-        ModelAndView mav = new ModelAndView(); 
 
-        List<BoardFreeVo> testList = testService.selectTest();
-        mav.addObject("list", testList);
+    @GetMapping("/freeBoard/list")
+    public String freeBoardList() {
+        System.out.println("board test");
 
-        return mav;
+        int limit = 10;
+        int offset = 1;
+
+        List<BoardFreeVo> freeList =  boardFreeService.BoardFreeList(limit, offset);
+        System.out.println("freeList :::" + freeList);
+        return "board success";
     }
+
 }
