@@ -24,11 +24,17 @@ public class BoardFreeController {
             System.out.println(tt.toString());
         }
 
-        System.out.println("success"); 
-        System.out.println("success2 - hanna_test"); 
-        System.out.println("success2 - yeongwoo_test"); 
-        System.out.println("success2 - jinju_test"); 
+        // System.out.println("컨트롤러 - /api/hello"); 
+        // System.out.println("success2 - hanna_test"); 
+        // System.out.println("success2 - yeongwoo_test"); 
+        // System.out.println("success2 - jinju_test"); 
         return "안녕하세요. 현재 서버시간은 " + new Date() + "입니다. \n";
+    }
+
+    @GetMapping("/test")
+    public String hello(){
+        System.out.println("테스트~");
+        return "테스트";
     }
 
     public ModelAndView test() {

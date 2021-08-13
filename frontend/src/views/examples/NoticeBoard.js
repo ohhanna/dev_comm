@@ -1,49 +1,21 @@
-/*!
-
-=========================================================
-* Paper Kit React - v1.3.0
-=========================================================
-
-* Product Page: https://www.creative-tim.com/product/paper-kit-react
-
-* Copyright 2021 Creative Tim (https://www.creative-tim.com)
-* Licensed under MIT (https://github.com/creativetimofficial/paper-kit-react/blob/main/LICENSE.md)
-
-* Coded by Creative Tim
-
-=========================================================
-
-* The above copyright notice and this permission notice shall be included in all copies or substantial portions of the Software.
-
-*/
-import React from "react";
-
-// reactstrap components
-import {
-  Button,
-  Form,
-  Input,
-  Container,
-  Row,
-  Col,
-  FormGroup,
-  Label,
-  Table,
-  Pagination,
-  PaginationItem,
-  PaginationLink
-} from "reactstrap";
+import React, { useState } from "react";
 
 // core components
 import IndexNavbar from "components/Navbars/IndexNavbar.js";
 import LandingPageHeader from "components/Headers/LandingPageHeader.js";
 import NoticeList from "views/noticeBoard/NoticeList.js";
+import NoticeView from "views/noticeBoard/NoticeView.js";
+import NoticeWriteForm from "views/noticeBoard/NoticeWriteForm.js";
+import NoticeEditForm from "views/noticeBoard/NoticeEditForm.js";
 import DemoFooter from "components/Footers/DemoFooter.js";
-import { useState } from "react/cjs/react.production.min";
+import { Route, Switch, Redirect } from "react-router-dom";
 
-function NoticeBoard() {
+import {
+  Button,
+  Modal
+} from "reactstrap";
 
-  // let [변수, 변수변경] = useState();
+function NoticeBoard(match) {
 
   document.documentElement.classList.remove("nav-open");
   React.useEffect(() => {
@@ -52,17 +24,109 @@ function NoticeBoard() {
       document.body.classList.remove("profile-page");
     };
   });
+
   return (
     <>
       <IndexNavbar />
       <LandingPageHeader />
 
-      <NoticeList/>
-      
+      <Switch>
+        <Route exact path="/notice-page/list">
+          <NoticeList/>
+        </Route>
+        <Route exact path="/notice-page/writeForm">
+          <NoticeWriteForm/>
+        </Route>
+        <Route exact path="/notice-page/view/:board_no" component={NoticeView}>
+          {/* <NoticeView params={match.params.board_no}/> */}
+        </Route>
+        <Route exact path="/notice-page/write">
+          <NoticeWriteForm/>
+        </Route>
+        <Route exact path="/notice-page/edit/:board_no" component={NoticeEditForm}>
+          {/* <NoticeEditForm/> */}
+        </Route>
+        <Route exact path="/notice-page/del/:board_no" component={DeleteCom}>
+        </Route>
+      </Switch>
+
+      {/* shoes.map((a, i)=>{
+        return <Card shoes={shoes[i]} i={i}/>
+      }) */}
+
       <DemoFooter />
     </>
   );
 }
+
+const DeleteCom = ({match}) => {
+
+  console.log(match.params.board_no);
+
+  const [msg, setMsg] = useState("hi");
+
+  fetch(match.params.board_no)
+  .then( res => res.json())
+  .then( res => {
+    if(res == 1){
+      // 삭제 성공
+      alert('삭제되었습니다.');
+      // setMsg("삭제되었습니다");
+    } else {
+      // 삭제 실패
+      alert('삭제에 실패했습니다. 다시 시도해주세요.');
+      // setMsg("삭제에 실패했습니다. 다시 시도해주세요.");
+    }
+  })
+
+  console.log(msg);
+
+  return (
+    <>
+      {/* <AlertModal msg={msg}/> */}
+      <Redirect to={{
+        pathname:"/notice-page/list"
+      }}/>
+    </>
+  )
+}
+
+// function AlertModal(props){
+//   const [alertModal, setAlertModal] = React.useState(false);
+//   const toggleModal = () =>{
+//     setAlertModal(!alertModal);
+//   }
+
+//   return (
+//     <>
+//     <Modal isOpen={alertModal} toggle={toggleModal}>
+//       <div className="modal-header">
+//           <button aria-label="Close"
+//                   className="close"
+//                   type="button"
+//                   onClick={toggleModal}>
+//               <span aria-hidden={true}>×</span>
+//           </button>
+//           <h5></h5>
+//       </div>
+//       <div className="modal-body text-center">
+//           {props.msg}
+//       </div>
+//       <div className="modal-footer" margin="auto">
+//         <div className="left-side">
+//         <Button className="btn-link"
+//                 color="default"
+//                 type="button"
+//                 width="50%"
+//                 onClick={toggleModal}>
+//             확인
+//         </Button>
+//         </div>
+//       </div>
+//     </Modal>
+//     </>
+//   )
+// }
 
 
 export default NoticeBoard;
