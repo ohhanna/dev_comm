@@ -28,7 +28,8 @@ import "assets/demo/demo.css?v=1.3.0";
 import Index from "views/Index.js";
 import NucleoIcons from "views/NucleoIcons.js";
 import NoticePage from "views/examples/NoticeBoard.js";
-import ProfilePage from "views/examples/ProfilePage.js";
+import MemberBoardList from "views/memberBoard/MemberBoardList";
+import MemberBoardEdit from "views/memberBoard/MemberBoardEdit";
 import RegisterPage from "views/examples/RegisterPage.js";
 // others
 
@@ -45,11 +46,15 @@ ReactDOM.render(
         render={(props) => <NoticePage {...props} />}
       />
       <Route
-        path="/profile-page"
-        render={(props) => <ProfilePage {...props} />}
+        path="/memberBoardList"
+        render={(props) => <MemberBoardList {...props} />}
       />
       <Route
-        path="/register-page"
+        path="/memberBoardEdit"
+        render={(props) => <MemberBoardEdit {...props} />}
+      />
+      <Route
+        path="/register-pages"
         render={(props) => <RegisterPage {...props} />}
       />
       <Redirect to="/index" />
