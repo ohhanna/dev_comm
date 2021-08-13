@@ -29,7 +29,7 @@ import Index from "views/Index.js";
 import NucleoIcons from "views/NucleoIcons.js";
 import NoticePage from "views/examples/NoticeBoard.js";
 import ProfilePage from "views/examples/ProfilePage.js";
-import RegisterPage from "views/examples/RegisterPage.js";
+import FreePage from "views/examples/FreeBoard.js";
 // others
 
 ReactDOM.render(
@@ -49,8 +49,8 @@ ReactDOM.render(
         render={(props) => <ProfilePage {...props} />}
       />
       <Route
-        path="/register-pages"
-        render={(props) => <RegisterPage {...props} />}
+        path="/free-page"
+        render={(props) => <FreePage {...props} />}
       />
       <Redirect to="/index" />
     </Switch>

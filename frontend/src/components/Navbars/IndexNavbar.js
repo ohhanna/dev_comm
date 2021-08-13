@@ -133,7 +133,7 @@ function IndexNavbar() {
               </NavLink>
             </NavItem>
             <NavItem>
-              <NavLink className="navbar-brand" to="/register-pages">
+              <NavLink className="navbar-brand" to="/free-page">
                 자유게시판
               </NavLink>
             </NavItem>

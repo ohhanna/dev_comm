@@ -13,8 +13,14 @@ public class BoardFreeService {
     @Autowired(required = true)
     public BoardFreeMapper mapper;
 
-    public List<BoardFreeVo> selectTest() {
-        return mapper.selectTest();
+    // public List<BoardFreeVo> selectTest() {
+    //     return mapper.selectTest();
+    // }
+
+    public List<BoardFreeVo> BoardFreeList(int limit, int offset) {
+        System.out.println("limit :::" + limit);
+        System.out.println("offset :::" + offset);
+        return mapper.BoardFreeList(limit, offset);
     }
 
 }
