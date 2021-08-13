@@ -1,3 +1,4 @@
+/* eslint-disable */
 import React, { useState } from "react";
 
 // core components
@@ -9,11 +10,6 @@ import NoticeWriteForm from "views/noticeBoard/NoticeWriteForm.js";
 import NoticeEditForm from "views/noticeBoard/NoticeEditForm.js";
 import DemoFooter from "components/Footers/DemoFooter.js";
 import { Route, Switch, Redirect } from "react-router-dom";
-
-import {
-  Button,
-  Modal
-} from "reactstrap";
 
 function NoticeBoard(match) {
 
