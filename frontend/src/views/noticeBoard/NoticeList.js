@@ -22,9 +22,12 @@ function useFetch(url){
 
   const [data, setData] = useState([]);
 
+<<<<<<< HEAD
   console.log('list');
   console.log(url);
 
+=======
+>>>>>>> d03f666029320db2e0e25d9c7f5289b7902b094d
   async function fetchUrl(){
     const response = await fetch(url);
     const json = await response.json();
@@ -43,9 +46,12 @@ function useFetch(url){
 function NoticeList() {
 
   const data = useFetch("/notice-page/list");
+<<<<<<< HEAD
 
   console.log('data');
   console.log(data);
+=======
+>>>>>>> d03f666029320db2e0e25d9c7f5289b7902b094d
 
   return (
     <>
@@ -100,7 +106,12 @@ function NoticeList() {
         </div>
 
         <Link to="/notice-page/write">
+<<<<<<< HEAD
           <Button type="button" id="notice_write" className="btn mr-1 float-right" color="default" outline>
+=======
+          <Button type="button" id="notice_write" className="btn mr-1 float-right" color="default" outline
+            onClick={()=>{console.log('write')}}>
+>>>>>>> d03f666029320db2e0e25d9c7f5289b7902b094d
             Write
           </Button>
         </Link>
@@ -119,6 +130,13 @@ function NoticeList() {
               <tr key={data.board_no}>
                 <td>{data.board_no}</td>
                 <td><Link to={`/notice-page/view/${data.board_no}`}>{data.board_ttl}</Link></td>
+<<<<<<< HEAD
+=======
+                {/* <td><Link to={{
+                  pathname : "/notice-page/view",
+                  search : `?board_no=${data.board_no}`
+                  }}>{data.board_ttl}</Link></td> */}
+>>>>>>> d03f666029320db2e0e25d9c7f5289b7902b094d
                 <td>
                   <Moment format="YYYY/MM/DD">
                     {data.crt_dt}
