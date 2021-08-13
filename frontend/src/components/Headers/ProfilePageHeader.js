@@ -46,7 +46,7 @@ function ProfilePageHeader() {
           backgroundImage:
             "url(" + require("assets/img/fabio-mangione.jpg").default + ")",
         }}
-        className="page-header page-header-xs"
+        className="page-header page-header-xss"
         data-parallax={true}
         ref={pageHeader}
       >
