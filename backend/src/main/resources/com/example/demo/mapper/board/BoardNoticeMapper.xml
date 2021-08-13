@@ -9,7 +9,10 @@
         AND is_del = 'N'
         ORDER BY board_no DESC
 <<<<<<< HEAD
+<<<<<<< HEAD
         <!-- 페이징 필요 -->
+=======
+>>>>>>> d03f666029320db2e0e25d9c7f5289b7902b094d
 =======
 >>>>>>> d03f666029320db2e0e25d9c7f5289b7902b094d
     </select>
