@@ -1,21 +1,3 @@
-/*!
-
-=========================================================
-* Paper Kit React - v1.3.0
-=========================================================
-
-* Product Page: https://www.creative-tim.com/product/paper-kit-react
-
-* Copyright 2021 Creative Tim (https://www.creative-tim.com)
-* Licensed under MIT (https://github.com/creativetimofficial/paper-kit-react/blob/main/LICENSE.md)
-
-* Coded by Creative Tim
-
-=========================================================
-
-* The above copyright notice and this permission notice shall be included in all copies or substantial portions of the Software.
-
-*/
 import React from "react";
 import ReactDOM from "react-dom";
 import { BrowserRouter, Route, Redirect, Switch } from "react-router-dom";
@@ -24,12 +6,14 @@ import { BrowserRouter, Route, Redirect, Switch } from "react-router-dom";
 import "bootstrap/scss/bootstrap.scss";
 import "assets/scss/paper-kit.scss?v=1.3.0";
 import "assets/demo/demo.css?v=1.3.0";
+
 // pages
 import Index from "views/Index.js";
 import NucleoIcons from "views/NucleoIcons.js";
 import NoticePage from "views/examples/NoticeBoard.js";
-import ProfilePage from "views/examples/ProfilePage.js";
 import FreePage from "views/examples/FreeBoard.js";
+import MemberBoardList from "views/memberBoard/MemberBoardList";
+import MemberBoardEdit from "views/memberBoard/MemberBoardEdit";
 // others
 
 ReactDOM.render(
@@ -41,12 +25,16 @@ ReactDOM.render(
         render={(props) => <NucleoIcons {...props} />}
       />
       <Route
-        path="/notice-page"
+        path="/notice-page/:d"
         render={(props) => <NoticePage {...props} />}
       />
       <Route
-        path="/profile-page"
-        render={(props) => <ProfilePage {...props} />}
+        path="/memberBoardList"
+        render={(props) => <MemberBoardList {...props} />}
+      />
+      <Route
+        path="/memberBoardEdit/:boardNo"
+        render={(props) => <MemberBoardEdit {...props} />}
       />
       <Route
         path="/free-page"
