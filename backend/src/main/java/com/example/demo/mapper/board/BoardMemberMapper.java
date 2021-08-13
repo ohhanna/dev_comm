@@ -12,4 +12,5 @@ import org.springframework.stereotype.Repository;
 @Mapper
 public interface BoardMemberMapper {
     ArrayList<BoardMemberVo> selectBoardList(PageVo pageVo);
+    BoardMemberVo selectBoardDtl(BoardMemberVo boardMemberVo);
 }

@@ -18,4 +18,8 @@ public class BoardMemberService {
     public ArrayList<BoardMemberVo> selectBoardList(PageVo pageVo){
         return mapper.selectBoardList(pageVo);
     }
+
+    public BoardMemberVo selectBoardDtl(BoardMemberVo boardMemberVo){
+        return mapper.selectBoardDtl(boardMemberVo);
+    }
 }

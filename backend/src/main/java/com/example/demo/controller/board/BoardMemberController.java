@@ -8,7 +8,6 @@ import com.example.demo.vo.board.BoardMemberVo;
 import com.example.demo.vo.board.PageVo;
 
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.ResponseBody;
 import org.springframework.web.bind.annotation.RestController;
@@ -31,9 +30,13 @@ public class BoardMemberController {
         return list;
     }
 
-    @GetMapping("/board/member/getBoard")
-    public String enterList() { 
-        System.out.println("success2 - 새로 추가한거. "); 
-        return "안녕하세요. 현재 서버시간은 입니다. \n";
+    @RequestMapping("/board/member/getDetail")
+    @ResponseBody
+    public BoardMemberVo getBoardDtl(BoardMemberVo boardMemberVo) { 
+        System.out.println(boardMemberVo.getBoardNo()); 
+
+        BoardMemberVo result = boardMemberService.selectBoardDtl(boardMemberVo);
+
+        return result;
     }
 }
