@@ -50,7 +50,7 @@ ReactDOM.render(
         render={(props) => <MemberBoardList {...props} />}
       />
       <Route
-        path="/memberBoardEdit"
+        path="/memberBoardEdit/:boardNo"
         render={(props) => <MemberBoardEdit {...props} />}
       />
       <Route
