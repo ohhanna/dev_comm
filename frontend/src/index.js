@@ -54,7 +54,7 @@ ReactDOM.render(
         render={(props) => <MemberBoardEdit {...props} />}
       />
       <Route
-        path="/register-page"
+        path="/register-pages"
         render={(props) => <RegisterPage {...props} />}
       />
       <Redirect to="/index" />
