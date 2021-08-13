@@ -111,18 +111,18 @@ function NoticeList() {
           </thead>
           <tbody>
             {data.map( data =>
-              <tr key={data.board_no}>
-                <td>{data.board_no}</td>
-                <td><Link to={`/notice-page/view/${data.board_no}`}>{data.board_ttl}</Link></td>
+              <tr key={data.boardNo}>
+                <td>{data.boardNo}</td>
+                <td><Link to={`/notice-page/view/${data.boardNo}`}>{data.boardTtl}</Link></td>
                 {/* <td><Link to={{
                   pathname : "/notice-page/view",
-                  search : `?board_no=${data.board_no}`
+                  search : `?boardNo=${data.boardNo}`
                   }}>{data.board_ttl}</Link></td> */}
                 <td>
                   <Moment format="YYYY/MM/DD">
-                    {data.crt_dt}
+                    {data.crtDt}
                   </Moment></td>
-                <td>{data.reg_mem_id}</td>
+                <td>{data.regMemId}</td>
               </tr>
               )}
           </tbody>
@@ -182,14 +182,14 @@ function NoticeBoardList(){
 
         </tr>
       </Link>
-      <tr key={data.board_no}>
-        <td>{data.board_no}</td>
-        <td><Link to="/notice-page/view">{data.board_ttl}</Link></td>
+      <tr key={data.boardNo}>
+        <td>{data.boardNo}</td>
+        <td><Link to="/notice-page/view">{data.boardTtl}</Link></td>
         <td>
           <Moment format="YYYY/MM/DD">
-            {data.crt_dt}
+            {data.crtDt}
           </Moment></td>
-        <td>{data.reg_mem_id}</td>
+        <td>{data.regMemId}</td>
       </tr> */}
     </>
   )

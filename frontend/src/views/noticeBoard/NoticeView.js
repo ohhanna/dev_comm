@@ -33,7 +33,7 @@ function useFetch(url){
 
 const NoticeView = ({match}) => {
 
-    const data = useFetch("/notice-page/view/"+match.params.board_no);
+    const data = useFetch("/notice-page/view/"+match.params.boardNo);
 
     return (
         <>
@@ -54,8 +54,8 @@ const NoticeView = ({match}) => {
                                                 LIST
                                             </Button>
                                         </Link>
-                                        <DeleteModal board_no={match.params.board_no}/>
-                                        <Link to={`/notice-page/edit/${match.params.board_no}`}>
+                                        <DeleteModal boardNo={match.params.boardNo}/>
+                                        <Link to={`/notice-page/edit/${match.params.boardNo}`}>
                                             <Button type="button" id="notice_edit_btn" className="btn mr-1 float-right" color="default" outline>
                                                 EDIT
                                             </Button>
@@ -65,15 +65,15 @@ const NoticeView = ({match}) => {
                                     <Table>
                                         <thead>
                                             <tr>
-                                                {/* <th width="10%">No.{data.board_no}</th> */}
-                                                <th colSpan="2" width="100%">{data.board_ttl}</th>
+                                                {/* <th width="10%">No.{data.boardNo}</th> */}
+                                                <th colSpan="2" width="100%">{data.boardTtl}</th>
                                             </tr>
                                         </thead>
                                         <tbody>
                                             <tr>
-                                                <td align="left" width="50%">Writer : {data.reg_mem_id}</td>
+                                                <td align="left" width="50%">Writer : {data.regMemId}</td>
                                                 <td align="right">Date : <Moment format="YYYY/MM/DD">
-                                                                    {data.crt_dt}
+                                                                    {data.crtDt}
                                                                 </Moment></td>
                                             </tr>
                                             <tr>
@@ -109,7 +109,7 @@ function DeleteModal(props){
         setDeleteModal(!deleteModal);
     }
 
-    const board_no = props.board_no;
+    const boardNo = props.boardNo;
 
     return (
         <>
@@ -144,7 +144,7 @@ function DeleteModal(props){
                 </Button>
                 </div>
                 <div className="right-side">
-                <Link to={`/notice-page/del/${board_no}`}>
+                <Link to={`/notice-page/del/${boardNo}`}>
                     <Button className="btn-link"
                             color="default"
                             type="button"

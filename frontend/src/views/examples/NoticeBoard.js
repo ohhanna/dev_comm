@@ -37,16 +37,16 @@ function NoticeBoard(match) {
         <Route exact path="/notice-page/writeForm">
           <NoticeWriteForm/>
         </Route>
-        <Route exact path="/notice-page/view/:board_no" component={NoticeView}>
-          {/* <NoticeView params={match.params.board_no}/> */}
+        <Route exact path="/notice-page/view/:boardNo" component={NoticeView}>
+          {/* <NoticeView params={match.params.boardNo}/> */}
         </Route>
         <Route exact path="/notice-page/write">
           <NoticeWriteForm/>
         </Route>
-        <Route exact path="/notice-page/edit/:board_no" component={NoticeEditForm}>
+        <Route exact path="/notice-page/edit/:boardNo" component={NoticeEditForm}>
           {/* <NoticeEditForm/> */}
         </Route>
-        <Route exact path="/notice-page/del/:board_no" component={DeleteCom}>
+        <Route exact path="/notice-page/del/:boardNo" component={DeleteCom}>
         </Route>
       </Switch>
 
@@ -61,11 +61,11 @@ function NoticeBoard(match) {
 
 const DeleteCom = ({match}) => {
 
-  console.log(match.params.board_no);
+  console.log(match.params.boardNo);
 
   const [msg, setMsg] = useState("hi");
 
-  fetch(match.params.board_no)
+  fetch(match.params.boardNo)
   .then( res => res.json())
   .then( res => {
     if(res == 1){

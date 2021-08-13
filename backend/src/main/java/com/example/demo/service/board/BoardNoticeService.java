@@ -18,12 +18,12 @@ public class BoardNoticeService {
         return boardNoticeMapper.selectAll();
     }
 
-    public BoardNoticeVo selectOne(int board_no){
-        return boardNoticeMapper.selectOne(board_no);
+    public BoardNoticeVo selectOne(int boardNo){
+        return boardNoticeMapper.selectOne(boardNo);
     }
 
-    public int noticeDel(int board_no){
-        return boardNoticeMapper.delOne(board_no);
+    public int noticeDel(int boardNo){
+        return boardNoticeMapper.delOne(boardNo);
     }
 
 }

@@ -11,6 +11,6 @@ import org.springframework.stereotype.Repository;
 @Mapper
 public interface BoardNoticeMapper {
     List<BoardNoticeVo> selectAll();
-    BoardNoticeVo selectOne(int board_no);
-    int delOne(int board_no);
+    BoardNoticeVo selectOne(int boardNo);
+    int delOne(int boardNo);
 }

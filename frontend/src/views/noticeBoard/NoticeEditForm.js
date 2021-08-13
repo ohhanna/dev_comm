@@ -33,7 +33,7 @@ function useFetch(url){
 
 const NoticeEditForm = ({match}) => {
 
-    const data = useFetch("/notice-page/view/"+match.params.board_no);
+    const data = useFetch("/notice-page/view/"+match.params.boardNo);
 
     return (
         <>
