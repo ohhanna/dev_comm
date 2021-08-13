@@ -76,7 +76,7 @@ function IndexNavbar() {
               </NavLink>
             </NavItem>
             <NavItem>
-              <NavLink className="navbar-brand" to="/profile-page">
+              <NavLink className="navbar-brand" to="/memberBoardList">
                 회원게시판
               </NavLink>
             </NavItem>
