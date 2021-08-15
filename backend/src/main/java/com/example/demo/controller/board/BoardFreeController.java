@@ -1,14 +1,17 @@
 package com.example.demo.controller.board;
 
+import java.util.HashMap;
 import java.util.List;
+import java.util.Map;
+
+import com.example.demo.service.board.BoardFreeService;
+import com.example.demo.vo.board.BoardFreeVo;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PostMapping;
+import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
-
-import com.example.demo.service.board.BoardFreeService;
-import com.example.demo.vo.board.BoardFreeVo;
 
 @RestController
 public class BoardFreeController {
@@ -31,17 +34,26 @@ public class BoardFreeController {
         return "success";
     }
 
-
+    //게시판 리스트, 총 갯수 get
     @GetMapping("/freeBoard/list")
-    public String freeBoardList() {
-        System.out.println("board test");
+    public Map<String, Object> freeBoardList(@RequestParam(value = "currentPage", required=false) Integer pageNum,
+                                             @RequestParam(value = "pageSize", required=false) Integer pageSize) {
 
-        int limit = 10;
-        int offset = 1;
+        System.out.println("freeBoardList Controller");
+        System.out.println("pageNum ::: " + pageNum);
+        System.out.println("pageSize ::: " + pageSize);
 
-        List<BoardFreeVo> freeList =  boardFreeService.BoardFreeList(limit, offset);
+        Map<String, Object> freeMap = new HashMap<String, Object>();
+
+        int freeListCount = boardFreeService.BoardFreeListCount();
+        List<BoardFreeVo> freeList =  boardFreeService.BoardFreeList(pageNum, pageSize);
+
+        freeMap.put("freeListCount", freeListCount);
+        freeMap.put("freeList", freeList);
+
         System.out.println("freeList :::" + freeList);
-        return "board success";
+        System.out.println("freeList Size :::" + freeList.size());
+        return freeMap;
     }
 
 }
