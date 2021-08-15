@@ -17,7 +17,6 @@ import {
 import IndexNavbar from "components/Navbars/IndexNavbar.js";
 import ProfilePageHeader from "components/Headers/ProfilePageHeader.js";
 import DemoFooter from "components/Footers/DemoFooter.js";
-import ToastEditor from "views/toast/toast-editor.js";
 
 function MemberBoardEdit(prop) {
 
@@ -50,6 +49,7 @@ function MemberBoardEdit(prop) {
   function saveDtl(){
     const boardDtlState = {...boardDtl};
     boardDtlState.boardCntn = editorRef.current.getInstance().getHTML();
+    console.log(boardDtlState.boardCntn);
     setBoardDtl(boardDtlState);
 
     const api = axios.create({
