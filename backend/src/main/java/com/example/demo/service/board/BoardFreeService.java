@@ -13,14 +13,14 @@ public class BoardFreeService {
     @Autowired(required = true)
     public BoardFreeMapper mapper;
 
-    // public List<BoardFreeVo> selectTest() {
-    //     return mapper.selectTest();
-    // }
+    //게시판 글 총 갯수
+    public int BoardFreeListCount() {
+        return mapper.BoardFreeListCount();
+    }
 
-    public List<BoardFreeVo> BoardFreeList(int limit, int offset) {
-        System.out.println("limit :::" + limit);
-        System.out.println("offset :::" + offset);
-        return mapper.BoardFreeList(limit, offset);
+    //게시판 리스트 get
+    public List<BoardFreeVo> BoardFreeList(int pageNum, int pageSize) {
+        return mapper.BoardFreeList(pageNum, pageSize);
     }
 
 }

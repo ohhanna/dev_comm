@@ -37,7 +37,7 @@ ReactDOM.render(
         render={(props) => <MemberBoardEdit {...props} />}
       />
       <Route
-        path="/free-page"
+        path="/freeBoard/:param"
         render={(props) => <FreePage {...props} />}
       />
       <Redirect to="/index" />
