@@ -34,4 +34,30 @@
          WHERE IS_DEL = 'N'
            AND BOARD_NO = #{boardNo}
     </select>
+
+    <insert id="insertBoardDtl" parameterType="com.example.demo.vo.board.BoardMemberVo">
+        INSERT IGNORE INTO BOARD_MEM (
+                                BOARD_NO
+                               ,BOARD_TTL
+                               ,BOARD_CNTN
+                               ,CRT_DT
+                               ,MOD_DT
+                               ,REG_MEM_ID
+                               ,IS_DEL
+                              )
+                      VALUES (
+                               #{boardNo}
+                               ,#{boardTtl}
+                               ,#{boardCntn}
+                               ,NOW()
+                               ,NOW()
+                               ,'DUMMY_MEM_1'
+                               ,'N'
+                             )
+        ON DUPLICATE KEY UPDATE BOARD_NO = #{boardNo}
+                                ,BOARD_TTL = #{boardTtl}
+                                ,BOARD_CNTN = #{boardCntn}
+                                ,MOD_DT = NOW()
+                                ,IS_DEL = 'N'
+    </insert>
 </mapper>
