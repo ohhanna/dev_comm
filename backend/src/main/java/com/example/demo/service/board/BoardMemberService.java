@@ -22,4 +22,8 @@ public class BoardMemberService {
     public BoardMemberVo selectBoardDtl(BoardMemberVo boardMemberVo){
         return mapper.selectBoardDtl(boardMemberVo);
     }
+
+    public int insertBoardDtl(BoardMemberVo boardMemberVo){
+        return mapper.insertBoardDtl(boardMemberVo);
+    }
 }

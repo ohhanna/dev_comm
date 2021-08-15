@@ -22,13 +22,8 @@
     </update>
 
     <insert id="">
-		<selectKey keyProperty="boardNo" order="BEFORE" resultType="int">
-			select boardNo.nextval from dual
-		</selectKey>
-	
-		insert into BOARD_NOTICE(boardNo, title, content, writer)
-		values(boardNo.nextval, #{title},#{content} ,#{writer})
-        <!-- 나중에 수정하기 -->
+		insert into BOARD_NOTICE(title, content, writer)
+		values(#{title},#{content} ,#{writer})
 	</insert>
 
 </mapper>

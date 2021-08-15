@@ -11,12 +11,7 @@ import {
   Container,
   Row,
   Col,
-  Alert,
-  Card,
-  Pagination,
-  PaginationItem,
-  PaginationLink,
-  NavLink
+  Alert
 } from "reactstrap";
 
 // core components
@@ -26,6 +21,10 @@ import DemoFooter from "components/Footers/DemoFooter.js";
 import PageControlModule from "views/memberBoard/PageControlModule";
 
 function MemberBoardList() {
+
+  ////////////////////////////////////////////////////////////////////
+  ///////////////// STATE
+  ////////////////////////////////////////////////////////////////////
   const [alertDanger, setAlertDanger] = React.useState(true);
   const [pageIndex, setPageIndex] = useState(1);
   const [pageSize, setPageSize] = useState(10);
@@ -35,6 +34,9 @@ function MemberBoardList() {
   const [firstRequest, setFirtRequest] = useState(0);
   const history = useHistory();
 
+  ////////////////////////////////////////////////////////////////////
+  ///////////////// 전역변수 
+  ////////////////////////////////////////////////////////////////////
   const option ={
     url : '/board/member/list',
     method:'GET',
@@ -45,7 +47,14 @@ function MemberBoardList() {
       'pageIndex' : pageIndex,
       'pageSize' : pageSize
     }
-  }
+  };
+
+  ////////////////////////////////////////////////////////////////////
+  ///////////////// 개발자 함수
+  ////////////////////////////////////////////////////////////////////
+  useEffect(() => {
+    getPageIndex(1, 10);
+  }, []);
 
   function getPageIndex(pageIndex, pageSize){
     setPageIndex(pageIndex);
@@ -80,6 +89,9 @@ function MemberBoardList() {
     history.push("/memberBoardEdit/" + boardNo);
   }
 
+  ////////////////////////////////////////////////////////////////////
+  ///////////////// Render
+  ////////////////////////////////////////////////////////////////////
   return (
     <>
       <IndexNavbar />
@@ -149,6 +161,9 @@ function MemberBoardList() {
   );
 }
 
+////////////////////////////////////////////////////////////////////
+///////////////// COMPONENT
+////////////////////////////////////////////////////////////////////
 // BoardList Component
 function BoardList(prop){
   let boardListProp = prop.boardListState;

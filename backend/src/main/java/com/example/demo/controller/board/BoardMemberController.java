@@ -39,4 +39,11 @@ public class BoardMemberController {
 
         return result;
     }
+
+    @RequestMapping("/board/member/save")
+    @ResponseBody
+    public void insertBoardDtl(BoardMemberVo boardMemberVo){
+        System.out.println(boardMemberVo.getBoardNo());
+        boardMemberService.insertBoardDtl(boardMemberVo);
+    }
 }
