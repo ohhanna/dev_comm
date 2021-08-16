@@ -10,6 +10,7 @@ import com.example.demo.vo.board.BoardFreeVo;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PostMapping;
+import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
 
@@ -54,6 +55,23 @@ public class BoardFreeController {
         System.out.println("freeList :::" + freeList);
         System.out.println("freeList Size :::" + freeList.size());
         return freeMap;
+    }
+
+    //게시판 리스트 글 상세보기
+    @GetMapping("/freeBoard/detail")
+    public List<BoardFreeVo> BoardFreeListDetail(@RequestParam(value = "boardNo", required=false) Integer boardNo) {
+        System.out.println("freeBoardList Controller Detail");
+
+        List<BoardFreeVo> freeDetail = boardFreeService.BoardFreeListDetail(boardNo);
+        return freeDetail;
+    }
+
+    //게시판 글 추가
+    @PostMapping("/freeBoard/add")
+    public void freeBoardAdd(@RequestBody BoardFreeVo boardFreeVo) {
+        System.out.println("freeBoardList Controller Add");
+
+        boardFreeService.BoardFreeAdd(boardFreeVo);
     }
 
 }

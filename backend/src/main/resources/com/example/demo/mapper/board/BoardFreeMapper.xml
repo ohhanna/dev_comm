@@ -24,4 +24,37 @@
           FROM BOARD_FREE
          WHERE IS_DEL = 'N'
     </select>
+
+    <select id="BoardFreeListDetail" resultType="com.example.demo.vo.board.BoardFreeVo">
+        /*BoardFreeListGetOne*/
+        SELECT BOARD_NO
+              ,BOARD_TTL
+              ,BOARD_CNTN
+              ,CRT_DT
+              ,MOD_DT
+              ,REG_MEM_ID
+              ,IS_DEL
+          FROM BOARD_FREE
+         WHERE BOARD_NO = #{BoardNo}
+    </select>
+
+    <insert id="BoardFreeAdd" parameterType="com.example.demo.vo.board.BoardFreeVo">
+        /*BoardFreeAdd*/
+        INSERT INTO BOARD_FREE (
+                        BOARD_NO
+                       ,BOARD_TTL
+                       ,BOARD_CNTN
+                       ,CRT_DT
+                       ,MOD_DT
+                       ,REG_MEM_ID
+                       ,IS_DEL)
+              VALUES (
+                        null
+                       ,#{boardTtl}
+                       ,#{boardCntn}
+                       ,NOW()
+                       ,NOW()
+                       ,'ADDED MEM'
+                       ,'N')
+    </insert>
 </mapper>

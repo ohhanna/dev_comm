@@ -6,7 +6,8 @@ import { Route, Switch } from "react-router-dom";
 import IndexNavbar from "components/Navbars/IndexNavbar.js";
 import LandingPageHeader from "components/Headers/LandingPageHeader.js";
 import FreePageList from "views/freeBoard/FreeList.js";
-import FreePageForm from "views/freeBoard/FreeListForm.js";
+import FreePageForm from "views/freeBoard/FreeListAdd.js";
+import FreePageDetail from "views/freeBoard/FreeListDetail.js"
 import DemoFooter from "components/Footers/DemoFooter.js";
 
 function FreePage() {
@@ -29,6 +30,10 @@ function FreePage() {
         <Route
           path="/freeBoard/addForm"
           component={FreePageForm}
+        />
+        <Route
+          path="/freeBoard/detail/:param"
+          component={FreePageDetail}
         />
       </Switch>
       <DemoFooter />

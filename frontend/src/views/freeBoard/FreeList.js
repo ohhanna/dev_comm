@@ -1,5 +1,5 @@
 import React, { useEffect, useState } from 'react';
-import { Link } from 'react-router-dom';
+import { Link, useHistory } from 'react-router-dom';
 import Moment from 'react-moment';
 import Pagination from 'react-js-pagination';
 
@@ -23,7 +23,8 @@ function FreeList() {
   let [datas, setDatas] = useState({                //총 갯수, 목록
     freeListCount : '',
     freeList : []
-  }); 
+  });
+  let history = useHistory();
 
   //목록 가져오기
   let url = '/freeBoard/list?' + new URLSearchParams({currentPage : pageSize * (currentPage - 1), 
@@ -41,6 +42,11 @@ function FreeList() {
            })
      .catch(err => { console.log('error' + JSON.stringify(err))});
   }, [currentPage]);
+
+  //상세보기
+  function ListDetail(props) {
+    history.push("/freeBoard/detail/" + props);
+  }
 
 
   return (
@@ -115,7 +121,11 @@ function FreeList() {
               datas && datas.freeList.map(data => {
                 return <tr key = {data.boardNo}>
                           <td> {data.boardNo} </td>
-                          <td> {data.boardTtl} </td>
+                          <td>
+                            <a onClick={ () => { ListDetail(data.boardNo) } }> 
+                              {data.boardTtl} 
+                            </a>
+                          </td>
                           <td><Moment format="YYYY/MM/DD">
                                 {data.crtDt}
                               </Moment>

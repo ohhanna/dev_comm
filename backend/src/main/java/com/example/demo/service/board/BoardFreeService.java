@@ -23,4 +23,14 @@ public class BoardFreeService {
         return mapper.BoardFreeList(pageNum, pageSize);
     }
 
+    //게시판 리스트 글 상세보기
+    public List<BoardFreeVo> BoardFreeListDetail(int boardNo) {
+        return mapper.BoardFreeListDetail(boardNo);
+    }
+
+    //게시판 글 추가
+    public int BoardFreeAdd(BoardFreeVo boardFreeVo) {
+        return mapper.BoardFreeAdd(boardFreeVo);
+    }
+
 }

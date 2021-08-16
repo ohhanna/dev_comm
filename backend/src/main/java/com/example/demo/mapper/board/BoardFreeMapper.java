@@ -16,5 +16,11 @@ public interface BoardFreeMapper {
 
     //게시판 리스트 get
     List<BoardFreeVo> BoardFreeList(int pageNum, int pageSize);
+
+    //게시판 리스트 글 상세보기
+    List<BoardFreeVo> BoardFreeListDetail(int boardNo);
+
+    //게시판 글 추가
+    int BoardFreeAdd(BoardFreeVo boardFreeVo);
     
 }
