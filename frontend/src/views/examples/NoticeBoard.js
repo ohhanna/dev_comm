@@ -30,9 +30,6 @@ function NoticeBoard(match) {
         <Route exact path="/notice-page/list">
           <NoticeList/>
         </Route>
-        <Route exact path="/notice-page/writeForm">
-          <NoticeWriteForm/>
-        </Route>
         <Route exact path="/notice-page/view/:boardNo" component={NoticeView}>
           {/* <NoticeView params={match.params.boardNo}/> */}
         </Route>

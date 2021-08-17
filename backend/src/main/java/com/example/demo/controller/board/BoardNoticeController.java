@@ -4,12 +4,12 @@ import java.util.List;
 
 import com.example.demo.service.board.BoardNoticeService;
 import com.example.demo.vo.board.BoardNoticeVo;
+import com.example.demo.vo.board.PageVo;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.RestController;
-
 
 @RestController
 public class BoardNoticeController {
@@ -20,6 +20,10 @@ public class BoardNoticeController {
     @GetMapping("/notice-page/list")
     public List<BoardNoticeVo> noticeList(){
         System.out.println("(한나) BoardNoticeController - /notice-page/list");
+        
+        // pageVo.createStartPage(pageVo.getPageIndex(), pageVo.getPageSize());
+        // List<BoardNoticeVo> noticeListByPaging = boardNoticeService.selectAll(pageVo);
+
         List<BoardNoticeVo> noticeList = boardNoticeService.selectAll();
 
         return noticeList;
