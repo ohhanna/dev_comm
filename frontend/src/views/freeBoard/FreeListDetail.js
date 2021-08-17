@@ -1,6 +1,6 @@
 import React, { useState, useEffect, useRef } from 'react';
 import '@toast-ui/editor/dist/toastui-editor.css';
-import { Editor, Viewer } from '@toast-ui/react-editor';
+import { Viewer } from '@toast-ui/react-editor';
 
 import {
     Button,
@@ -20,7 +20,7 @@ function FreeListDetail(props) {
     useEffect(() => {
         fetch(url)
        .then(res => res.json())
-       .then(datas => {setDatas(datas); editorRef.current.getInstance().setHTML(datas[0].boardCntn);})
+       .then(datas => {setDatas(datas); editorRef.current.getInstance().setMarkdown(datas[0].boardCntn);})
        .catch(err => { console.log('error' + JSON.stringify(err))});
     }, []);
 
@@ -47,7 +47,7 @@ function FreeListDetail(props) {
                               <tbody>
                                 <tr>
                                   <td>
-                                    <Editor ref={editorRef}/>
+                                    <Viewer ref={editorRef}/>
                                   </td>
                                 </tr>
                               </tbody>
