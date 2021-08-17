@@ -4,6 +4,7 @@ import java.util.List;
 
 import com.example.demo.mapper.board.BoardNoticeMapper;
 import com.example.demo.vo.board.BoardNoticeVo;
+import com.example.demo.vo.board.PageVo;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
@@ -15,6 +16,8 @@ public class BoardNoticeService {
 
     public List<BoardNoticeVo> selectAll(){
         System.out.println("(한나) BoardNoticeService - selectAll()");
+        
+        // return boardNoticeMapper.selectAll(pageVo);
         return boardNoticeMapper.selectAll();
     }
 
