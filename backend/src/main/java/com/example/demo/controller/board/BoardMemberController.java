@@ -42,8 +42,12 @@ public class BoardMemberController {
 
     @RequestMapping("/board/member/save")
     @ResponseBody
-    public void insertBoardDtl(BoardMemberVo boardMemberVo){
-        System.out.println(boardMemberVo.getBoardNo());
+    public String insertBoardDtl(BoardMemberVo boardMemberVo){
+        System.out.println("before boardNo : " + boardMemberVo.getBoardNo());
         boardMemberService.insertBoardDtl(boardMemberVo);
+
+        int result = boardMemberVo.getBoardNoProperty();
+
+        return Integer.toString(result);
     }
 }

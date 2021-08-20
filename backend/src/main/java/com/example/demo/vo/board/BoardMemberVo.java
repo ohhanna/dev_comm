@@ -7,6 +7,7 @@ import java.util.Date;
 public class BoardMemberVo {
 
 	private String boardNo;
+	private int boardNoProperty;
 	private String boardTtl;
     private String boardCntn;
     private Date crtDt;
@@ -17,6 +18,14 @@ public class BoardMemberVo {
 
 	public String getBoardNo() {
 		return this.boardNo;
+	}
+
+	public int getBoardNoProperty() {
+		return boardNoProperty;
+	}
+
+	public void setBoardNoProperty(int boardNoProperty) {
+		this.boardNoProperty = boardNoProperty;
 	}
 
 	public int getTotCnt() {

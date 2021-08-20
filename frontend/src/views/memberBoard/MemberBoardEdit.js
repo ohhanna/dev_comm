@@ -1,9 +1,17 @@
 /* eslint-disable */
-import React,{ useEffect, useState, useFocus, useRef } from "react";
+import React,{ useEffect, useState, useRef } from "react";
+
+import { useHistory } from 'react-router-dom';
 import axios from 'axios';
+
+import 'prismjs/themes/prism.css';
 
 import '@toast-ui/editor/dist/toastui-editor.css';
 import { Editor } from '@toast-ui/react-editor';
+
+import 'tui-color-picker/dist/tui-color-picker.css';
+import '@toast-ui/editor-plugin-color-syntax/dist/toastui-editor-plugin-color-syntax.css';
+import colorSyntax from '@toast-ui/editor-plugin-color-syntax';
 
 // reactstrap components
 import {
@@ -17,20 +25,29 @@ import {
 import IndexNavbar from "components/Navbars/IndexNavbar.js";
 import ProfilePageHeader from "components/Headers/ProfilePageHeader.js";
 import DemoFooter from "components/Footers/DemoFooter.js";
+import { Viewer } from '@toast-ui/react-editor';
 
 function MemberBoardEdit(prop) {
 
-  const [boardDtl, setBoardDtl] = useState({boardNo: '', boardTtl:''});
+  const [boardDtl, setBoardDtl] = useState({boardNo: '', boardTtl:'', boardCntn:''});
   const [boardTitle, setBoardTitle] = useState('');
+
+  const history = useHistory();
   const editorRef = useRef();
 
   useEffect(() => {
-    getBoardDtl();
+    if(prop.match.params.boardNo != "new" ){
+      getBoardDtl();
+    }
   }, []);
 
 
   // axios function
   function getBoardDtl(){
+
+    async()=>{
+
+    }
     const api = axios.create({
       baseURL: "/board/member"
     });
@@ -40,7 +57,13 @@ function MemberBoardEdit(prop) {
               boardDtlState = response.data;
               setBoardDtl(boardDtlState);
               setBoardTitle(boardDtlState.boardTtl);
-              editorRef.current.getInstance().setHTML(response.data.boardCntn);
+              if(editorRef.current.getInstance().isViewer()){
+                editorRef.current.getInstance().setMarkdown(response.data.boardCntn);
+              }
+              else{
+                editorRef.current.getInstance().setHTML(response.data.boardCntn);
+              }
+              
             }).catch(function(error){
               alert(error);
             });
@@ -49,23 +72,25 @@ function MemberBoardEdit(prop) {
   function saveDtl(){
     const boardDtlState = {...boardDtl};
     boardDtlState.boardCntn = editorRef.current.getInstance().getHTML();
-    console.log(boardDtlState.boardCntn);
     setBoardDtl(boardDtlState);
 
     const api = axios.create({
       baseURL: "/board/member"
     });
 
-    console.log(boardDtl);
     api.post('/save', null, { params : {
                                     boardNo : boardDtl.boardNo,
-                                    boardTtl : boardDtl.boardTtl,
-                                    boardCntn : boardDtl.boardCntn
-                                  } 
-                            }
+                                    boardTtl : boardTitle,
+                                    boardCntn : editorRef.current.getInstance().getHTML()
+                                  } }
             ).then(function(response){
-              console.log(response);
+              alert("저장이 완료되었습니다.");
+              console.log(response.data)
+              if(response.data != null && response.data != undefined){
+                history.push("/memberBoardEdit/" + response.data);
+              }
             }).catch(function(error){
+              alert(error);
               alert("System Error");
             });
   }
@@ -93,19 +118,21 @@ function MemberBoardEdit(prop) {
 
 
 
-          {/* Content */}
+          {/* Content 
           <Editor 
               previewStyle="vertical"
               height="300px"
               initialEditType="wysiwyg"
+              plugins={[colorSyntax]}
               ref={editorRef}
           />
-
-
+          */}
+          <Viewer ref={editorRef}/>
+        
           <br/>
 
           {/* Save Button */}
-          <Button className="btn-round mr-1"
+          <Button className="btn-round mr-1 float-right"
                   color="default"
                   size="sm"
                   outline
@@ -114,6 +141,7 @@ function MemberBoardEdit(prop) {
           >
                   SAVE
           </Button>
+          <br></br>
         </Container>
       </div>
       <DemoFooter />

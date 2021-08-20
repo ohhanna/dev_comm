@@ -48,7 +48,8 @@ public class PageVo {
         }
 
         // 1 페이지 의 경우 startpage 0 2페이지의 경우 11 부터 시작
-        this.startPage = (this.pageIndex - 1) * this.pageSize + (this.pageIndex == 1 ? 1 : 0);
+        System.out.println("pageIndex : " + this.pageIndex);
+        this.startPage = (this.pageIndex - 1) * this.pageSize + (this.pageIndex == 1 ? 0 : 1);
 
         System.out.println("START PAGE : " + this.startPage);
     }

@@ -3,20 +3,22 @@
 
 <mapper namespace="com.example.demo.mapper.board.BoardMemberMapper"> 
     <select id="selectBoardList" resultType="com.example.demo.vo.board.BoardMemberVo"> 
+    <![CDATA[
         SELECT BOARD_NO
               ,BOARD_TTL
-              ,BOARD_CNTN
+              ,LEFT(REGEXP_REPLACE(BOARD_CNTN, '<(/)?(img|label|table|thead|tbody|tfoot|tr|td|p|br|div|span|font|strong|b)(.|\s|\t|\n|\r\n)*?>', ''),200) AS BOARD_CNTN
               ,CRT_DT
               ,MOD_DT
               ,REG_MEM_ID
               ,IS_DEL
               ,(SELECT COUNT(BOARD_NO)
                   FROM BOARD_MEM
-                 WHERE IS_DEL = 'N')
+                 WHERE IS_DEL = 'N') AS TOT_CNT
           FROM BOARD_MEM
          WHERE IS_DEL = 'N'
-      ORDER BY BOARD_NO
+      ORDER BY MOD_DT DESC
       LIMIT #{startPage}, #{pageSize}
+    ]]>
     </select> 
 
     <select id="selectBoardDtl" resultType="com.example.demo.vo.board.BoardMemberVo">
@@ -36,6 +38,9 @@
     </select>
 
     <insert id="insertBoardDtl" parameterType="com.example.demo.vo.board.BoardMemberVo">
+        <selectKey keyProperty="boardNoProperty" resultType="int">
+            SELECT LAST_INSERT_ID()
+        </selectKey>
         INSERT IGNORE INTO BOARD_MEM (
                                 BOARD_NO
                                ,BOARD_TTL

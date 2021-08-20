@@ -1,0 +1,29 @@
+<?xml version="1.0" encoding="UTF-8"?> 
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd"> 
+
+<mapper namespace="com.example.demo.mapper.member.MemberMapper"> 
+    <select id="selectUserInfo" resultType="com.example.demo.vo.member.MemberVo"> 
+        SELECT MEM_ID
+              ,MEM_PW
+              ,GRADE
+              ,IS_DEL
+          FROM MEMBER
+         WHERE IS_DEL = 'N'
+           AND MEM_ID = #{memId}
+    </select> 
+
+    <insert id="insertMember" parameterType="com.example.demo.vo.member.MemberVo">
+        INSERT INTO MEMBER (
+                            MEM_ID
+                           ,MEM_PW
+                           ,GRADE
+                           ,IS_DEL
+                            )
+                    VALUES (
+                            #{memId}
+                           ,#{memPw}
+                           ,'MEMBER'
+                           ,'N'
+                            )
+    </insert>
+</mapper>

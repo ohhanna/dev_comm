@@ -3,6 +3,9 @@ import React,{ useEffect, useState } from "react";
 import { useHistory } from 'react-router-dom';
 import axios from 'axios';
 
+import '@toast-ui/editor/dist/toastui-editor.css';
+import {Viewer} from '@toast-ui/editor/dist/toastui-editor-viewer';
+
 // reactstrap components
 import {
   Button,
@@ -18,7 +21,7 @@ import {
 import IndexNavbar from "components/Navbars/IndexNavbar.js";
 import ProfilePageHeader from "components/Headers/ProfilePageHeader.js";
 import DemoFooter from "components/Footers/DemoFooter.js";
-import PageControlModule from "views/memberBoard/PageControlModule";
+import Pagination from 'react-js-pagination';
 
 function MemberBoardList() {
 
@@ -28,10 +31,8 @@ function MemberBoardList() {
   const [alertDanger, setAlertDanger] = React.useState(true);
   const [pageIndex, setPageIndex] = useState(1);
   const [pageSize, setPageSize] = useState(10);
-  const [pageCnt, setPageCnt] = useState(3);
   const [totCnt, setTotCnt] = useState(0);
   const [boardList, setBoardList] = useState([]);
-  const [firstRequest, setFirtRequest] = useState(0);
   const history = useHistory();
 
   ////////////////////////////////////////////////////////////////////
@@ -53,8 +54,8 @@ function MemberBoardList() {
   ///////////////// 개발자 함수
   ////////////////////////////////////////////////////////////////////
   useEffect(() => {
-    getPageIndex(1, 10);
-  }, []);
+    getPageIndex(pageIndex, 10);
+  }, [pageIndex]);
 
   function getPageIndex(pageIndex, pageSize){
     setPageIndex(pageIndex);
@@ -81,12 +82,13 @@ function MemberBoardList() {
               setBoardList(boardListState);
               setTotCnt(boardListState[0].totCnt);
             }).catch(function(error){
-              alert("System Error");
+              alert(error);
             });
   }
 
   function goToDetail(boardNo){
-    history.push("/memberBoardEdit/" + boardNo);
+    let boardNoUrl = boardNo == null && boardNo == undefined ? 'new' : boardNo;
+    history.push("/memberBoardEdit/" + boardNoUrl);
   }
 
   ////////////////////////////////////////////////////////////////////
@@ -99,7 +101,6 @@ function MemberBoardList() {
       
       <div className="section profile-content">
         {/* Page Control Module */}
-        <PageControlModule getPageIndex={getPageIndex} pageCnt={pageCnt} pageIndex={pageIndex} pageSize={pageSize} totCnt={totCnt}/>
 
         <Alert className="alert-with-icon" color="danger" isOpen={alertDanger}>
           <Container>
@@ -122,37 +123,59 @@ function MemberBoardList() {
         </Alert>
 
         <Container className="ml-auto mr-auto" md="9">
-          <h3 className="font-weight-bold">Member Board</h3>
-          <div className="float-right">
-            <Row>
-              <Col >
-                <FormGroup>
-                  <Input placeholder="put in title" type="text" size="sm"/>
-                </FormGroup>
-              </Col>
-              <Col sm="0">
-                <Button
-                  className="btn-round mr-1"
-                  color="default"
-                  size="sm"
-                  outline
-                  type="button"
-                  onClick={()=>{getBoardList(option)}}
-                >
-                  Search
-                </Button>
-              </Col>
-            </Row>
+          <div style={{'height':'80px', 'margin':'0auto'}}>
+              <p className="h3 font-weight-bold float-left">Member Board</p>
           </div>
-          <br/>
+          <Row>
+            <Col >
+              <FormGroup>
+                <Input type="text" size="sm" onChange={(e)=>{console.log(e.target.value)}}/>
+              </FormGroup>
+            </Col>
+            <Col sm="0">
+              <Button
+                className="btn-round mr-1"
+                color="default"
+                size="sm"
+                outline
+                type="button"
+                onClick={()=>{getBoardList(option)}}
+              >
+                Search
+              </Button>
 
+              <Button
+                className="btn-round mr-1 "
+                color="default"
+                size="sm"
+                outline
+                type="button"
+                onClick={()=>{goToDetail()}}
+              >
+                Write
+              </Button>
+            </Col>
+          </Row>
 
 
           {/* Board List Component */}
           <BoardList getBoardList={getBoardList} boardListState={boardList} goToDetail={goToDetail}/>
           <br />
 
+          <Row>
+            <div className="ml-auto mr-auto">
+              <nav>
+                <Pagination activePage={pageIndex} 
+                            itemsCountPerPage={pageSize} 
+                            totalItemsCount={totCnt} 
+                            pageRangeDisplayed={5} 
+                            prevPageText={"‹"} 
+                            nextPageText={"›"} 
+                            onChange={(page) => setPageIndex(page)} />
 
+              </nav>
+            </div>
+          </Row>       
 
         </Container>
       </div>
@@ -187,12 +210,12 @@ function BoardList(prop){
     if(boardListArr != undefined && boardListArr != null && boardListArr.length != 0){
       for(let i = 0; i < boardListArr.length; i++){
           result.push(
-            <Row className="mt-5 text-left" key={i} style={{cursor: 'pointer'}} onClick={()=>{prop.goToDetail(boardListArr[i].boardNo)}}>
+            <Row className="mt-3 text-left" key={i} style={{cursor: 'pointer'}} onClick={()=>{prop.goToDetail(boardListArr[i].boardNo)}}>
               <Col>
                 <h6 key={i + "a"} >
                   {boardListArr[i].boardTtl}
                 </h6>
-                <p key={i + "b"} >
+                <p>
                   {boardListArr[i].boardCntn}
                 </p>
                 <br />
