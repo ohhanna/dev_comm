@@ -1,7 +1,10 @@
-import React, { useState } from "react";
+import React, { useState,useRef } from "react";
 // nodejs library that concatenates strings
 import classnames from "classnames";
 import { NavLink } from 'react-router-dom';
+import axios from 'axios';
+
+import Authentication from 'views/authentication/AuthenticationService.js';
 // reactstrap components
 import {
   Collapse,
@@ -18,29 +21,30 @@ import {
 } from "reactstrap";
 
 function IndexNavbar() {
+
   // 모달
   const [modal, setModal] = React.useState(false);
+  const [isLogin, setIsLogin] = React.useState(false);
+
   const toggleModal = () => {
     setModal(!modal);
   };
 
   const [userInfo, setUserInfo] = useState({
-    email: '',
-    password: '',
+    memId: '',
+    memPw: '',
   });
 
-  function emailChange(e) {
+  function idChange(e) {
     const data = { ...userInfo };
-    data.email = e.currentTarget.value; // input 태그에 입력된 값 지정
+    data.memId = e.currentTarget.value; // input 태그에 입력된 값 지정
     setUserInfo(data);
-    console.log(userInfo);
   }
 
   function passChange(e) {
     const data = { ...userInfo };
-    data.password = e.currentTarget.value; // input 태그에 입력된 값 지정
+    data.memPw = e.currentTarget.value; // input 태그에 입력된 값 지정
     setUserInfo(data);
-    console.log(userInfo);
   }
 
   // function loginHandler(e) {
@@ -48,23 +52,56 @@ function IndexNavbar() {
   //   this.setState({ [name]: value });
   // } 
 
-  function loginClickHandler (props){
-    alert('hi');
-    const email = props.email;
-    const password = props.password;
-    fetch("/api/login", {
-      method: "POST",
-      headers: {
-        "Content-Type": "application/json",
-      },
-      body: JSON.stringify({
-        email,
-        password,
-      }),
-    })
-      .then((res) => res.json())
-      .then((res) => console.log(res));
+  function loginClickHandler (){
+    Authentication.executeJwtAuthenticationService(userInfo.memId,userInfo.memPw)
+                  .then((response)=>{
+                    Authentication.registerSuccessfulLoginForJwt(userInfo.memId, response.data.token);
+                    alert("로그인에 성공하였습니다.");
+
+                    setModal(false);
+                    setIsLogin(Authentication.isUserLoggedIn());
+                  })
+                  .catch((err)=>{
+                    alert("아이디 및 비밀번호를 확인해주세요.");
+                  });
   }; 
+
+  function logoutClickHandler(){
+    Authentication.logout();
+
+    const data = {...userInfo};
+    data.memId = '';
+    data.memPw = '';
+    setUserInfo(data);
+
+    setIsLogin(Authentication.isUserLoggedIn());
+  }
+
+  function registerHandler(){
+
+    if(userInfo.memId == null || userInfo.memId == undefined || userInfo.memId == ''){
+      alert("아이디를 입력해주세요.");
+      return;
+    }else if(userInfo.memPw == null || userInfo.memPw == undefined || userInfo.memPw == ''){
+      alert("비밀번호를 입력해주세요.");
+      return;
+    }
+
+    const api = axios.create({
+      baseURL: "/member"
+    });
+    api.post('/register', null, { params : {
+                                    memId : userInfo.memId,
+                                    memPw : userInfo.memPw
+                                  } }
+            ).then(function(response){
+              alert("회원 등록이 완료되었습니다.");
+              console.log(response.data);
+            }).catch(function(error){
+              //alert(error);
+              alert("System Error");
+            });
+  }
 
   const [navbarColor, setNavbarColor] = React.useState("navbar-transparent");
   const [navbarCollapse, setNavbarCollapse] = React.useState(false);
@@ -137,12 +174,23 @@ function IndexNavbar() {
                 자유게시판
               </NavLink>
             </NavItem>
-            <Button
-                className="btn-round mr-1 btn btn-outline-default"
-                onClick={toggleModal}
-              >
-                로그인(임시)
+            {
+              isLogin == false 
+              ? 
+              <Button
+                  className="btn-round mr-1 btn btn-outline-default"
+                  onClick={toggleModal}
+                >
+                  로그인
               </Button>
+              :
+              <Button
+                  className="btn-round mr-1 btn btn-outline-default"
+                  onClick={logoutClickHandler}
+                >
+                  로그아웃
+              </Button>
+            }
               {/* Modal */}
               <Modal isOpen={modal} toggle={toggleModal}>
                 <div className="modal-header">
@@ -162,13 +210,12 @@ function IndexNavbar() {
                   </h5>
                 </div>
                 <div className="modal-body">
-                <Form className="register-form"  onSubmit={() => { loginClickHandler(userInfo) }} >
                   <label>Email</label>
                   <Input name="email"
                     className="loginId"
                     type="text"
                     placeholder="아이디"
-                    onChange={(e) => { emailChange(e) }} />
+                    onChange={(e) => { idChange(e) }} />
                   <label>Password</label>
                   <Input name="password"
                     className="loginPw"
@@ -177,18 +224,17 @@ function IndexNavbar() {
                     onChange={(e) => { passChange(e) }} />          
                 
                   <div className="left-side">
-                  <Button className="mr-1 btn btn-link">
-                    Login
-                  </Button>                    
-                  </div>
-                  </Form>
-                  <div className="divider" />
+                    <Button className="mr-1 btn btn-link" onClick={loginClickHandler}>
+                      Login
+                    </Button>                    
+                </div>
+                <div className="divider" />
                   <div className="right-side">
-                  <Button className="mr-1 btn btn-link">
-                    Register
-                  </Button>
+                    <Button className="mr-1 btn btn-link" onClick={registerHandler}>
+                      Register
+                    </Button>
                   </div>
-                  </div>
+                </div>
               </Modal>
           </Nav>
         </Collapse>
