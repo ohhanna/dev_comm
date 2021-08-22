@@ -13,7 +13,7 @@
               ,IS_DEL
           FROM BOARD_FREE
          WHERE IS_DEL = 'N'
-      ORDER BY BOARD_NO
+      ORDER BY BOARD_NO DESC
          LIMIT #{pageSize}
         OFFSET #{pageNum}        
     </select>

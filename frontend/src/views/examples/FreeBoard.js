@@ -8,6 +8,7 @@ import LandingPageHeader from "components/Headers/LandingPageHeader.js";
 import FreePageList from "views/freeBoard/FreeList.js";
 import FreePageForm from "views/freeBoard/FreeListAdd.js";
 import FreePageDetail from "views/freeBoard/FreeListDetail.js"
+import FreePageModify from "views/freeBoard/FreeListModify.js"
 import DemoFooter from "components/Footers/DemoFooter.js";
 
 function FreePage() {
@@ -34,6 +35,10 @@ function FreePage() {
         <Route
           path="/freeBoard/detail/:param"
           component={FreePageDetail}
+        />
+        <Route
+          path="/freeBoard/modify/:param"
+          component={FreePageModify}
         />
       </Switch>
       <DemoFooter />

@@ -1,4 +1,4 @@
-import React,{ useRef, useState } from 'react';
+import React, { useEffect, useState, useRef } from 'react';
 import '@toast-ui/editor/dist/toastui-editor.css';
 import { Editor } from '@toast-ui/react-editor';
 
@@ -9,40 +9,39 @@ import {
     Container
   } from "reactstrap";
 
-function FreeListAddFn(props) {
-
-    fetch('/freeBoard/add', {
-        method: 'POST',
-        headers: {
-            'Content-Type': 'application/json',
-        },
-        body: JSON.stringify({
-            'boardTtl': props.title,
-            'boardCntn': props.content
-        }),
-        redirect : 'follow'
-    })
-    .then(response => {
-    if (response.redirected) {
-        window.location.href = 'localhost:3000/freeBoard/list'
-    }
-})
+function FreeListModifyFn(props) {
+    alert('ing, , , ,');
+    console.log(props);
 }
 
-function FreeListAdd() {
+const FreeListModify = (props) => {
 
-    let [title, setTitle] = useState();
-    let [content, setContent] = useState();
+    let[ datas, setDatas ] = useState([{}]);
+    let[ title, setTitle ] = useState("");
+    let[ content, setContent ] = useState("");
     let editorRef = useRef();
 
+    let boardNo = props.match.params.param;
+    let url = '/freeBoard/detail?' + new URLSearchParams({boardNo : boardNo});
+
+    useEffect(() => {
+        fetch(url)
+       .then(res => res.json())
+       .then(datas => { setDatas(datas); 
+                        setTitle(datas[0].boardTtl); 
+                        setContent(datas[0].boardCntn);
+                        editorRef.current.getInstance().setHTML(datas[0].boardCntn);})
+       .catch(err => { console.log('error' + JSON.stringify(err))});
+    }, []);
+
     return (
-      <>
+        <>
         <div className="main">
           <div className="section">
               <div className="section landing-section">
                 <Container>
                     <Col className="ml-auto mr-auto">
-                        <h2 className="text-center">게시글 등록</h2>
+                        <h2 className="text-center">게시글 수정</h2>
                         <br/>
                         <div>
                           <Button type="button" 
@@ -50,8 +49,8 @@ function FreeListAdd() {
                                   className="btn mr-1 float-right" 
                                   color="default" 
                                   outline
-                                  onClick={ () => { FreeListAddFn({ title : title, content : content }) }}>
-                                    SAVE
+                                  onClick={ () => { FreeListModifyFn({ title : title, content : content }) }}>
+                                    저장
                           </Button>
                         </div>
                         <br/><br/><br/>
@@ -83,7 +82,7 @@ function FreeListAdd() {
             </div>
         </div>
         </>
-    )
-} 
+    );
+};
 
-export default FreeListAdd;
+export default FreeListModify;

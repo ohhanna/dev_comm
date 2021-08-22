@@ -263,3 +263,21 @@
         }
     }
 }
+
+.custom-flex{
+    display : flex;
+    justify-content: center;
+    margin-top: 30px;
+    .custom-item{
+        margin : 0px 10px 10px 20px;
+
+    }
+}
+
+.custom-input{
+    width : 60%;
+}
+
+
+
+

@@ -6,14 +6,16 @@ import Pagination from 'react-js-pagination';
 // reactstrap components
 import {
     Button,
-    Form,
     Input,
     Container,
-    Row,
-    Col,
-    FormGroup,
-    Label,
     Table
+  } from "reactstrap";
+
+  import {
+    DropdownToggle,
+    DropdownMenu,
+    DropdownItem,
+    UncontrolledDropdown
   } from "reactstrap";
 
 function FreeList() {
@@ -56,53 +58,45 @@ function FreeList() {
           <Container>
           <div className="section landing-section">
             <Container>
-              <Row>
-                <Col className="ml-auto mr-auto" md="6">
-                  <h2 className="text-center">자유게시판</h2>
-                  <Form className="text-center">
-                    <FormGroup>
-                    <br/>
-                      <Row>
-                        <Col>
-                          <Label check>
-                            <Input type="radio" defaultValue="option1" id="search_notice_writer" name="search_notice"/>
-                            Writer <span className="form-check-sign" />
-                          </Label>
-                        </Col>
-                        <Col>
-                          <Label check>
-                            <Input type="radio" defaultValue="option2" id="search_notice_title" name="search_notice"/>
-                            Title  <span className="form-check-sign" />
-                          </Label>
-                        </Col>
-                        <Col>
-                          <Label check>
-                            <Input type="radio" defaultValue="option3" id="search_notice_content" name="search_notice"/>
-                            Content  <span className="form-check-sign" />
-                          </Label>
-                        </Col>
-                      </Row>
-                      <br/>
-                      <Row>
-                        <Col className="text-center">
-                          <Input type="text" id="search_notice_input" placeholder="Please enter a search term"/>
-                        </Col>
-                        <Col>
-                          <Button type="button" id="search_notice" className="btn mr-1" color="default" outline
-                            onClick={()=>{console.log('search')}}>
-                            Search
-                          </Button>
-                        </Col>
-                      </Row>
-                    </FormGroup>
-                  </Form>
-                </Col>
-              </Row>
+            <h2 className="text-center">자유게시판</h2>
+            <div className="custom-flex">
+              <UncontrolledDropdown className="custom-item">
+                <DropdownToggle
+                  aria-expanded={false}
+                  aria-haspopup={true}
+                  caret
+                  color="secondary"
+                  data-toggle="dropdown"
+                  href="#pablo"
+                  id="dropdownMenuLink"
+                  onClick={e => e.preventDefault()}
+                  role="button"
+                >
+                  검색어
+                </DropdownToggle>
+                <DropdownMenu aria-labelledby="dropdownMenuLink">
+                  <DropdownItem href="#pablo" onClick={e => e.preventDefault()}>
+                    제목
+                  </DropdownItem>
+                  <DropdownItem href="#pablo" onClick={e => e.preventDefault()}>
+                    작성자
+                  </DropdownItem>
+                  <DropdownItem href="#pablo" onClick={e => e.preventDefault()}>
+                    내용
+                  </DropdownItem>
+                </DropdownMenu>
+              </UncontrolledDropdown>
+              <Input placeholder="Please enter a search term" className="custom-item custom-input"/>
+              <Button type="button" className="btn mr-1 custom-item" color="default" outline
+                onClick={()=>{console.log('search')}}>
+                검색
+              </Button>
+            </div>          
             </Container>
           </div>
           <Button type="button" id="notice_write" className="btn mr-1 float-right" color="default" outline
                   tag={Link} to="/freeBoard/addForm">
-             Write
+             새 글 쓰기
           </Button>
           <br/><br/><br/>
 
@@ -122,7 +116,7 @@ function FreeList() {
                 return <tr key = {data.boardNo}>
                           <td> {data.boardNo} </td>
                           <td>
-                            <a onClick={ () => { ListDetail(data.boardNo) } }> 
+                            <a onClick={ () => { ListDetail(data.boardNo) } } href="#!"> 
                               {data.boardTtl} 
                             </a>
                           </td>
@@ -142,8 +136,7 @@ function FreeList() {
           </Table>
           <br/>
 
-          <Row>
-          <div className="ml-auto mr-auto">
+          <div className="ml-auto mr-auto custom-flex">
             <nav>
             <Pagination activePage={currentPage} 
                         itemsCountPerPage={pageSize} 
@@ -154,8 +147,7 @@ function FreeList() {
                         onChange={(page) => setCurrentPage(page)} />
 
             </nav>
-          </div>
-          </Row>          
+          </div>       
           </Container>
         </div>
       </div>  
