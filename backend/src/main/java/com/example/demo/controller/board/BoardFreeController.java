@@ -59,10 +59,10 @@ public class BoardFreeController {
 
     //게시판 리스트 글 상세보기
     @GetMapping("/freeBoard/detail")
-    public List<BoardFreeVo> BoardFreeListDetail(@RequestParam(value = "boardNo", required=false) Integer boardNo) {
+    public List<BoardFreeVo> BoardFreeDetail(@RequestParam(value = "boardNo", required=false) Integer boardNo) {
         System.out.println("freeBoardList Controller Detail");
 
-        List<BoardFreeVo> freeDetail = boardFreeService.BoardFreeListDetail(boardNo);
+        List<BoardFreeVo> freeDetail = boardFreeService.BoardFreeDetail(boardNo);
         return freeDetail;
     }
 
@@ -72,6 +72,14 @@ public class BoardFreeController {
         System.out.println("freeBoardList Controller Add");
 
         boardFreeService.BoardFreeAdd(boardFreeVo);
+    }
+
+    //게시판 글 수정
+    @PostMapping("/freeBoard/modify")
+    public void freeBoardModify(@RequestBody BoardFreeVo boardFreeVo) {
+        System.out.println("freeBoardList Controller Modify");
+
+        boardFreeService.BoardFreeModify(boardFreeVo);
     }
 
 }

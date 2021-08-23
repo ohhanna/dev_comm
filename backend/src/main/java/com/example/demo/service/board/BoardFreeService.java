@@ -24,13 +24,18 @@ public class BoardFreeService {
     }
 
     //게시판 리스트 글 상세보기
-    public List<BoardFreeVo> BoardFreeListDetail(int boardNo) {
-        return mapper.BoardFreeListDetail(boardNo);
+    public List<BoardFreeVo> BoardFreeDetail(int boardNo) {
+        return mapper.BoardFreeDetail(boardNo);
     }
 
     //게시판 글 추가
     public int BoardFreeAdd(BoardFreeVo boardFreeVo) {
         return mapper.BoardFreeAdd(boardFreeVo);
+    }
+
+    //게시판 글 수정
+    public int BoardFreeModify(BoardFreeVo boardFreeVo) {
+        return mapper.BoardFreeModify(boardFreeVo);
     }
 
 }

@@ -23,8 +23,8 @@ function FreeListAddFn(props) {
         redirect : 'follow'
     })
     .then(response => {
-    if (response.redirected) {
-        window.location.href = 'localhost:3000/freeBoard/list'
+    if (response.status === 200) {
+      window.location.href = 'localhost:4200/freeBoard/list/';
     }
 })
 }

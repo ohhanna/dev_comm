@@ -10,8 +10,24 @@ import {
   } from "reactstrap";
 
 function FreeListModifyFn(props) {
-    alert('ing, , , ,');
-    console.log(props);
+
+    fetch('/freeBoard/modify', {
+      method: 'POST',
+        headers: {
+            'Content-Type': 'application/json',
+        },
+        body: JSON.stringify({
+            'boardNo': props.boardNo,
+            'boardTtl': props.title,
+            'boardCntn': props.content
+        }),
+        redirect : 'follow'
+    })
+    .then(response => {
+    if (response.status === 200) {
+      window.location.href = 'localhost:4200/freeBoard/list/';
+    }
+    })
 }
 
 const FreeListModify = (props) => {
@@ -49,7 +65,9 @@ const FreeListModify = (props) => {
                                   className="btn mr-1 float-right" 
                                   color="default" 
                                   outline
-                                  onClick={ () => { FreeListModifyFn({ title : title, content : content }) }}>
+                                  onClick={ () => { FreeListModifyFn({ boardNo : datas[0].boardNo, 
+                                                                       title : title, 
+                                                                       content : content }) }}>
                                     저장
                           </Button>
                         </div>
