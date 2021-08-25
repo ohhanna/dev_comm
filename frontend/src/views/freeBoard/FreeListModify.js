@@ -1,4 +1,5 @@
 import React, { useEffect, useState, useRef } from 'react';
+import { useHistory } from 'react-router-dom';
 import '@toast-ui/editor/dist/toastui-editor.css';
 import { Editor } from '@toast-ui/react-editor';
 
@@ -9,32 +10,12 @@ import {
     Container
   } from "reactstrap";
 
-function FreeListModifyFn(props) {
-
-    fetch('/freeBoard/modify', {
-      method: 'POST',
-        headers: {
-            'Content-Type': 'application/json',
-        },
-        body: JSON.stringify({
-            'boardNo': props.boardNo,
-            'boardTtl': props.title,
-            'boardCntn': props.content
-        }),
-        redirect : 'follow'
-    })
-    .then(response => {
-    if (response.status === 200) {
-      window.location.href = 'localhost:4200/freeBoard/list/';
-    }
-    })
-}
-
 const FreeListModify = (props) => {
 
     let[ datas, setDatas ] = useState([{}]);
     let[ title, setTitle ] = useState("");
     let[ content, setContent ] = useState("");
+    let history = useHistory();
     let editorRef = useRef();
 
     let boardNo = props.match.params.param;
@@ -49,6 +30,25 @@ const FreeListModify = (props) => {
                         editorRef.current.getInstance().setHTML(datas[0].boardCntn);})
        .catch(err => { console.log('error' + JSON.stringify(err))});
     }, []);
+
+    function FreeListModifyFn(props) {
+      fetch('/freeBoard/modify', {
+        method: 'POST',
+          headers: {
+              'Content-Type': 'application/json',
+          },
+          body: JSON.stringify({
+              'boardNo': props.boardNo,
+              'boardTtl': props.title,
+              'boardCntn': props.content
+          })
+      })
+      .then(response => {
+        if (response.status === 200) {
+          history.push('/freeBoard/list');
+        }
+      })
+    }
 
     return (
         <>

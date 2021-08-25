@@ -1,4 +1,5 @@
 import React,{ useRef, useState } from 'react';
+import { useHistory } from 'react-router-dom';
 import '@toast-ui/editor/dist/toastui-editor.css';
 import { Editor } from '@toast-ui/react-editor';
 
@@ -9,31 +10,31 @@ import {
     Container
   } from "reactstrap";
 
-function FreeListAddFn(props) {
-
-    fetch('/freeBoard/add', {
-        method: 'POST',
-        headers: {
-            'Content-Type': 'application/json',
-        },
-        body: JSON.stringify({
-            'boardTtl': props.title,
-            'boardCntn': props.content
-        }),
-        redirect : 'follow'
-    })
-    .then(response => {
-    if (response.status === 200) {
-      window.location.href = 'localhost:4200/freeBoard/list/';
-    }
-})
-}
-
 function FreeListAdd() {
 
     let [title, setTitle] = useState();
     let [content, setContent] = useState();
+    let history = useHistory();
     let editorRef = useRef();
+
+    function FreeListAddFn(props) {
+      fetch('/freeBoard/add', {
+          method: 'POST',
+          headers: {
+              'Content-Type': 'application/json',
+          },
+          body: JSON.stringify({
+              'boardTtl': props.title,
+              'boardCntn': props.content
+          }),
+          redirect : 'follow'
+      })
+      .then(response => {
+        if (response.status === 200) {
+          history.push('/freeBoard/list');
+        }
+      })
+    }
 
     return (
       <>
