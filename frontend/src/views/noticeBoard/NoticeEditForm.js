@@ -1,6 +1,8 @@
 /* eslint-disable */
-import React, { useState, useEffect } from "react";
-import { Link } from "react-router-dom";
+import React, { useState, useEffect, useRef } from "react";
+import { Link, useHistory } from "react-router-dom";
+import '@toast-ui/editor/dist/toastui-editor.css';
+import { Editor, Viewer } from '@toast-ui/react-editor';
 
 import {
     Button,
@@ -13,27 +15,93 @@ import {
     Modal
   } from "reactstrap";
 
-function useFetch(url){
-    const [data, setData] = useState([]);
+// function useFetch(url){
+//     const [data, setData] = useState([]);
+//     let editorRef = useRef();
 
-    async function fetchUrl(){
-        const response = await fetch(url);
-        const json = await response.json();
+//     async function fetchUrl(){
+//         const response = await fetch(url);
+//         const json = await response.json();
 
-        setData(json);
-    }
+//         setData(json);
+//         editorRef.current.getInstance().setHTML(json[0].boardCntn);
+//     }
 
-    useEffect(()=>{
-        fetchUrl();
-    },[]);
+//     useEffect(()=>{
+//         fetchUrl();
+//     },[]);
 
-    return data;
+//     console.log(data);
+//     return data;
+// }
 
-}
+// function NoticeEdit(props){
+
+//     let history = useHistory();
+
+//     fetch('/notice-page/editProcess', {
+//         method : 'POST',
+//         headers : {
+//             'Content-Type' : 'application/json',
+//         },
+//         body : JSON.stringify({
+//             'boardNo' : props.boardNo,
+//             'boardTtl' : props.title,
+//             'boardCntn' : props.content
+//         })
+//     })
+//     .then(response => {
+//         if (response.status === 200) {
+//             history.push('/notice-page/list');
+//         }
+//     })
+// }
 
 const NoticeEditForm = ({match}) => {
 
-    const data = useFetch("/notice-page/view/"+match.params.boardNo);
+    let [data, setData] = useState([{}]);
+    let [boardNo, setBoardNo] = useState();
+    let [title, setTitle] = useState();
+    let [content, setContent] = useState();
+    let history = useHistory();
+    let editorRef = useRef();
+
+    let url = "/notice-page/view/"+match.params.boardNo;
+    console.log(url);
+
+    function NoticeEdit(props){
+    
+        fetch('/notice-page/editProcess', {
+            method : 'POST',
+            headers : {
+                'Content-Type' : 'application/json',
+            },
+            body : JSON.stringify({
+                'boardNo' : props.boardNo,
+                'boardTtl' : props.title,
+                'boardCntn' : props.content
+            })
+        })
+        .then(response => {
+            if (response.status === 200) {
+                history.push('/notice-page/view/'+props.boardNo);
+            }
+        })
+    }
+
+    useEffect(()=>{
+        fetch(url)
+        .then(res => res.json())
+        .then(data => {
+            setData(data);
+            editorRef.current.getInstance().setHTML(data.boardCntn);
+            setTitle(data.boardTtl);
+            setContent(editorRef.current.getInstance().getHTML(data.boardCntn));
+            setBoardNo(data.boardNo);
+        })
+        .catch(err => {console.log('error!' + JSON.stringify(err))})
+    },[]);
+
 
     return (
         <>
@@ -49,24 +117,34 @@ const NoticeEditForm = ({match}) => {
                                 <FormGroup>
                                     <br/>
                                     <div>
-                                        <ListModal/>
-                                        {/* <Link to="/notice-page/editProcess"> */}
-                                            <Button type="button" id="notice_edit_btn" className="btn mr-1 float-right" color="default" outline>
-                                                SAVE
-                                            </Button>
-                                        {/* </Link> */}
+                                        <ListModal boardNo={boardNo}/>
+                                        <EditModal boardNo={boardNo} title={title} content={content} NoticeEdit={NoticeEdit}/>
+                                        {/* <Button type="button" 
+                                                className="btn mr-1 float-right"
+                                                color="default" outline
+                                                onClick={()=>{NoticeEdit({boardNo:boardNo, title:title, content:content})}}>
+                                            SAVE
+                                        </Button> */}
                                     </div>
                                     <br/><br/><br/>
                                     <Table>
                                         <thead>
                                             <tr>
-                                                <th><input type="text" class="form-control">{data.board_ttl}</input></th>
+                                                <th>
+                                                    <input type="text"
+                                                           className="form-control"
+                                                           placeholder={data.boardTtl}
+                                                           onChange={(e) => setTitle(e.target.value)}/>
+                                                </th>
                                             </tr>
                                         </thead>
                                         <tbody>
                                             <tr>
                                                 <td>
-                                                    <textarea rows="4" class="form-control"></textarea>
+                                                    <Editor ref={editorRef}
+                                                            height="500px"
+                                                            initialEditType="wysiwyg"
+                                                            onChange={ () => setContent(editorRef.current.getInstance().getHTML()) }/>
                                                 </td>
                                             </tr>
                                         </tbody>
@@ -85,7 +163,7 @@ const NoticeEditForm = ({match}) => {
     )
 }
 
-function ListModal(){
+function ListModal(props){
 
     const [listModal, setListModal] = React.useState(false);
     const toggleModal = () => {
@@ -126,7 +204,7 @@ function ListModal(){
                 </Button>
                 </div>
                 <div className="right-side">
-                <Link to="/notice-page/list">
+                <Link to={`/notice-page/view/${props.boardNo}`}>
                     <Button className="btn-link"
                             color="default"
                             type="button"
@@ -135,6 +213,59 @@ function ListModal(){
                         네
                     </Button>
                 </Link>
+                </div>
+            </div>
+        </Modal>
+        </>
+    )
+}
+
+function EditModal(props){
+
+    const [EditModal, setEditModal] = React.useState(false);
+    const toggleModal = () => {
+        setEditModal(!EditModal);
+    }
+
+    return (
+        <>
+        <Button type="button" 
+                className="btn mr-1 float-right"
+                color="default" outline
+                onClick={toggleModal}>
+            SAVE
+        </Button>
+        <Modal isOpen={EditModal} toggle={toggleModal}>
+            <div className="modal-header">
+                <button aria-label="Close"
+                        className="close"
+                        type="button"
+                        onClick={toggleModal}>
+                    <span aria-hidden={true}>×</span>
+                </button>
+                <h5>NOTICE!</h5>
+            </div>
+            <div className="modal-body text-center">
+                수정하시겠습니까?
+            </div>
+            <div className="modal-footer" flex-wrap="inherit">
+                <div className="left-side">
+                <Button className="btn-link"
+                        color="default"
+                        type="button"
+                        width="50%"
+                        onClick={toggleModal}>
+                    아니오
+                </Button>
+                </div>
+                <div className="right-side">
+                <Button className="btn-link"
+                        color="default"
+                        type="button"
+                        width="50%"
+                        onClick={()=>{props.NoticeEdit({boardNo:props.boardNo, title:props.title, content:props.content})}}>
+                    네
+                </Button>
                 </div>
             </div>
         </Modal>

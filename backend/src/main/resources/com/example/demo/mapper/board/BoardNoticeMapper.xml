@@ -1,45 +1,67 @@
 <?xml version="1.0" encoding="UTF-8"?> 
 <!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd"> 
 
-<mapper namespace="com.example.demo.mapper.board.BoardNoticeMapper"> 
+<mapper namespace="com.example.demo.mapper.board.BoardNoticeMapper">
 
-    <select id="selectAll" resultType="com.example.demo.vo.board.BoardNoticeVo"> 
-        SELECT * FROM BOARD_NOTICE
-        WHERE is_del = 'N'
-        ORDER BY board_no DESC
-    </select>
-
-    <!-- <select id="selectAll" resultType="com.example.demo.vo.board.BoardNoticeVo"> 
-        SELECT BOARD_NO,
-                BOARD_TTL,
-                BOARD_CNTN,
-                CRT_DT,
-                MOD_DT,
-                REG_MEM_ID,
-                IS_DEL,
-                (SELECT COUNT(BOARD_NO)
-                    FROM BOARD_NOTICE
-                    WHERE IS_DEL = 'N')
+    <!-- LIST -->
+    <select id="boardNoticeListCount" resultType="int">
+        SELECT COUNT(*)
         FROM BOARD_NOTICE
         WHERE IS_DEL = 'N'
-        ORDER BY BORDER_NO DESC
-        LIMIT #{startPage}, #{pageSize}
-    </select> -->
+    </select>
+
+    <select id="boardNoticeList" resultType="com.example.demo.vo.board.BoardNoticeVo">
+        SELECT BOARD_NO
+                ,BOARD_TTL
+                ,BOARD_CNTN
+                ,CRT_DT
+                ,MOD_DT
+                ,REG_MEM_ID
+                ,IS_DEL
+        FROM BOARD_NOTICE
+        WHERE IS_DEL = 'N'
+        ORDER BY BOARD_NO DESC
+        LIMIT #{pageSize}
+        OFFSET #{pageNum}
+    </select>
+
+    <!-- WRITE -->
+    <insert id="boardNoticeWrite" parameterType="com.example.demo.vo.board.BoardFreeVo">
+        INSERT INTO BOARD_NOTICE (
+                        BOARD_TTL,
+                        BOARD_CNTN,
+                        CRT_DT,
+                        MOD_DT,
+                        REG_MEM_ID,
+                        IS_DEL)
+                VALUES (
+                    #{boardTtl},
+                    #{boardCntn},
+                    NOW(),
+                    NOW(),
+                    'ADMIN',
+                    'N')
+    </insert>
+
+    <!-- EDIT -->
+    <update id="boardNoticeEdit">
+        UPDATE BOARD_NOTICE
+        SET board_ttl = #{boardTtl},
+            board_cntn = #{boardCntn}
+        WHERE board_no = #{boardNo}
+    </update>
     
+    <!-- VIEW -->
     <select id="selectOne" resultType="com.example.demo.vo.board.BoardNoticeVo"> 
         SELECT * FROM BOARD_NOTICE
         WHERE board_no = #{board_no} AND is_del = 'N'
     </select>
 
+    <!-- DELETE -->
     <update id="delOne">
         UPDATE BOARD_NOTICE
         SET is_del = 'Y'
         WHERE board_no = #{board_no}
     </update>
-
-    <insert id="">
-		insert into BOARD_NOTICE(title, content, writer)
-		values(#{title},#{content} ,#{writer})
-	</insert>
 
 </mapper>

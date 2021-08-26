@@ -3,6 +3,7 @@ import React, { useState, useEffect } from "react";
 import { Link } from "react-router-dom";
 import Moment from 'react-moment';
 import axios from 'axios';
+import Pagination from 'react-js-pagination';
 
 // reactstrap components
 import {
@@ -14,64 +15,42 @@ import {
   Col,
   FormGroup,
   Label,
-  Table,
-  Pagination,
-  PaginationItem,
-  PaginationLink
+  Table
 } from "reactstrap";
-
-// function useFetch(url){
-
-//   const [data, setData] = useState([]);
-
-//   async function fetchUrl(){
-//     const response = await fetch(url);
-//     const json = await response.json();
-
-//     setData(json);
-//   }
-
-//   useEffect(()=>{
-//     fetchUrl();
-//   },[]);
-
-//   return data;
-// }
 
 function NoticeList() {
 
-  // const data = useFetch("/notice-page/list");
+  let [currentPage, setCurrentPage] = useState(1);
+  let [pageSize, setPageSize] = useState(10);
+  let [post, setPost] = useState({
+    noticeListCount : '',
+    noticeList : []
+  });
 
-  const [posts, setPosts] = useState([]);
-  const [loading, setLoading] = useState(false);
-  const [currentPage, setCurrentPage] = useState(1);
-  const [postsPerPage, setPostsPerPage] = useState(10);
+  let url = '/notice-page/list?' + new URLSearchParams({
+    currentPage : pageSize * (currentPage - 1),
+    pageSize : pageSize
+  })
 
-  useEffect(()=>{
-    async function fetchData(){
-      setLoading(true);
-      const response = await axios.get('/notice-page/list');
-      setPosts(response.data);
-      setLoading(false);
-    }
-    fetchData();
-  },[]);
+  useEffect(() => {
+    fetch(url)
+    .then(res => res.json())
+    .then((post) => {setPost({
+          ...post,
+        noticeListCount: post.noticeListCount,
+        noticeList: post.noticeList
+      })
+    })
+    .catch(err => { console.log('error! ' + JSON.stringify(err))});
+  }, [currentPage]);
 
-  const indexOfLast = currentPage * postsPerPage;
-  const indexOfFirst = indexOfLast - postsPerPage;
-  const currentPosts = posts.slice(indexOfFirst, indexOfLast);
-
-  const paginate = (pageNumber) => setCurrentPage(pageNumber);
-
-  // function currentPosts(tmp){
-  //   let currentPosts = 0;
-  //   currentPosts = tmp.slice(indexOfFirst, indexOfLast);
-  //   console.log('current posts');
-  //   console.log(currentPosts);
-  //   return currentPosts;
-  // }
-
-  // console.log(posts);
+  // useEffect(()=>{
+  //   async function fetchData(){
+  //     const response = await axios.get('/notice-page/list');
+  //     setPosts(response.data);
+  //   }
+  //   fetchData();
+  // },[]);
 
   return (
     <>
@@ -132,55 +111,18 @@ function NoticeList() {
           </Button>
         </Link>
         <br/><br/><br/>
-        <Table>
-          <thead>
-            <tr>
-              <th width="10%">#</th>
-              <th width="60%">Title</th>
-              <th width="15%">Date</th>
-              <th width="15%">Writer</th>
-            </tr>
-          </thead>
-          <tbody>
-            <Lists posts={currentPosts} loading={loading}/>
-          </tbody>
-        </Table>
+        <Lists post={post}/>
         <br/>
         <Row>
         <div className="ml-auto mr-auto">
           <nav>
-            <ListPage postsPerPage = {postsPerPage} totalPosts = {posts.length} paginate = {paginate}/>
-            {/* <Pagination>
-              <PaginationItem>
-                <PaginationLink aria-label="Previous" href="#pablo"
-                  onClick={(e) => e.preventDefault()}>
-                  <i aria-hidden={true} className="fa fa-angle-left" />
-                  <span className="sr-only">Previous</span>
-                </PaginationLink>
-              </PaginationItem>
-              <PaginationItem active>
-                <PaginationLink href="#pablo" onClick={(e) => e.preventDefault()}>1</PaginationLink>
-              </PaginationItem>
-              <PaginationItem>
-                <PaginationLink href="#pablo" onClick={(e) => e.preventDefault()}>2</PaginationLink>
-              </PaginationItem>
-              <PaginationItem>
-                <PaginationLink href="#pablo" onClick={(e) => e.preventDefault()}>3</PaginationLink>
-              </PaginationItem>
-              <PaginationItem>
-                <PaginationLink href="#pablo" onClick={(e) => e.preventDefault()}>4</PaginationLink>
-              </PaginationItem>
-              <PaginationItem>
-                <PaginationLink href="#pablo" onClick={(e) => e.preventDefault()}>5</PaginationLink>
-              </PaginationItem>
-              <PaginationItem>
-                <PaginationLink aria-label="Next" href="#pablo"
-                  onClick={(e) => e.preventDefault()}>
-                  <i aria-hidden={true} className="fa fa-angle-right" />
-                  <span className="sr-only">Next</span>
-                </PaginationLink>
-              </PaginationItem>
-            </Pagination> */}
+            <Pagination activePage={currentPage} 
+                        itemsCountPerPage={pageSize} 
+                        totalItemsCount={post.noticeListCount} 
+                        pageRangeDisplayed={5}
+                        prevPageText={"‹"} 
+                        nextPageText={"›"} 
+                        onChange={(page) => setCurrentPage(page)} />
           </nav>
         </div>
         </Row>
@@ -191,62 +133,34 @@ function NoticeList() {
   );
 }
 
-const Lists = ({posts, loading}) => {
+const Lists = ({post}) => {
   return (
     <>
-    { loading &&
-      <tr>
-        <td colSpan="4"> LOADING... </td>
-      </tr>
-    }
-    { !loading &&
-      posts.map( posts =>
-      <tr key={posts.boardNo}>
-        <td>{posts.boardNo}</td>
-        <td><Link to={`/notice-page/view/${posts.boardNo}`}>{posts.boardTtl}</Link></td>
-        <td>
-          <Moment format="YYYY/MM/DD">
-            {posts.crtDt}
-          </Moment></td>
-        <td>{posts.regMemId}</td>
-      </tr>
-      )}
-    </>
-  )
-}
-
-const ListPage = ({postsPerPage, totalPosts, paginate}) => {
-  // pageNumbers = 총 페이지 넘버 (100데이터, 10개씩 = pageNumbers : 10)
-  const pageNumbers = [];
-  for(let i = 1 ; i <= Math.ceil(totalPosts/postsPerPage); i++){
-    pageNumbers.push(i);
-  }
-
-  return (
-    <>
-    <Pagination>
-      <PaginationItem>
-        <PaginationLink aria-label="Previous" href="#pablo"
-          onClick={(e) => e.preventDefault()}>
-          <i aria-hidden={true} className="fa fa-angle-left" />
-          <span className="sr-only">Previous</span>
-        </PaginationLink>
-      </PaginationItem>
-      {
-        pageNumbers.map(number => (
-          <PaginationItem>
-            <PaginationLink href="#pablo" onClick={()=>{paginate(number)}}>{number}</PaginationLink>
-          </PaginationItem>
-        ))
+    <Table>
+      <thead>
+        <tr>
+          <th width="10%">#</th>
+          <th width="60%">Title</th>
+          <th width="15%">Date</th>
+          <th width="15%">Writer</th>
+        </tr>
+      </thead>
+      <tbody>
+      { 
+        post.noticeList.map( post =>
+        <tr key={post.boardNo}>
+          <td>{post.boardNo}</td>
+          <td><Link to={`/notice-page/view/${post.boardNo}`}>{post.boardTtl}</Link></td>
+          <td>
+            <Moment format="YYYY/MM/DD">
+              {post.crtDt}
+            </Moment></td>
+          <td>{post.regMemId}</td>
+        </tr>
+        )
       }
-      <PaginationItem>
-        <PaginationLink aria-label="Next" href="#pablo"
-          onClick={(e) => e.preventDefault()}>
-          <i aria-hidden={true} className="fa fa-angle-right" />
-          <span className="sr-only">Next</span>
-        </PaginationLink>
-      </PaginationItem>
-    </Pagination>
+      </tbody>
+    </Table>
     </>
   )
 }

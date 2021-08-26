@@ -1,13 +1,12 @@
 package com.example.demo.vo.board;
 
-import java.sql.Blob;
 import java.util.Date;
 
 public class BoardNoticeVo {
 
     int boardNo;
     String boardTtl;
-    Blob boardCntn;
+    String boardCntn;
     Date crtDt;
     Date modDt;
     String regMemId;
@@ -29,11 +28,11 @@ public class BoardNoticeVo {
         this.boardTtl = boardTtl;
     }
 
-    public Blob getBoardCntn() {
+    public String getBoardCntn() {
         return this.boardCntn;
     }
 
-    public void setBoardCntn(Blob boardCntn) {
+    public void setBoardCntn(String boardCntn) {
         this.boardCntn = boardCntn;
     }
 

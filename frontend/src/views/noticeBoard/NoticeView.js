@@ -29,7 +29,6 @@ function useFetch(url){
     },[]);
 
     return data;
-
 }
 
 const NoticeView = ({match}) => {
@@ -79,11 +78,8 @@ const NoticeView = ({match}) => {
                                             </tr>
                                             <tr>
                                                 <td colSpan="2">
-                                                    나 오늘 리액트 공부했당<br/>
-                                                    abc<br/>
-                                                    abc<br/>
-                                                    abc<br/>
-                                                    ㅋㅋㅋㅋㅋㅋㅋㅋㅋㅋ
+                                                    <div dangerouslySetInnerHTML={ {__html: data.boardCntn} }/>
+                                                    {/* {data.boardCntn} */}
                                                 </td>
                                             </tr>
                                             <tr><td/><td/></tr>

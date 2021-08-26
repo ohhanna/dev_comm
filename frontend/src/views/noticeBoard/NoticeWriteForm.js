@@ -1,6 +1,8 @@
 /* eslint-disable */
-import React from "react";
+import React,{ useRef, useState } from 'react';
 import { Link } from "react-router-dom";
+import '@toast-ui/editor/dist/toastui-editor.css';
+import { Editor } from '@toast-ui/react-editor';
 
 import {
     Button,
@@ -13,7 +15,29 @@ import {
     Modal
   } from "reactstrap";
 
+function NoticeWrite(props){
+    fetch('/notice-page/writeProcess', {
+        method : 'POST',
+        headers : {
+            'Content-Type' : 'application/json',
+        },
+        body : JSON.stringify({
+            'boardTtl' : props.title,
+            'boardCntn' : props.content
+        })
+    })
+    .then(response => {
+        if(response.redirected){
+            // window.location.href = '/notice-page/list'
+        }
+    })
+}
+
 function NoticeWriteForm() {
+
+    let [title, setTitle] = useState();
+    let [content, setContent] = useState();
+    let editorRef = useRef();
 
     return (
         <>
@@ -30,23 +54,32 @@ function NoticeWriteForm() {
                                     <br/>
                                     <div>
                                         <ListModal/>
-                                        {/* <Link to="/notice-page/writeProcess"> */}
-                                            <Button type="button" id="notice_save_btn" className="btn mr-1 float-right" color="default" outline>
-                                                SAVE
-                                            </Button>
-                                        {/* </Link> */}
+                                        <Button type="button"
+                                                className="btn mr-1 float-right"
+                                                color="default" outline
+                                                onClick={()=>{NoticeWrite({title:title, content:content})}}>
+                                            SAVE
+                                        </Button>
                                     </div>
                                     <br/><br/><br/>
                                     <Table>
                                         <thead>
                                             <tr>
-                                                <th><input type="text" class="form-control" placeholder="Please enter a title."></input></th>
+                                                <th>
+                                                    <input type="text" class="form-control"
+                                                           placeholder="Please enter a title."
+                                                           onChange={(e) => setTitle(e.target.value)}/>
+                                                </th>
                                             </tr>
                                         </thead>
                                         <tbody>
                                             <tr>
                                                 <td>
-                                                    <textarea rows="4" class="form-control" placeholder="Please enter a content."></textarea>
+                                                    <Editor previewStyle="vertical"
+                                                            height="500px"
+                                                            initialEditType="wysiwyg"
+                                                            onChange={ () => setContent(editorRef.current.getInstance().getHTML()) }
+                                                            ref={editorRef}/>
                                                 </td>
                                             </tr>
                                         </tbody>
@@ -60,7 +93,6 @@ function NoticeWriteForm() {
             </Container>
             </div>
         </div>
-
         </>
     )
 }
