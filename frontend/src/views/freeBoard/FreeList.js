@@ -2,6 +2,7 @@ import React, { useEffect, useState } from 'react';
 import { Link, useHistory } from 'react-router-dom';
 import Moment from 'react-moment';
 import Pagination from 'react-js-pagination';
+import Loader from './Loader';
 
 // reactstrap components
 import {
@@ -19,7 +20,8 @@ import {
   } from "reactstrap";
 
 function FreeList() {
-
+  
+  let [loading, setLoading] = useState(null);
   let [currentPage, setCurrentPage] = useState(1);  //현재 페이지
   let [pageSize, setPageSize] = useState(10);       //페이지 갯수
   let [datas, setDatas] = useState({                //총 갯수, 목록
@@ -34,6 +36,7 @@ function FreeList() {
   
   //목록 setting
   useEffect(() => {
+      setLoading(true);
       fetch(url) 
      .then(res => res.json())
      .then((datas) => {setDatas({
@@ -41,8 +44,9 @@ function FreeList() {
                         freeListCount: datas.freeListCount,
                         freeList: datas.freeList
                       })
-           })
-     .catch(err => { console.log('error' + JSON.stringify(err))});
+          })
+     .then(res => setLoading(false))
+     .catch(err => { console.log('error' + JSON.stringify(err))});     
   }, [currentPage]);
 
   //상세보기
@@ -50,6 +54,7 @@ function FreeList() {
     history.push("/freeBoard/detail/" + props);
   }
 
+  if (loading) return <Loader />; //로딩 이미지
 
   return (
     <>
