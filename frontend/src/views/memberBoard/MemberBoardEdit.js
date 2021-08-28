@@ -119,6 +119,8 @@ function MemberBoardEdit(prop) {
 
 
           {/* Content 
+          <Viewer ref={editorRef}/>
+          */}
           <Editor 
               previewStyle="vertical"
               height="300px"
@@ -126,8 +128,6 @@ function MemberBoardEdit(prop) {
               plugins={[colorSyntax]}
               ref={editorRef}
           />
-          */}
-          <Viewer ref={editorRef}/>
         
           <br/>
 
@@ -141,6 +141,8 @@ function MemberBoardEdit(prop) {
           >
                   SAVE
           </Button>
+
+          
           <br></br>
         </Container>
       </div>
