@@ -6,6 +6,7 @@ import com.example.demo.service.board.BoardMemberService;
 import java.util.ArrayList;
 import com.example.demo.vo.board.BoardMemberVo;
 import com.example.demo.vo.board.PageVo;
+import com.example.demo.vo.reply.ReplyVo;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.RequestMapping;
@@ -38,6 +39,16 @@ public class BoardMemberController {
         BoardMemberVo result = boardMemberService.selectBoardDtl(boardMemberVo);
 
         return result;
+    }
+
+    @RequestMapping("/board/member/getReply")
+    @ResponseBody
+    public ArrayList<ReplyVo> getReply(ReplyVo replyVo){
+        System.out.println("Board NO : " + replyVo.getBoardNo());
+
+        
+
+        return null;
     }
 
     @RequestMapping("/board/member/save")

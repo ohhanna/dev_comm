@@ -11,7 +11,6 @@ import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.ResponseEntity;
-import org.springframework.security.authentication.AuthenticationManager;
 import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.web.bind.annotation.CrossOrigin;
 import org.springframework.web.bind.annotation.RequestBody;
@@ -24,8 +23,8 @@ import org.springframework.web.bind.annotation.RestController;
 @CrossOrigin(origins = "*")
 public class JwtAuthenticationController {
     
-    @Autowired
-    private AuthenticationManager authenticationManager;
+    // @Autowired
+    // private AuthenticationManager authenticationManager;
 
     @Autowired
     private JwtTokenUtil jwtTokenUtil;
@@ -45,7 +44,7 @@ public class JwtAuthenticationController {
         System.out.println(userDetails);
         final String token = jwtTokenUtil.generateToken(userDetails);
 
-        HashMap<String, Object> responseMap = new HashMap();
+        HashMap<String, Object> responseMap = new HashMap<String, Object>();
 
         responseMap.put("token", new JwtResponse(token));
         responseMap.put("auth", userDetails.getAuthorities());

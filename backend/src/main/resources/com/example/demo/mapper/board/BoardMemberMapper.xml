@@ -56,7 +56,7 @@
                                ,#{boardCntn}
                                ,NOW()
                                ,NOW()
-                               ,'DUMMY_MEM_1'
+                               ,#{regMemId}
                                ,'N'
                              )
         ON DUPLICATE KEY UPDATE BOARD_NO = #{boardNo}

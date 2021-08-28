@@ -1,8 +1,6 @@
 package com.example.demo.jwtLogin.service;
 
 import java.util.ArrayList;
-import java.util.Arrays;
-import java.util.Collection;
 import java.util.List;
 
 import com.example.demo.service.member.MemberService;
@@ -27,7 +25,7 @@ public class JwtUserDetailsService implements UserDetailsService {
     @Autowired
     MemberService memberService;
     
-    private Collection<SimpleGrantedAuthority> authorities;
+    // private Collection<SimpleGrantedAuthority> authorities;
 
     final Logger log = LoggerFactory.getLogger(JwtUserDetailsService.class);
 

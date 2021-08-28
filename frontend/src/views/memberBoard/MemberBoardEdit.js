@@ -12,6 +12,7 @@ import { Editor } from '@toast-ui/react-editor';
 import 'tui-color-picker/dist/tui-color-picker.css';
 import '@toast-ui/editor-plugin-color-syntax/dist/toastui-editor-plugin-color-syntax.css';
 import colorSyntax from '@toast-ui/editor-plugin-color-syntax';
+import Authentication from 'views/authentication/AuthenticationService.js';
 
 // reactstrap components
 import {
@@ -31,6 +32,7 @@ function MemberBoardEdit(prop) {
 
   const [boardDtl, setBoardDtl] = useState({boardNo: '', boardTtl:'', boardCntn:''});
   const [boardTitle, setBoardTitle] = useState('');
+  const [isRegUsr, setIsRegUsr] = useState(true);
 
   const history = useHistory();
   const editorRef = useRef();
@@ -53,6 +55,12 @@ function MemberBoardEdit(prop) {
     });
     api.get('/getDetail', { params : {boardNo : prop.match.params.boardNo} }
             ).then(function(response){
+              
+              if(response.data.regMemId != Authentication.getLoggedInUserName()){
+                console.log(response.data.regMemId);
+                setIsRegUsr(false);
+              }
+
               let boardDtlState = {...boardDtl};
               boardDtlState = response.data;
               setBoardDtl(boardDtlState);
@@ -63,7 +71,15 @@ function MemberBoardEdit(prop) {
               else{
                 editorRef.current.getInstance().setHTML(response.data.boardCntn);
               }
+
               
+            }).catch(function(error){
+              alert(error);
+            });
+            
+    api.get('/getReply', { params : {boardNo : prop.match.params.boardNo} }
+            ).then(function(response){
+              console.log(response);
             }).catch(function(error){
               alert(error);
             });
@@ -81,7 +97,8 @@ function MemberBoardEdit(prop) {
     api.post('/save', null, { params : {
                                     boardNo : boardDtl.boardNo,
                                     boardTtl : boardTitle,
-                                    boardCntn : editorRef.current.getInstance().getHTML()
+                                    boardCntn : editorRef.current.getInstance().getHTML(),
+                                    regMemId : Authentication.getLoggedInUserName()
                                   } }
             ).then(function(response){
               alert("저장이 완료되었습니다.");
@@ -109,38 +126,43 @@ function MemberBoardEdit(prop) {
       
       <div className="section profile-content" >
         <Container className="ml-auto mr-auto" md="9">
-          <h3 className="font-weight-bold">Member Board Edit</h3>
-          <br/>
+          <br/><br/>
           {/* Title */}
-          <FormGroup>
-            <Input autoFocus placeholder="put in title" type="text" size="sm" value={boardTitle} onChange={(e)=>{inputChange(e)}}/>
-          </FormGroup>
 
 
 
-          {/* Content 
-          <Viewer ref={editorRef}/>
-          */}
-          <Editor 
+          {
+            isRegUsr == true ?
+            <>
+            <FormGroup>
+              <Input autoFocus placeholder="put in title" type="text" size="sm" value={boardTitle} onChange={(e)=>{inputChange(e)}}/>
+            </FormGroup>
+            <Editor 
               previewStyle="vertical"
               height="300px"
               initialEditType="wysiwyg"
               plugins={[colorSyntax]}
               ref={editorRef}
-          />
+            />
+            <Button className="btn-round mr-1 float-right"
+                    color="default"
+                    size="sm"
+                    outline
+                    type="button"
+                    onClick={()=>{saveDtl()}}
+            >
+                    SAVE
+            </Button>
+            </>
+            :
+            <>
+            <h3 className="font-weight-bold">{boardTitle}</h3>
+            <hr/>
+            <Viewer ref={editorRef}/>
+            </>
+          }
         
           <br/>
-
-          {/* Save Button */}
-          <Button className="btn-round mr-1 float-right"
-                  color="default"
-                  size="sm"
-                  outline
-                  type="button"
-                  onClick={()=>{saveDtl()}}
-          >
-                  SAVE
-          </Button>
 
           
           <br></br>
