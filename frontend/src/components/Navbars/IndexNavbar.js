@@ -1,4 +1,4 @@
-import React, { useState,useRef } from "react";
+import React, { useState,useRef, useEffect } from "react";
 // nodejs library that concatenates strings
 import classnames from "classnames";
 import { NavLink } from 'react-router-dom';
@@ -25,6 +25,15 @@ function IndexNavbar() {
   // 모달
   const [modal, setModal] = React.useState(false);
   const [isLogin, setIsLogin] = React.useState(false);
+
+
+  useEffect(() => {
+    if(Authentication.isUserLoggedIn()){
+      setIsLogin(true);
+    }else{
+      setIsLogin(false);
+    }
+  }, []);
 
   const toggleModal = () => {
     setModal(!modal);
@@ -55,7 +64,7 @@ function IndexNavbar() {
   function loginClickHandler (){
     Authentication.executeJwtAuthenticationService(userInfo.memId,userInfo.memPw)
                   .then((response)=>{
-                    Authentication.registerSuccessfulLoginForJwt(userInfo.memId, response.data.token);
+                    Authentication.registerSuccessfulLoginForJwt(userInfo.memId, response.data.token, response.data.auth);
                     alert("로그인에 성공하였습니다.");
 
                     setModal(false);

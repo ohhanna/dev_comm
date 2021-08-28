@@ -1,6 +1,9 @@
 package com.example.demo.jwtLogin.service;
 
 import java.util.ArrayList;
+import java.util.Arrays;
+import java.util.Collection;
+import java.util.List;
 
 import com.example.demo.service.member.MemberService;
 import com.example.demo.vo.member.MemberVo;
@@ -8,6 +11,8 @@ import com.example.demo.vo.member.MemberVo;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.security.core.GrantedAuthority;
+import org.springframework.security.core.authority.SimpleGrantedAuthority;
 import org.springframework.security.core.userdetails.User;
 import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.security.core.userdetails.UserDetailsService;
@@ -21,6 +26,8 @@ public class JwtUserDetailsService implements UserDetailsService {
 
     @Autowired
     MemberService memberService;
+    
+    private Collection<SimpleGrantedAuthority> authorities;
 
     final Logger log = LoggerFactory.getLogger(JwtUserDetailsService.class);
 
@@ -61,17 +68,20 @@ public class JwtUserDetailsService implements UserDetailsService {
 
         // DB에서 회원의 권한 정보 조회
         ArrayList<MemberVo> memberInfo = memberService.findByUserId(memberVo);
+        
         if(memberInfo.size() > 0){
             memberVo = memberInfo.get(0);
-
-            log.info("사용자 비밀번호 암호화");
+            System.out.println(memberVo.getGrade());
     
             BCryptPasswordEncoder bCryptPasswordEncoder = new BCryptPasswordEncoder();
-            log.info("사용자 비밀번호 매칭여부 조회");
             if(bCryptPasswordEncoder.matches(password, memberVo.getMemPw())){
                 log.info("사용자 비밀번호 매칭 성공");
                 log.info("User Create > user id is " + memberVo.getMemId());
-                return new User(username, memberVo.getMemPw(), new ArrayList<>());
+
+                List<GrantedAuthority> authorities = new ArrayList<GrantedAuthority>();
+                authorities.add(new SimpleGrantedAuthority(memberVo.getGrade()));
+                
+                return new User(username, memberVo.getMemPw(), authorities);
             }else{
                 log.info("사용자 비밀번호 매칭 실패 로그인 에러");
                 throw new UsernameNotFoundException("Invalid User Password > user id is " + username);

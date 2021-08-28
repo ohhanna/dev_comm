@@ -10,16 +10,16 @@ class AuthenticationService {
     }
 
     executeHelloService() {
-        console.log("===executeHelloService===")
         return axios.get('http://localhost:8090/hello');        
     }
 
-    registerSuccessfulLoginForJwt(username, token) {
-        console.log("===registerSuccessfulLoginForJwt===")
-        localStorage.setItem('token', token);
+    registerSuccessfulLoginForJwt(username, token, auth) {
+        console.log("===Register Login User===")
+
         localStorage.setItem('authenticatedUser', username);
-        // sessionStorage.setItem('authenticatedUser', username)
-        //this.setupAxiosInterceptors(this.createJWTToken(token))
+        localStorage.setItem('token', token);
+        localStorage.setItem('auth', auth);
+
         this.setupAxiosInterceptors();
     }
 
@@ -43,14 +43,13 @@ class AuthenticationService {
     }
 
     logout() {
-        //sessionStorage.removeItem('authenticatedUser');
         localStorage.removeItem("authenticatedUser");
         localStorage.removeItem("token");
+        localStorage.removeItem("auth");
     }
 
     isUserLoggedIn() {
         const token = localStorage.getItem('token');
-        console.log("===UserloggedInCheck===");
 
         if (token) {
             return true;
@@ -64,6 +63,12 @@ class AuthenticationService {
         let user = localStorage.getItem('authenticatedUser');
         if(user===null) return '';
         return user;
+    }
+
+    getLoggedInUserAuth(){
+        let userAuth = localStorage.getItem('auth');
+        if(userAuth===null) return '';
+        return userAuth;
     }
 }
 

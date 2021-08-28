@@ -14,6 +14,7 @@ import NoticePage from "views/examples/NoticeBoard.js";
 import FreePage from "views/examples/FreeBoard.js";
 import MemberBoardList from "views/memberBoard/MemberBoardList";
 import MemberBoardEdit from "views/memberBoard/MemberBoardEdit";
+import Authentication from 'views/authentication/AuthenticationService.js';
 // others
 
 ReactDOM.render(
@@ -30,7 +31,17 @@ ReactDOM.render(
       />
       <Route
         path="/memberBoardList"
-        render={(props) => <MemberBoardList {...props} />}
+        render={
+          (props) => {
+            if(Authentication.isUserLoggedIn() == true ){
+              return <MemberBoardList {...props} />
+            }
+            else{
+              alert("회원전용 게시판입니다.");
+              return <Redirect to="/index"/>
+            }
+          }
+      }
       />
       <Route
         path="/memberBoardEdit/:boardNo"
