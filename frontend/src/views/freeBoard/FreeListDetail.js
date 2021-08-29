@@ -10,9 +10,12 @@ import {
     Container
   } from "reactstrap";
 
+
 function FreeListDetail(props) {
 
     let[datas, setDatas] = useState([{}]);
+    let[replyTtl, setReplyTtl] = useState('');
+    let[replyCntn, setReplyCntn] = useState('');
     let editorRef = useRef();
     let history = useHistory();
 
@@ -29,6 +32,11 @@ function FreeListDetail(props) {
     
     function ListModify(props) {
       history.push("/freeBoard/modify/" + props);
+    }
+
+    function FreeReplyAdd() {
+      console.log('title : ' + replyTtl);
+      console.log('content : ' + replyCntn);
     }
 
     return (
@@ -60,6 +68,20 @@ function FreeListDetail(props) {
                                 </tr>
                               </tbody>
                             </Table>
+                            <ul className="listReply">
+
+                            </ul>
+                            <fieldset>
+                              <div>
+                                <span><input value={ replyTtl } onChange={ (e) => { setReplyTtl(e.target.value) } } /></span>
+                              </div>
+                              <div>
+                                <textarea  value={ replyCntn } onChange={ (e) => { setReplyCntn(e.target.value) } } ></textarea>
+                              </div>
+                              <div>
+                                <button onClick={ () => { FreeReplyAdd() } }>등록</button>
+                              </div>
+                            </fieldset>
                       </Col>
                   </Container>
                   </div>
