@@ -64,8 +64,8 @@ function FreeList() {
           <div className="section landing-section">
             <Container>
             <h2 className="text-center">자유게시판</h2>
-            <div className="custom-flex">
-              <UncontrolledDropdown className="custom-item">
+            <div className="custom-search-flex-free">
+              <UncontrolledDropdown className="custom-item-free">
                 <DropdownToggle
                   aria-expanded={false}
                   aria-haspopup={true}
@@ -91,8 +91,8 @@ function FreeList() {
                   </DropdownItem>
                 </DropdownMenu>
               </UncontrolledDropdown>
-              <Input placeholder="Please enter a search term" className="custom-item custom-input"/>
-              <Button type="button" className="btn mr-1 custom-item" color="default" outline
+              <Input placeholder="Please enter a search term" className="custom-item-free custom-search-input-free"/>
+              <Button type="button" className="btn mr-1 custom-item-free" color="default" outline
                 onClick={()=>{console.log('search')}}>
                 검색
               </Button>
@@ -141,7 +141,7 @@ function FreeList() {
           </Table>
           <br/>
 
-          <div className="ml-auto mr-auto custom-flex">
+          <div className="ml-auto mr-auto custom-search-flex-free">
             <nav>
             <Pagination activePage={currentPage} 
                         itemsCountPerPage={pageSize} 

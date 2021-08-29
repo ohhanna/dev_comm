@@ -6,6 +6,7 @@ import java.util.Map;
 
 import com.example.demo.service.board.BoardFreeService;
 import com.example.demo.vo.board.BoardFreeVo;
+import com.example.demo.vo.reply.ReplyFreeVo;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.GetMapping;
@@ -46,8 +47,8 @@ public class BoardFreeController {
 
         Map<String, Object> freeMap = new HashMap<String, Object>();
 
-        int freeListCount = boardFreeService.BoardFreeListCount();
-        List<BoardFreeVo> freeList =  boardFreeService.BoardFreeList(pageNum, pageSize);
+        int freeListCount = boardFreeService.boardFreeListCount();
+        List<BoardFreeVo> freeList =  boardFreeService.boardFreeList(pageNum, pageSize);
 
         freeMap.put("freeListCount", freeListCount);
         freeMap.put("freeList", freeList);
@@ -62,7 +63,7 @@ public class BoardFreeController {
     public List<BoardFreeVo> BoardFreeDetail(@RequestParam(value = "boardNo", required=false) Integer boardNo) {
         System.out.println("freeBoardList Controller Detail");
 
-        List<BoardFreeVo> freeDetail = boardFreeService.BoardFreeDetail(boardNo);
+        List<BoardFreeVo> freeDetail = boardFreeService.boardFreeDetail(boardNo);
         return freeDetail;
     }
 
@@ -71,7 +72,7 @@ public class BoardFreeController {
     public void freeBoardAdd(@RequestBody BoardFreeVo boardFreeVo) {
         System.out.println("freeBoardList Controller Add");
 
-        boardFreeService.BoardFreeAdd(boardFreeVo);
+        boardFreeService.boardFreeAdd(boardFreeVo);
     }
 
     //게시판 글 수정
@@ -79,7 +80,34 @@ public class BoardFreeController {
     public void freeBoardModify(@RequestBody BoardFreeVo boardFreeVo) {
         System.out.println("freeBoardList Controller Modify");
 
-        boardFreeService.BoardFreeModify(boardFreeVo);
+        boardFreeService.boardFreeModify(boardFreeVo);
+    }
+
+    /* 댓글 시작 */
+
+    @GetMapping("/freeBoard/reply/list")
+    public Map<String, Object> freeReplyList(@RequestParam(value = "boardNo", required=false) Integer boardNo) {
+        System.out.println("freeBoardList Controller ReplyList");
+
+        int pageNum = 1;
+        int pageSize = 10;
+
+        Map<String, Object> freeReplyMap = new HashMap<String, Object>();
+
+        int replyCount = boardFreeService.freeReplyCount(boardNo);
+        List<ReplyFreeVo> replyList = boardFreeService.freeReplyList(pageNum, pageSize);
+
+        freeReplyMap.put("replyCount", replyCount);
+        freeReplyMap.put("replyList", replyList);
+
+        return freeReplyMap;
+    }
+
+    @PostMapping("/freeBoard/reply/add")
+    public void freeReplyAdd(@RequestBody ReplyFreeVo replyFreeVo) {
+        System.out.println("freeBoardList Controller ReplyAdd");
+
+        boardFreeService.freeReplyAdd(replyFreeVo);
     }
 
 }

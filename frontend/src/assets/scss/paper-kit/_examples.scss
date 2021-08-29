@@ -264,19 +264,40 @@
     }
 }
 
-.custom-flex{
+.custom-search-flex-free{
     display : flex;
     justify-content: center;
     margin-top: 30px;
-    .custom-item{
+    .custom-item-free{
         margin : 0px 10px 10px 20px;
-
     }
 }
 
-.custom-input{
+.custom-search-input-free{
     width : 60%;
 }
+
+.custom-fieldset-free{
+    margin : 0px 0px 0px 10px;
+    padding : 0px 0px 0px 20px;
+    background-color: lightgray;
+    border-radius: 4px;
+}
+
+.custom-reply-flex-free{
+    display : flex;
+    .custom-reply-input-free{
+        margin : 10px 20px 10px 0px;
+    }
+}
+
+
+
+.custom-reply-textarea-free{
+    width: 98%;
+}
+
+
 
 
 

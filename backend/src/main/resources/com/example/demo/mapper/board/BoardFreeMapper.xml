@@ -2,7 +2,7 @@
 <!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
 
 <mapper namespace="com.example.demo.mapper.board.BoardFreeMapper">
-    <select id="BoardFreeList" resultType="com.example.demo.vo.board.BoardFreeVo">
+    <select id="boardFreeList" resultType="com.example.demo.vo.board.BoardFreeVo">
         /*BoardFreeList*/
         SELECT BOARD_NO
               ,BOARD_TTL
@@ -15,17 +15,17 @@
          WHERE IS_DEL = 'N'
       ORDER BY BOARD_NO DESC
          LIMIT #{pageSize}
-        OFFSET #{pageNum}        
+        OFFSET #{pageNum}
     </select>
 
-    <select id="BoardFreeListCount" resultType="int">
+    <select id="boardFreeListCount" resultType="int">
         /*BoardFreeListCount*/
         SELECT COUNT(*)
           FROM BOARD_FREE
          WHERE IS_DEL = 'N'
     </select>
 
-    <select id="BoardFreeDetail" resultType="com.example.demo.vo.board.BoardFreeVo">
+    <select id="boardFreeDetail" resultType="com.example.demo.vo.board.BoardFreeVo">
         /*BoardFreeListGetOne*/
         SELECT BOARD_NO
               ,BOARD_TTL
@@ -38,7 +38,7 @@
          WHERE BOARD_NO = #{BoardNo}
     </select>
 
-    <insert id="BoardFreeAdd" parameterType="com.example.demo.vo.board.BoardFreeVo">
+    <insert id="boardFreeAdd" parameterType="com.example.demo.vo.board.BoardFreeVo">
         /*BoardFreeAdd*/
         INSERT INTO BOARD_FREE (
                         BOARD_NO
@@ -58,11 +58,66 @@
                        ,'N')
     </insert>
 
-    <update id="BoardFreeModify" parameterType="com.example.demo.vo.board.BoardFreeVo">
+    <update id="boardFreeModify" parameterType="com.example.demo.vo.board.BoardFreeVo">
         /*BoardFreeModify*/
         UPDATE BOARD_FREE
            SET BOARD_TTL = #{boardTtl}
               ,BOARD_CNTN = #{boardCntn}
         WHERE BOARD_NO = #{boardNo}
     </update>
+
+    <!-- 댓글 start -->
+    
+    <select id="freeReplyList" resultType="com.example.demo.vo.reply.ReplyFreeVo">
+        /*freeReplyList*/
+        SELECT REPLY_NO
+              ,BOARD_NO
+              ,REPLY_CNTN
+              ,UP_REPLY_NO
+              ,DEPTH
+              ,IS_DEL
+              ,REG_MEM_ID
+              ,MOD_DT
+              ,REPLY_PW
+          FROM REPLY_FREE
+         WHERE IS_DEL = 'N'
+      ORDER BY REPLY_NO DESC
+         LIMIT #{pageSize}
+        OFFSET #{pageNum}
+    </select>
+
+    <select id="freeReplyCount" resultType="int">
+        /*freeReplyCount*/
+        SELECT COUNT(*)
+          FROM REPLY_FREE
+         WHERE BOARD_NO = #{boardNo}
+           AND IS_DEL = 'N'
+    </select>
+
+    <insert id="freeReplyAdd" parameterType="com.example.demo.vo.reply.ReplyFreeVo">
+        /*freeReplyAdd*/
+        INSERT INTO REPLY_FREE (
+                        REPLY_NO
+                       ,BOARD_NO
+                       ,REPLY_CNTN
+                       ,UP_REPLY_NO
+                       ,DEPTH
+                       ,IS_DEL
+                       ,REG_MEM_ID
+                       ,CRT_DT
+                       ,MOD_DT
+                       ,REPLY_PW)
+              VALUES (
+                        null
+                       ,#{boardNo}
+                       ,#{replyCntn}
+                       ,null
+                       ,1
+                       ,'N'
+                       ,#{regMemId}
+                       ,NOW()
+                       ,NOW()
+                       ,#{replyPw})
+    </insert>
+
 </mapper>
