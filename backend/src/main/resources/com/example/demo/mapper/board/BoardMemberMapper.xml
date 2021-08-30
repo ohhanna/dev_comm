@@ -80,7 +80,7 @@
                   FROM REPLY_MEM B
                  WHERE B.REPLY_NO = A.UP_REPLY_NO
                 ) AS REPLY_CNT
-          FROM REPLY_MEM
+          FROM REPLY_MEM A
          WHERE BOARD_NO = #{boardNo}
       ORDER BY REPLY_NO 
     </select>

@@ -153,6 +153,7 @@ function MemberBoardEdit(prop) {
       });
 
       api.post('/saveReply', null, { params : {
+                                      replyNo: replyNo,
                                       boardNo : boardDtl.boardNo,
                                       replyCntn : replyCntn,
                                       regMemId : Authentication.getLoggedInUserName()
@@ -172,13 +173,25 @@ function MemberBoardEdit(prop) {
   }
 
 
-  function writeReply(replyNo, targetReplyCntn){
-    Authentication.getLoggedInUserAuth();
+  function writeReply(targetReplyNo, targetReplyCntn){
 
-    setReplyNo(replyNo);
-    setAlrmReplyCntn(targetReplyCntn);
+    if(popRef.current.state.isOpen == true){
+      if(replyNo == targetReplyNo){
+        popRef.current.toggle();
 
-    popRef.current.toggle();
+        setReplyNo('');
+        setAlrmReplyCntn('');
+        
+      }else{
+        setReplyNo(targetReplyNo);
+        setAlrmReplyCntn(targetReplyCntn);
+      }
+    }else{
+      popRef.current.toggle();
+      setReplyNo(targetReplyNo);
+      setAlrmReplyCntn(targetReplyCntn);
+    }
+
   }
 
   return (
