@@ -80,7 +80,8 @@
               ,MOD_DT
               ,REPLY_PW
           FROM REPLY_FREE
-         WHERE IS_DEL = 'N'
+         WHERE BOARD_NO = #{boardNo} 
+           AND IS_DEL = 'N'
       ORDER BY REPLY_NO DESC
          LIMIT #{pageSize}
         OFFSET #{pageNum}

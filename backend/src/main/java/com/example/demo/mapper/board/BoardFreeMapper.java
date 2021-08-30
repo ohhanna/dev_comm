@@ -33,7 +33,7 @@ public interface BoardFreeMapper {
     int freeReplyCount(int boardNo);
 
     //댓글 리스트 get
-    List<ReplyFreeVo> freeReplyList(int pageNum, int pageSize);
+    List<ReplyFreeVo> freeReplyList(int boardNo, int pageNum, int pageSize);
 
     //댓글 등록
     int freeReplyAdd(ReplyFreeVo replyFreeVo);

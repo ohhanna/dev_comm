@@ -60,15 +60,12 @@ const FreeListModify = (props) => {
                         <h2 className="text-center">게시글 수정</h2>
                         <br/>
                         <div>
-                          <Button type="button" 
-                                  id="notice_save_btn" 
-                                  className="btn mr-1 float-right" 
-                                  color="default" 
-                                  outline
+                          <Button type="button"
+                                  className="btn-round mr-1 float-right"
                                   onClick={ () => { FreeListModifyFn({ boardNo : datas[0].boardNo, 
                                                                        title : title, 
                                                                        content : content }) }}>
-                                    저장
+                                    등록
                           </Button>
                         </div>
                         <br/><br/><br/>
