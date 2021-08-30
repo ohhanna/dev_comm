@@ -3,6 +3,7 @@ package com.example.demo.mapper.board;
 import java.util.List;
 
 import com.example.demo.vo.board.BoardFreeVo;
+import com.example.demo.vo.reply.ReplyFreeVo;
 
 import org.apache.ibatis.annotations.Mapper;
 import org.springframework.stereotype.Repository;
@@ -12,17 +13,28 @@ import org.springframework.stereotype.Repository;
 public interface BoardFreeMapper {
 
     //게시판 글 총 갯수
-    int BoardFreeListCount();
+    int boardFreeListCount();
 
     //게시판 리스트 get
-    List<BoardFreeVo> BoardFreeList(int pageNum, int pageSize);
+    List<BoardFreeVo> boardFreeList(int pageNum, int pageSize);
 
     //게시판 리스트 글 상세보기
-    List<BoardFreeVo> BoardFreeDetail(int boardNo);
+    List<BoardFreeVo> boardFreeDetail(int boardNo);
 
     //게시판 글 추가
-    int BoardFreeAdd(BoardFreeVo boardFreeVo);
+    int boardFreeAdd(BoardFreeVo boardFreeVo);
     
     //게시판 글 수정
-    int BoardFreeModify(BoardFreeVo boardFreeVo);
+    int boardFreeModify(BoardFreeVo boardFreeVo);
+
+    /*댓글 시작*/
+
+    //댓글 총 갯수
+    int freeReplyCount(int boardNo);
+
+    //댓글 리스트 get
+    List<ReplyFreeVo> freeReplyList(int pageNum, int pageSize);
+
+    //댓글 등록
+    int freeReplyAdd(ReplyFreeVo replyFreeVo);
 }
