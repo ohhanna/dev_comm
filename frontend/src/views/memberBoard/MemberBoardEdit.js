@@ -5,9 +5,11 @@ import { useHistory } from 'react-router-dom';
 import axios from 'axios';
 
 import 'prismjs/themes/prism.css';
+import 'assets/css/popover.css';
 
 import '@toast-ui/editor/dist/toastui-editor.css';
 import { Editor } from '@toast-ui/react-editor';
+import Moment from 'react-moment';
 
 import 'tui-color-picker/dist/tui-color-picker.css';
 import '@toast-ui/editor-plugin-color-syntax/dist/toastui-editor-plugin-color-syntax.css';
@@ -19,7 +21,12 @@ import {
   Container,
   Input,
   Button,
-  FormGroup
+  FormGroup,
+  Row,
+  Col,
+  PopoverBody,
+  PopoverHeader,
+  UncontrolledPopover,
 } from "reactstrap";
 
 // core components
@@ -30,12 +37,19 @@ import { Viewer } from '@toast-ui/react-editor';
 
 function MemberBoardEdit(prop) {
 
-  const [boardDtl, setBoardDtl] = useState({boardNo: '', boardTtl:'', boardCntn:''});
+  const [boardDtl, setBoardDtl] = useState({boardNo: '', boardTtl:'', boardCntn:'', regMemId:'', crtDt:''});
   const [boardTitle, setBoardTitle] = useState('');
   const [isRegUsr, setIsRegUsr] = useState(true);
+  const [replyList, setReplyList] = useState([]);
+  const [replyCntn, setReplyCntn] = useState('');
+  const [replyNo, setReplyNo] = useState('');
+  const [alrmReplyCntn, setAlrmReplyCntn] = useState('');
+
+  const [logindUser, setLoginUser] = useState(Authentication.getLoggedInUserName());
 
   const history = useHistory();
   const editorRef = useRef();
+  const popRef = useRef();
 
   useEffect(() => {
     if(prop.match.params.boardNo != "new" ){
@@ -79,7 +93,7 @@ function MemberBoardEdit(prop) {
             
     api.get('/getReply', { params : {boardNo : prop.match.params.boardNo} }
             ).then(function(response){
-              console.log(response);
+              setReplyList(response.data);
             }).catch(function(error){
               alert(error);
             });
@@ -102,7 +116,6 @@ function MemberBoardEdit(prop) {
                                   } }
             ).then(function(response){
               alert("저장이 완료되었습니다.");
-              console.log(response.data)
               if(response.data != null && response.data != undefined){
                 history.push("/memberBoardEdit/" + response.data);
               }
@@ -118,6 +131,55 @@ function MemberBoardEdit(prop) {
     boardTtlState = e.target.value;
     setBoardTitle(boardTtlState);
   }
+  
+
+
+
+  ///////////////////////////////////////////////////////////////
+  ///////////////////// 댓글 함수
+  function replyChange(e){
+    let replyCntnState = {...replyCntn};
+    //console.log(boardDtlState);
+    replyCntnState = e.target.value;
+    setReplyCntn(replyCntnState);
+  }
+
+
+  function saveReply(){
+    if(confirm("댓글을 작성하시겠습니까?")){
+
+      const api = axios.create({
+        baseURL: "/board/member"
+      });
+
+      api.post('/saveReply', null, { params : {
+                                      boardNo : boardDtl.boardNo,
+                                      replyCntn : replyCntn,
+                                      regMemId : Authentication.getLoggedInUserName()
+                                    } }
+              ).then(function(response){
+                alert("저장이 완료되었습니다.");
+                // if(response.data != null && response.data != undefined){
+                //   history.push("/memberBoardEdit/" + response.data);
+                // }
+              }).catch(function(error){
+                alert(error);
+                alert("System Error");
+              });
+    }else{
+      return;
+    }
+  }
+
+
+  function writeReply(replyNo, targetReplyCntn){
+    Authentication.getLoggedInUserAuth();
+
+    setReplyNo(replyNo);
+    setAlrmReplyCntn(targetReplyCntn);
+
+    popRef.current.toggle();
+  }
 
   return (
     <>
@@ -127,44 +189,149 @@ function MemberBoardEdit(prop) {
       <div className="section profile-content" >
         <Container className="ml-auto mr-auto" md="9">
           <br/><br/>
-          {/* Title */}
-
-
 
           {
             isRegUsr == true ?
             <>
-            <FormGroup>
-              <Input autoFocus placeholder="put in title" type="text" size="sm" value={boardTitle} onChange={(e)=>{inputChange(e)}}/>
-            </FormGroup>
-            <Editor 
-              previewStyle="vertical"
-              height="300px"
-              initialEditType="wysiwyg"
-              plugins={[colorSyntax]}
-              ref={editorRef}
-            />
-            <Button className="btn-round mr-1 float-right"
-                    color="default"
-                    size="sm"
-                    outline
-                    type="button"
-                    onClick={()=>{saveDtl()}}
-            >
-                    SAVE
-            </Button>
+              <Row>
+                <Col sm="11" >
+                  <FormGroup>
+                    <Input autoFocus placeholder="put in title" type="text" size="md" value={boardTitle} onChange={(e)=>{inputChange(e)}}/>
+                  </FormGroup>
+                </Col>
+                <Col sm="1" >
+                  <p className="text-right">
+                    <Moment format="YYYY.MM.DD">
+                      {boardDtl.crtDt}
+                    </Moment>
+                  </p>
+                  <p className="text-right">{boardDtl.regMemId}</p>
+                </Col>
+              </Row>
+              <Editor 
+                previewStyle="vertical"
+                height="300px"
+                initialEditType="wysiwyg"
+                plugins={[colorSyntax]}
+                ref={editorRef}
+              />
+              <br/>
+              <Button className="btn-round mr-1 float-right"
+                      color="default"
+                      size="sm"
+                      outline
+                      type="button"
+                      onClick={()=>{saveDtl()}}
+              >
+                      SAVE
+              </Button>
             </>
             :
             <>
-            <h3 className="font-weight-bold">{boardTitle}</h3>
-            <hr/>
-            <Viewer ref={editorRef}/>
+              <h3 className="font-weight-bold">{boardTitle}</h3>
+              <hr/>
+              <Viewer ref={editorRef}/>
             </>
           }
         
           <br/>
+          <br/>
 
           
+          <hr/>
+          <Row>
+            <UncontrolledPopover
+              className="popover"
+              placement="top"
+              target="tooltip344834141"
+              trigger="manual"
+              ref={popRef}
+            >
+              <PopoverHeader>{alrmReplyCntn}</PopoverHeader>
+              <PopoverBody>
+                위 댓글에 대한 대댓글을 작성해주세요
+                <br/>
+                대댓글을 취소하려면 x 버튼을 클릭해주세요
+              </PopoverBody>
+              <i className="nc-icon nc-simple-remove" onClick={()=>{popRef.current.toggle()}}/>
+            </UncontrolledPopover>
+          </Row>
+          <Row>
+            <Col sm="1" className="align-self-center">
+              <h6>
+                {logindUser}
+              </h6>
+            </Col>
+            <Col sm="10">
+                <Input placeholder="댓글을 입력해주세요." type="text" onChange={(e)=>{replyChange(e)}}
+                    id="tooltip344834141" />
+            </Col>
+            <Col sm="1">
+                <Button onClick={()=>{saveReply()}}>등록</Button>
+            </Col>
+          </Row>
+
+          <hr/>
+
+          {
+            replyList.map((reply) => {
+              return (
+                <Row className="mt-3" >
+                <Col sm="1"  className="align-self-center">
+                  <h6>
+                    {reply.regMemId}
+                  </h6>
+                </Col>
+                <Col sm="10">
+                    <p>
+                      {reply.replyCntn} 
+                      <span style={{cursor: 'pointer'}}
+                            onClick={(e)=>{writeReply(reply.replyNo, reply.replyCntn)}}
+                        >
+                              &nbsp; ✎
+                      </span>
+                    </p>
+                </Col>
+                <Col sm="1"  className="align-self-center">
+                    <Moment format="YYYY.MM.DD">
+                      {reply.crtDt}
+                    </Moment>
+                </Col>
+
+                {
+                  reply.replyCnt > 0 
+                  ?
+                    <>
+                    <Col sm ="1"></Col>
+                    <Col sm ="2">
+                      <label className="label label-default mr-1">대댓글 보기</label>
+                    </Col>
+                    </>
+                  :
+                    <div></div>
+                }
+              </Row>
+            )
+            })
+          }
+          
+          <Row className="mt-3">
+            <Col sm="1"></Col>
+            <Col sm="1"  className="align-self-center">
+              <h6>
+                MEM_01
+              </h6>
+            </Col>
+            <Col sm="9">
+                <p>admin 댓글 작성</p>
+            </Col>
+            <Col sm="1"  className="align-self-center">
+              <p>
+                2021.08.01
+              </p>
+            </Col>
+          </Row>
+
           <br></br>
         </Container>
       </div>

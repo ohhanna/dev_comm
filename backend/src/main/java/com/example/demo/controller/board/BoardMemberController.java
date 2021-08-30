@@ -46,9 +46,9 @@ public class BoardMemberController {
     public ArrayList<ReplyVo> getReply(ReplyVo replyVo){
         System.out.println("Board NO : " + replyVo.getBoardNo());
 
-        
+        ArrayList<ReplyVo> list = boardMemberService.selectReply(replyVo);
 
-        return null;
+        return list;
     }
 
     @RequestMapping("/board/member/save")
@@ -58,6 +58,17 @@ public class BoardMemberController {
         boardMemberService.insertBoardDtl(boardMemberVo);
 
         int result = boardMemberVo.getBoardNoProperty();
+
+        return Integer.toString(result);
+    }
+
+
+    @RequestMapping("/board/member/saveReply")
+    @ResponseBody
+    public String insertBoardDtl(ReplyVo replyVo){
+        System.out.println("before boardNo : " + replyVo.getReplyCntn());
+
+        int result = boardMemberService.insertReply(replyVo);
 
         return Integer.toString(result);
     }

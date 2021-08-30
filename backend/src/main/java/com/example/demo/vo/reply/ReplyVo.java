@@ -2,7 +2,9 @@ package com.example.demo.vo.reply;
 
 import java.util.Date;
 
-public class ReplyVo {
+import com.example.demo.vo.member.MemberVo;
+
+public class ReplyVo extends MemberVo{
     private String replyNo;
     private String boardNo;
     private String replyCntn;
@@ -12,6 +14,7 @@ public class ReplyVo {
     private String regMemId;
     private Date crtDt;
     private Date modDt;
+    private int replyCnt;
 
     public String getReplyNo() {
         return this.replyNo;
@@ -85,5 +88,12 @@ public class ReplyVo {
         this.modDt = modDt;
     }
 
+    public int getReplyCnt() {
+        return this.replyCnt;
+    }
+
+    public void setReplyCnt(int replyCnt) {
+        this.replyCnt = replyCnt;
+    }
 
 }

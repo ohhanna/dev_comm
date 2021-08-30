@@ -65,4 +65,5 @@
               ,BOARD_CNTN = #{boardCntn}
         WHERE BOARD_NO = #{boardNo}
     </update>
+
 </mapper>
