@@ -16,6 +16,8 @@ class AuthenticationService {
     registerSuccessfulLoginForJwt(username, token, auth) {
         console.log("===Register Login User===")
 
+        console.log(auth);
+
         localStorage.setItem('authenticatedUser', username);
         localStorage.setItem('token', token);
         localStorage.setItem('auth', auth);
@@ -67,6 +69,7 @@ class AuthenticationService {
 
     getLoggedInUserAuth(){
         let userAuth = localStorage.getItem('auth');
+
         if(userAuth===null) return '';
         return userAuth;
     }
