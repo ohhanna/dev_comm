@@ -5,6 +5,8 @@ import axios from 'axios';
 
 import '@toast-ui/editor/dist/toastui-editor.css';
 import {Viewer} from '@toast-ui/editor/dist/toastui-editor-viewer';
+import Moment from 'react-moment';
+
 
 // reactstrap components
 import {
@@ -221,7 +223,9 @@ function BoardList(prop){
                 <br />
               </Col>
               <Col sm="0" key={i + "c"} >
-                2021.07.01
+                <Moment format="YYYY.MM.DD">
+                  {boardListArr[i].crtDt}
+                </Moment>
               </Col>
             </Row>
           );

@@ -64,7 +64,14 @@ function IndexNavbar() {
   function loginClickHandler (){
     Authentication.executeJwtAuthenticationService(userInfo.memId,userInfo.memPw)
                   .then((response)=>{
-                    Authentication.registerSuccessfulLoginForJwt(userInfo.memId, response.data.token, response.data.auth);
+
+                    let auth = "";
+                    for(var i = 0; i < response.data.auth.length; i++){
+                      auth += response.data.auth[i].authority + ",";
+                    }
+                    auth = auth.substr(0, auth.length-1);
+
+                    Authentication.registerSuccessfulLoginForJwt(userInfo.memId, response.data.token, auth);
                     alert("로그인에 성공하였습니다.");
 
                     setModal(false);

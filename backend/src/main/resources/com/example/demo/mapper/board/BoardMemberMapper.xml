@@ -65,4 +65,62 @@
                                 ,MOD_DT = NOW()
                                 ,IS_DEL = 'N'
     </insert>
+
+    <select id="selectReply" resultType="com.example.demo.vo.reply.ReplyVo">
+        SELECT REPLY_NO
+              ,BOARD_NO
+              ,REPLY_CNTN
+              ,UP_REPLY_NO
+              ,DEPTH
+              ,IS_DEL
+              ,REG_MEM_ID
+              ,CRT_DT
+              ,MOD_DT
+              ,(SELECT COUNT(1)
+                  FROM REPLY_MEM B
+                 WHERE B.REPLY_NO = A.UP_REPLY_NO
+                ) AS REPLY_CNT
+          FROM REPLY_MEM
+         WHERE BOARD_NO = #{boardNo}
+      ORDER BY REPLY_NO 
+    </select>
+
+    <select id="selectReplyMore" resultType="com.example.demo.vo.board.BoardMemberVo">
+        SELECT  CONCAT(REPEAT('    ', level - 1), CAST(HI.REPLY_NO AS CHAR)) AS treeitem, UP_REPLY_NO, level
+        FROM    (
+                SELECT  hierarchy_connect_by_parent_eq_prior_id(REPLY_NO) AS REPLY_NO, @level AS level
+                FROM    (
+                        SELECT  @start_with := 6142,
+                                @id := @start_with,
+                                @level := 0
+                        ) vars
+                        , REPLY_MEM A
+                WHERE   @id IS NOT NULL
+                ) HO
+        JOIN    REPLY_MEM HI
+        ON      HI.REPLY_NO = HO.REPLY_NO
+    </select>
+
+    <insert id="insertReply" parameterType="com.example.demo.vo.reply.ReplyVo">
+        INSERT INTO REPLY_MEM(
+                                BOARD_NO
+                               ,REPLY_CNTN
+                               ,UP_REPLY_NO
+                               ,DEPTH
+                               ,IS_DEL
+                               ,REG_MEM_ID
+                               ,CRT_DT
+                               ,MOD_DT
+                              )
+                        VALUES(
+                                #{boardNo}
+                               ,#{replyCntn}
+                               ,#{upReplyNo}
+                               ,'1'
+                               ,'N'
+                               ,#{regMemId}
+                               ,NOW()
+                               ,NOW()
+                              )
+    </insert>
 </mapper>
