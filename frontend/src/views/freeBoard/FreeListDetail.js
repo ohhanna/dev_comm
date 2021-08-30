@@ -5,7 +5,6 @@ import '@toast-ui/editor/dist/toastui-editor.css';
 import { Viewer } from '@toast-ui/react-editor';
 
 import {
-    Button,
     Col,
     Table,
     Container
@@ -90,14 +89,11 @@ function FreeListDetail(props) {
                           <h2 className="text-center">{ datas[0].boardTtl }</h2>
                           <br/>
                           <div>
-                            <Button type="button" 
-                                    id="notice_save_btn" 
-                                    className="btn mr-1 float-right"
-                                    onClick={ () => { ListModify(datas[0].boardNo) } }
-                                    color="default" 
-                                    outline>
+                            <button type="button"
+                                    className="btn-round ml-1 btn btn-success float-right"
+                                    onClick={ () => { ListModify(datas[0].boardNo) } }>
                                       수정하기
-                            </Button>
+                            </button>
                           </div>
                           <br/><br/><br/>
                             <Table>
@@ -138,22 +134,26 @@ function FreeListDetail(props) {
                                 </button>
                               </div>
                             </fieldset>
-                            <ul className="listReply">
+                            <ul className="custom-reply-ul-free pl-3">
                                 { replyDatas.replyList.map(replyData => {
-                                    return <li>
-                                            <div>
-                                              <span>{replyData.regMemId}</span>
-                                              <span>
-                                                <Moment format="YYYY/MM/DD">
-                                                  {replyData.modDt}
-                                                </Moment>  
-                                              </span>
+                                    return <li className="custom-reply-li-free mb-3">
+                                            <div className="custom-reply-flex-free mt-3 mb-2">
+                                              <img alt="..." class="custom-reply-img-free" src="/paper-kit-react/static/media/kaci-baum-2.9b929eea.jpg" />
+                                              <div className="ml-2">
+                                                <b>{replyData.regMemId}</b>
+                                                <div>
+                                                  <Moment format="YYYY/MM/DD">
+                                                    {replyData.modDt}
+                                                  </Moment>  
+                                                </div>
+                                              </div>
+                                              <div className="custom-reply-buttons-free">
+                                                <button className="mr-1 btn btn-outline-success btn-sm">수정</button>
+                                                <button className="mr-1 btn btn-outline-danger btn-sm">삭제</button>
+                                              </div>
                                             </div>
                                               <p>{replyData.replyCntn}</p>
-                                            <div>
-                                              <button>수정</button>
-                                              <button>삭제</button>
-                                            </div>
+                                            
                                             </li>
                                 }) }
                             </ul>                            

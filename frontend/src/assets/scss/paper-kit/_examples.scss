@@ -286,16 +286,35 @@
 
 .custom-reply-flex-free{
     display : flex;
+    align-items: center;
     .custom-reply-input-free{
         margin : 10px 20px 10px 0px;
     }
 }
 
-
-
 .custom-reply-textarea-free{
     width: 98%;
 }
+
+.custom-reply-ul-free{
+    list-style-type: none;
+}
+
+.custom-reply-img-free{
+    width: 3.375rem;
+    height: 3.375rem;
+    display: block;
+    border-radius: 50%;
+}
+
+.custom-reply-li-free{
+    border-top: 1px solid #dee2e6;
+}
+
+.custom-reply-buttons-free{
+    margin-left: auto;
+}
+
 
 
 

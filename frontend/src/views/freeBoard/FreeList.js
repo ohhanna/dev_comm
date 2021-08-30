@@ -99,8 +99,10 @@ function FreeList() {
             </div>          
             </Container>
           </div>
-          <Button type="button" id="notice_write" className="btn mr-1 float-right" color="default" outline
-                  tag={Link} to="/freeBoard/addForm">
+          <Button type="button"
+                  className="btn-round ml-1 btn btn-success float-right"
+                  tag={Link} 
+                  to="/freeBoard/addForm">
              새 글 쓰기
           </Button>
           <br/><br/><br/>

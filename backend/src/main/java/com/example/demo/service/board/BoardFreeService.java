@@ -47,8 +47,8 @@ public class BoardFreeService {
     }
 
     //댓글 리스트 get
-    public List<ReplyFreeVo> freeReplyList(int pageNum, int pageSize) {
-        return mapper.freeReplyList(pageNum, pageSize);
+    public List<ReplyFreeVo> freeReplyList(int boardNo, int pageNum, int pageSize) {
+        return mapper.freeReplyList(boardNo, pageNum, pageSize);
     }
 
     //댓글 등록

@@ -95,7 +95,7 @@ public class BoardFreeController {
         Map<String, Object> freeReplyMap = new HashMap<String, Object>();
 
         int replyCount = boardFreeService.freeReplyCount(boardNo);
-        List<ReplyFreeVo> replyList = boardFreeService.freeReplyList(pageNum, pageSize);
+        List<ReplyFreeVo> replyList = boardFreeService.freeReplyList(boardNo, pageNum, pageSize);
 
         freeReplyMap.put("replyCount", replyCount);
         freeReplyMap.put("replyList", replyList);
