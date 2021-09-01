@@ -1,12 +1,11 @@
 /* eslint-disable */
 import React,{ useEffect, useState } from "react";
 import { useHistory } from 'react-router-dom';
-import axios from 'axios';
+import axios from '../../axios-plugin/axios.js';
 
 import '@toast-ui/editor/dist/toastui-editor.css';
 import {Viewer} from '@toast-ui/editor/dist/toastui-editor-viewer';
 import Moment from 'react-moment';
-
 
 // reactstrap components
 import {
@@ -24,6 +23,7 @@ import IndexNavbar from "components/Navbars/IndexNavbar.js";
 import ProfilePageHeader from "components/Headers/ProfilePageHeader.js";
 import DemoFooter from "components/Footers/DemoFooter.js";
 import Pagination from 'react-js-pagination';
+import Loader from '../../axios-plugin/Loader.js';
 
 function MemberBoardList() {
 
@@ -35,6 +35,7 @@ function MemberBoardList() {
   const [pageSize, setPageSize] = useState(10);
   const [totCnt, setTotCnt] = useState(0);
   const [boardList, setBoardList] = useState([]);
+  const [isLoad, setIsLoad] = useState(false);
   const history = useHistory();
 
   ////////////////////////////////////////////////////////////////////
@@ -69,13 +70,10 @@ function MemberBoardList() {
   }
 
   function getBoardList(option){
-
-    const api = axios.create({
-      baseURL: "/board/member"
-    });
-
-    api.post('/list', null, { params : { pageIndex : option.data.pageIndex, pageSize : option.data.pageSize } }
+    setIsLoad(true);
+    axios.post('/board/member/list', null, { params : { pageIndex : option.data.pageIndex, pageSize : option.data.pageSize } }
             ).then(function(response){
+              setIsLoad(false);
               // SEARCH 전 기존 state 초기화
               setBoardList([]);
               // board list deep copy
@@ -98,12 +96,18 @@ function MemberBoardList() {
   ////////////////////////////////////////////////////////////////////
   return (
     <>
+
       <IndexNavbar />
       <ProfilePageHeader />
       
       <div className="section profile-content">
         {/* Page Control Module */}
 
+        {
+          isLoad == true 
+          ?<Loader/>
+          :<div></div>
+        }
         <Alert className="alert-with-icon" color="danger" isOpen={alertDanger}>
           <Container>
             <div className="alert-wrapper">
@@ -123,7 +127,7 @@ function MemberBoardList() {
             </div>
           </Container>
         </Alert>
-
+        
         <Container className="ml-auto mr-auto" md="9">
           <div style={{'height':'80px', 'margin':'0auto'}}>
               <p className="h3 font-weight-bold float-left">Member Board</p>
