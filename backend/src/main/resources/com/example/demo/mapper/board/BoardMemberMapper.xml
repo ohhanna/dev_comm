@@ -67,22 +67,47 @@
     </insert>
 
     <select id="selectReply" resultType="com.example.demo.vo.reply.ReplyVo">
-        SELECT REPLY_NO
-              ,BOARD_NO
-              ,REPLY_CNTN
-              ,UP_REPLY_NO
-              ,DEPTH
-              ,IS_DEL
-              ,REG_MEM_ID
-              ,CRT_DT
-              ,MOD_DT
-              ,(SELECT COUNT(1)
-                  FROM REPLY_MEM B
-                 WHERE B.REPLY_NO = A.UP_REPLY_NO
-                ) AS REPLY_CNT
-          FROM REPLY_MEM A
-         WHERE BOARD_NO = #{boardNo}
-      ORDER BY REPLY_NO 
+        WITH RECURSIVE CTE AS (
+            SELECT A.REPLY_NO
+                ,A.BOARD_NO
+                ,A.REPLY_CNTN
+                ,A.UP_REPLY_NO
+                ,A.IS_DEL
+                ,A.REG_MEM_ID
+                ,A.CRT_DT 
+                ,A.MOD_DT
+                ,CAST(REPLY_NO AS CHAR(100)) AS LEVEL
+                ,0 AS DEPTH_LEVEL
+            FROM REPLY_MEM A
+           WHERE A.UP_REPLY_NO IS NULL
+            AND A.BOARD_NO = #{boardNo}
+        UNION ALL
+            SELECT B.REPLY_NO
+                ,B.BOARD_NO
+                ,B.REPLY_CNTN
+                ,B.UP_REPLY_NO
+                ,B.IS_DEL
+                ,B.REG_MEM_ID
+                ,B.CRT_DT 
+                ,B.MOD_DT
+                ,CONCAT(C.LEVEL, ",", B.REPLY_NO) AS LEVEL
+                ,DEPTH_LEVEL + 1 AS DEPTH_LEVEL
+            FROM REPLY_MEM B
+      INNER JOIN CTE C ON B.UP_REPLY_NO = C.REPLY_NO
+           WHERE B.BOARD_NO = #{boardNo}
+        )
+        SELECT C.REPLY_NO
+              ,C.BOARD_NO
+              ,C.REPLY_CNTN
+              ,C.UP_REPLY_NO
+              ,C.IS_DEL
+              ,C.REG_MEM_ID
+              ,C.CRT_DT
+              ,C.MOD_DT
+              ,C.LEVEL
+              ,C.DEPTH_LEVEL
+          FROM CTE C
+      ORDER BY LEVEL
     </select>
 
     <select id="selectReplyMore" resultType="com.example.demo.vo.board.BoardMemberVo">

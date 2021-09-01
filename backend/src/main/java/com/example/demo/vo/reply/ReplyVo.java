@@ -15,6 +15,15 @@ public class ReplyVo extends MemberVo{
     private Date crtDt;
     private Date modDt;
     private int replyCnt;
+    private int depthLevel;
+
+    public int getDepthLevel() {
+        return this.depthLevel;
+    }
+
+    public void setDepthLevel(int depthLevel) {
+        this.depthLevel = depthLevel;
+    }
 
     public String getReplyNo() {
         return this.replyNo;

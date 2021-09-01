@@ -153,7 +153,7 @@ function MemberBoardEdit(prop) {
       });
 
       api.post('/saveReply', null, { params : {
-                                      replyNo: replyNo,
+                                      upReplyNo: replyNo,
                                       boardNo : boardDtl.boardNo,
                                       replyCntn : replyCntn,
                                       regMemId : Authentication.getLoggedInUserName()
@@ -174,24 +174,28 @@ function MemberBoardEdit(prop) {
 
 
   function writeReply(targetReplyNo, targetReplyCntn){
-
     if(popRef.current.state.isOpen == true){
       if(replyNo == targetReplyNo){
         popRef.current.toggle();
-
-        setReplyNo('');
-        setAlrmReplyCntn('');
-        
+        setStateReply('','');
       }else{
-        setReplyNo(targetReplyNo);
-        setAlrmReplyCntn(targetReplyCntn);
+        setStateReply(targetReplyNo,targetReplyCntn);
       }
     }else{
+      setStateReply(targetReplyNo,targetReplyCntn);
       popRef.current.toggle();
-      setReplyNo(targetReplyNo);
-      setAlrmReplyCntn(targetReplyCntn);
     }
 
+  }
+
+  function cancelReply(){
+    popRef.current.toggle();
+    setStateReply('','');
+  }
+
+  function setStateReply(targetReplyNo, targetReplyCntn){
+    setReplyNo(targetReplyNo);
+    setAlrmReplyCntn(targetReplyCntn);
   }
 
   return (
@@ -266,7 +270,7 @@ function MemberBoardEdit(prop) {
                 <br/>
                 대댓글을 취소하려면 x 버튼을 클릭해주세요
               </PopoverBody>
-              <i className="nc-icon nc-simple-remove" onClick={()=>{popRef.current.toggle()}}/>
+              <i className="nc-icon nc-simple-remove" onClick={()=>{cancelReply()}}/>
             </UncontrolledPopover>
           </Row>
           <Row>
@@ -290,12 +294,17 @@ function MemberBoardEdit(prop) {
             replyList.map((reply) => {
               return (
                 <Row className="mt-3" >
+                  {
+                    reply.depthLevel > 0 
+                    ?<Col sm={reply.depthLevel}></Col>
+                    :<div></div>
+                  }
                 <Col sm="1"  className="align-self-center">
                   <h6>
                     {reply.regMemId}
                   </h6>
                 </Col>
-                <Col sm="10">
+                <Col sm={10 - reply.replyDepth}>
                     <p>
                       {reply.replyCntn} 
                       <span style={{cursor: 'pointer'}}
@@ -310,40 +319,10 @@ function MemberBoardEdit(prop) {
                       {reply.crtDt}
                     </Moment>
                 </Col>
-
-                {
-                  reply.replyCnt > 0 
-                  ?
-                    <>
-                    <Col sm ="1"></Col>
-                    <Col sm ="2">
-                      <label className="label label-default mr-1">대댓글 보기</label>
-                    </Col>
-                    </>
-                  :
-                    <div></div>
-                }
               </Row>
-            )
+              )
             })
           }
-          
-          <Row className="mt-3">
-            <Col sm="1"></Col>
-            <Col sm="1"  className="align-self-center">
-              <h6>
-                MEM_01
-              </h6>
-            </Col>
-            <Col sm="9">
-                <p>admin 댓글 작성</p>
-            </Col>
-            <Col sm="1"  className="align-self-center">
-              <p>
-                2021.08.01
-              </p>
-            </Col>
-          </Row>
 
           <br></br>
         </Container>
