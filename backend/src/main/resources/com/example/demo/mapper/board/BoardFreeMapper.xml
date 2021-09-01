@@ -70,19 +70,36 @@
     
     <select id="freeReplyList" resultType="com.example.demo.vo.reply.ReplyFreeVo">
         /*freeReplyList*/
-        SELECT REPLY_NO
-              ,BOARD_NO
-              ,REPLY_CNTN
-              ,UP_REPLY_NO
-              ,DEPTH
-              ,IS_DEL
-              ,REG_MEM_ID
-              ,MOD_DT
-              ,REPLY_PW
-          FROM REPLY_FREE
-         WHERE BOARD_NO = #{boardNo} 
-           AND IS_DEL = 'N'
-      ORDER BY REPLY_NO DESC
+        WITH RECURSIVE REPLY_LAYER AS (
+            SELECT REPLY_NO
+                  ,BOARD_NO
+                  ,REPLY_CNTN
+                  ,UP_REPLY_NO
+                  ,IS_DEL
+                  ,REG_MEM_ID
+                  ,MOD_DT
+                  ,0 AS DEPTH_LEVEL
+              FROM REPLY_FREE
+             WHERE UP_REPLY_NO IS NULL
+               AND BOARD_NO = #{boardNo}
+            UNION ALL
+            SELECT B.REPLY_NO
+                  ,B.BOARD_NO
+                  ,B.REPLY_CNTN
+                  ,B.UP_REPLY_NO
+                  ,B.IS_DEL
+                  ,B.REG_MEM_ID
+                  ,B.MOD_DT
+                  ,DEPTH_LEVEL + 1 AS DEPTH_LEVEL
+              FROM REPLY_FREE B
+        INNER JOIN REPLY_LAYER C 
+                ON B.UP_REPLY_NO = C.REPLY_NO
+             WHERE B.BOARD_NO = 1006
+        )
+        SELECT * 
+          FROM REPLY_LAYER C
+      ORDER BY MOD_DT DESC, 
+               DEPTH_LEVEL
          LIMIT #{pageSize}
         OFFSET #{pageNum}
     </select>
