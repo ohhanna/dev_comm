@@ -2,8 +2,8 @@
 import React, { useState, useEffect } from "react";
 import { Link } from "react-router-dom";
 import Moment from 'react-moment';
-import axios from 'axios';
 import Pagination from 'react-js-pagination';
+import Authentication from 'views/authentication/AuthenticationService.js';
 
 // reactstrap components
 import {
@@ -43,14 +43,6 @@ function NoticeList() {
     })
     .catch(err => { console.log('error! ' + JSON.stringify(err))});
   }, [currentPage]);
-
-  // useEffect(()=>{
-  //   async function fetchData(){
-  //     const response = await axios.get('/notice-page/list');
-  //     setPosts(response.data);
-  //   }
-  //   fetchData();
-  // },[]);
 
   return (
     <>
@@ -103,13 +95,7 @@ function NoticeList() {
             </Row>
           </Container>
         </div>
-
-        <Link to="/notice-page/write">
-          <Button type="button" id="notice_write" className="btn mr-1 float-right" color="default" outline
-            onClick={()=>{console.log('write')}}>
-            Write
-          </Button>
-        </Link>
+        <MasterBtn/>
         <br/><br/><br/>
         <Lists post={post}/>
         <br/>
@@ -131,6 +117,21 @@ function NoticeList() {
     </div>
     </>
   );
+}
+
+function MasterBtn(){
+  
+  if(Authentication.getLoggedInUserAuth() == 'MASTER' ){
+    return(
+      <Link to="/notice-page/write">
+        <Button type="button" id="notice_write" className="btn mr-1 float-right" color="default" outline>
+            Write
+        </Button>
+      </Link>
+    )
+  } else {
+    return null;
+  }
 }
 
 const Lists = ({post}) => {

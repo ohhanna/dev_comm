@@ -39,7 +39,7 @@
                     #{boardCntn},
                     NOW(),
                     NOW(),
-                    'ADMIN',
+                    #{regMemId},
                     'N')
     </insert>
 
@@ -62,6 +62,37 @@
         UPDATE BOARD_NOTICE
         SET is_del = 'Y'
         WHERE board_no = #{board_no}
+    </update>
+
+    <!-- REPLY_COUNT -->
+    <select id ="noticeReplyCnt" resultType="int">
+        SELECT COUNT(*) FROM REPLY_NOTICE
+        WHERE board_no = #{board_no} AND is_del = 'N'
+    </select>
+
+    <!-- REPLY_LIST -->
+    <select id="noticeReplyList" resultType="com.example.demo.vo.reply.ReplyVo">
+        SELECT REPLY_NO
+              ,BOARD_NO
+              ,REPLY_CNTN
+              ,UP_REPLY_NO
+              ,IS_DEL
+              ,REG_MEM_ID
+              ,CRT_DT
+              ,MOD_DT
+        FROM REPLY_NOTICE
+        WHERE board_no = #{board_no} AND is_del = 'N'
+        ORDER BY crt_dt desc
+    </select>
+    <!-- REPLY_WRITE -->
+
+    <!-- REPLY_EDIT -->
+
+    <!-- REPLY_DELETE -->
+    <update id="noticeReplyDel">
+        UPDATE REPLY_NOTICE
+        SET is_del = 'Y'
+        WHERE reply_no = #{reply_no}
     </update>
 
 </mapper>
