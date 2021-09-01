@@ -42,7 +42,7 @@ function MemberBoardEdit(prop) {
   const [isRegUsr, setIsRegUsr] = useState(true);
   const [replyList, setReplyList] = useState([]);
   const [replyCntn, setReplyCntn] = useState('');
-  const [replyNo, setReplyNo] = useState('');
+  const [replyNo, setReplyNo] = useState(null);
   const [alrmReplyCntn, setAlrmReplyCntn] = useState('');
 
   const [logindUser, setLoginUser] = useState(Authentication.getLoggedInUserName());
@@ -61,9 +61,6 @@ function MemberBoardEdit(prop) {
   // axios function
   function getBoardDtl(){
 
-    async()=>{
-
-    }
     const api = axios.create({
       baseURL: "/board/member"
     });
@@ -85,7 +82,6 @@ function MemberBoardEdit(prop) {
               else{
                 editorRef.current.getInstance().setHTML(response.data.boardCntn);
               }
-
               
             }).catch(function(error){
               alert(error);
@@ -116,8 +112,9 @@ function MemberBoardEdit(prop) {
                                   } }
             ).then(function(response){
               alert("저장이 완료되었습니다.");
+
               if(response.data != null && response.data != undefined){
-                history.push("/memberBoardEdit/" + response.data);
+                history.push("/memberBoardList");
               }
             }).catch(function(error){
               alert(error);
@@ -160,9 +157,10 @@ function MemberBoardEdit(prop) {
                                     } }
               ).then(function(response){
                 alert("저장이 완료되었습니다.");
-                // if(response.data != null && response.data != undefined){
-                //   history.push("/memberBoardEdit/" + response.data);
-                // }
+
+                console.log(response);
+                getBoardDtl();
+                console.log(2);
               }).catch(function(error){
                 alert(error);
                 alert("System Error");
@@ -177,7 +175,7 @@ function MemberBoardEdit(prop) {
     if(popRef.current.state.isOpen == true){
       if(replyNo == targetReplyNo){
         popRef.current.toggle();
-        setStateReply('','');
+        setStateReply(null,null);
       }else{
         setStateReply(targetReplyNo,targetReplyCntn);
       }
@@ -190,7 +188,7 @@ function MemberBoardEdit(prop) {
 
   function cancelReply(){
     popRef.current.toggle();
-    setStateReply('','');
+    setStateReply(null,null);
   }
 
   function setStateReply(targetReplyNo, targetReplyCntn){
