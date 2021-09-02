@@ -4,6 +4,7 @@ import java.util.*;
 
 import com.example.demo.service.board.BoardNoticeService;
 import com.example.demo.vo.board.BoardNoticeVo;
+import com.example.demo.vo.reply.ReplyVo;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.GetMapping;
@@ -43,22 +44,7 @@ public class BoardNoticeController {
         System.out.println("(한나) BoardNoticeController - /notice-page/view/{boardNo}");
         BoardNoticeVo noticeView = boardNoticeService.selectOne(boardNo);
 
-        if(noticeView != null){
-            System.out.println("★★★★★★★");
-            System.out.println(noticeView.getBoardNo());
-            System.out.println(noticeView.getBoardTtl());
-            System.out.println(noticeView.getBoardCntn());
-            System.out.println("★★★★★★★");
-        }
-
         return noticeView;
-    }
-
-    // DELETE - is_del = 'Y' 로 변경함
-    @GetMapping("/notice-page/del/{boardNo}")
-    public int noticeDel(@PathVariable int boardNo){
-        System.out.println("(한나) BoardNoticeController - /notice-page/del");    
-        return boardNoticeService.noticeDel(boardNo);
     }
 
     // WRITE
@@ -66,7 +52,7 @@ public class BoardNoticeController {
     public void noticeWriteProcess(
         @RequestBody BoardNoticeVo boardNoticeVo)
     {
-        System.out.println("(한나) BoardNoticeController - /notice-page/writeProcess"); 
+        System.out.println("(한나) BoardNoticeController - /notice-page/writeProcess");
         boardNoticeService.boardNoticeWrite(boardNoticeVo);
     }
 
@@ -76,9 +62,42 @@ public class BoardNoticeController {
         @RequestBody BoardNoticeVo boardNoticeVo)
     {
         System.out.println("(한나) BoardNoticeController - /notice-page/editProcess");
-        System.out.println("board no : " + boardNoticeVo.getBoardNo());
-        System.out.println("title : " + boardNoticeVo.getBoardTtl());
-        System.out.println("content : " + boardNoticeVo.getBoardCntn());
         boardNoticeService.boardNoticeEdit(boardNoticeVo);
+    }
+
+    // DELETE - is_del = 'Y' 로 변경함
+    @GetMapping("/notice-page/del/{boardNo}")
+    public int noticeDel(@PathVariable int boardNo){
+        System.out.println("(한나) BoardNoticeController - /notice-page/del");    
+        return boardNoticeService.noticeDel(boardNo);
+    }
+
+    // REPLY - LIST
+    @GetMapping("/notice-page/view/reply/{boardNo}")
+    public Map<String, Object> noticeReply(@PathVariable int boardNo){
+        System.out.println("(한나) BoardNoticeController - /notice-page/view/reply/{boardNo}");
+
+        Map<String, Object> replyMap = new HashMap<String, Object>();
+
+        int replyCnt = boardNoticeService.noticeReplyCnt(boardNo);
+        List<ReplyVo> replyList = boardNoticeService.noticeReplyList(boardNo);
+
+        replyMap.put("replyCnt", replyCnt);
+        replyMap.put("replyList", replyList);
+
+        return replyMap;
+    }
+
+    // REPLY - WRITE
+
+    // REPLY - EDIT
+
+    // REPLY - DELETE
+    @GetMapping("/notice-page/view/replydelete/{replyNo}")
+    public int noticeReplyDel(@PathVariable int replyNo){
+        System.out.println("(한나) BoardNoticeController - /notice-page/view/reply-delete/{replyNo}");
+        int result = boardNoticeService.noticeReplyDel(replyNo);
+
+        return result;
     }
 }

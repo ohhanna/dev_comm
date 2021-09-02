@@ -153,7 +153,6 @@ function FreeListDetail(props) {
                                               </div>
                                             </div>
                                               <p>{replyData.replyCntn}</p>
-                                            
                                             </li>
                                 }) }
                             </ul>                            

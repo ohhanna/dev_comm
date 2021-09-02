@@ -1,5 +1,5 @@
 /* eslint-disable */
-import React, { useState } from "react";
+import React from "react";
 
 // core components
 import IndexNavbar from "components/Navbars/IndexNavbar.js";
@@ -10,6 +10,7 @@ import NoticeWriteForm from "views/noticeBoard/NoticeWriteForm.js";
 import NoticeEditForm from "views/noticeBoard/NoticeEditForm.js";
 import DemoFooter from "components/Footers/DemoFooter.js";
 import { Route, Switch, Redirect } from "react-router-dom";
+import Authentication from 'views/authentication/AuthenticationService.js';
 
 function NoticeBoard(match) {
 
@@ -31,21 +32,23 @@ function NoticeBoard(match) {
           <NoticeList/>
         </Route>
         <Route exact path="/notice-page/view/:boardNo" component={NoticeView}>
-          {/* <NoticeView params={match.params.boardNo}/> */}
         </Route>
-        <Route exact path="/notice-page/write">
-          <NoticeWriteForm/>
-        </Route>
-        <Route exact path="/notice-page/edit/:boardNo" component={NoticeEditForm}>
-          {/* <NoticeEditForm/> */}
-        </Route>
-        <Route exact path="/notice-page/del/:boardNo" component={DeleteCom}>
-        </Route>
+        <Route exact path="/notice-page/write"
+               render={
+                 (props) => {
+                    if(Authentication.getLoggedInUserAuth() == 'MASTER' ){
+                      return <NoticeWriteForm/>
+                    }
+                    else{
+                      alert("권한이 없습니다.");
+                      return <Redirect to="/notice-page/list"/>
+                    }
+                 }
+               }
+        />
+        <Route exact path="/notice-page/edit/:boardNo" component={NoticeEditForm}/>
+        <Route exact path="/notice-page/del/:boardNo" component={DeleteCom}/>
       </Switch>
-
-      {/* shoes.map((a, i)=>{
-        return <Card shoes={shoes[i]} i={i}/>
-      }) */}
 
       <DemoFooter />
     </>
@@ -54,34 +57,31 @@ function NoticeBoard(match) {
 
 const DeleteCom = ({match}) => {
 
-  console.log(match.params.boardNo);
+  // if(Authentication.getLoggedInUserAuth() == 'MASTER'){
 
-  const [msg, setMsg] = useState("hi");
+    fetch(match.params.boardNo)
+    .then( res => res.json())
+    .then( res => {
+      if(res == 1){
+        // 삭제 성공
+        alert('삭제되었습니다.');
+        // setMsg("삭제되었습니다");
+      } else {
+        // 삭제 실패
+        alert('삭제에 실패했습니다. 다시 시도해주세요.');
+        // setMsg("삭제에 실패했습니다. 다시 시도해주세요.");
+      }
+    })
 
-  fetch(match.params.boardNo)
-  .then( res => res.json())
-  .then( res => {
-    if(res == 1){
-      // 삭제 성공
-      alert('삭제되었습니다.');
-      // setMsg("삭제되었습니다");
-    } else {
-      // 삭제 실패
-      alert('삭제에 실패했습니다. 다시 시도해주세요.');
-      // setMsg("삭제에 실패했습니다. 다시 시도해주세요.");
-    }
-  })
-
-  console.log(msg);
-
-  return (
-    <>
-      {/* <AlertModal msg={msg}/> */}
-      <Redirect to={{
-        pathname:"/notice-page/list"
-      }}/>
-    </>
-  )
+    return (
+      <>
+        {/* <AlertModal msg={msg}/> */}
+        <Redirect to={{
+          pathname:"/notice-page/list"
+        }}/>
+      </>
+    )
+  // }
 }
 
 // function AlertModal(props){

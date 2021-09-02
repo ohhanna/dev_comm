@@ -70,23 +70,31 @@ const NoticeEditForm = ({match}) => {
     console.log(url);
 
     function NoticeEdit(props){
-    
-        fetch('/notice-page/editProcess', {
-            method : 'POST',
-            headers : {
-                'Content-Type' : 'application/json',
-            },
-            body : JSON.stringify({
-                'boardNo' : props.boardNo,
-                'boardTtl' : props.title,
-                'boardCntn' : props.content
+
+        if(props.title == null){
+            alert('제목을 입력해주세요');
+            return ;
+        } else if (props.content == null){
+            alert('내용을 입력해주세요');
+            return ;
+        } else {
+            fetch('/notice-page/editProcess', {
+                method : 'POST',
+                headers : {
+                    'Content-Type' : 'application/json',
+                },
+                body : JSON.stringify({
+                    'boardNo' : props.boardNo,
+                    'boardTtl' : props.title,
+                    'boardCntn' : props.content
+                })
             })
-        })
-        .then(response => {
-            if (response.status === 200) {
-                history.push('/notice-page/view/'+props.boardNo);
-            }
-        })
+            .then(response => {
+                if (response.status === 200) {
+                    history.push('/notice-page/view/'+props.boardNo);
+                }
+            })
+        }
     }
 
     useEffect(()=>{
@@ -119,12 +127,6 @@ const NoticeEditForm = ({match}) => {
                                     <div>
                                         <ListModal boardNo={boardNo}/>
                                         <EditModal boardNo={boardNo} title={title} content={content} NoticeEdit={NoticeEdit}/>
-                                        {/* <Button type="button" 
-                                                className="btn mr-1 float-right"
-                                                color="default" outline
-                                                onClick={()=>{NoticeEdit({boardNo:boardNo, title:title, content:content})}}>
-                                            SAVE
-                                        </Button> */}
                                     </div>
                                     <br/><br/><br/>
                                     <Table>
@@ -133,7 +135,7 @@ const NoticeEditForm = ({match}) => {
                                                 <th>
                                                     <input type="text"
                                                            className="form-control"
-                                                           placeholder={data.boardTtl}
+                                                           value={data.boardTtl}
                                                            onChange={(e) => setTitle(e.target.value)}/>
                                                 </th>
                                             </tr>
