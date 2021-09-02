@@ -26,7 +26,7 @@
     </select>
 
     <!-- WRITE -->
-    <insert id="boardNoticeWrite" parameterType="com.example.demo.vo.board.BoardFreeVo">
+    <insert id="boardNoticeWrite" parameterType="com.example.demo.vo.board.BoardNoticeVo">
         INSERT INTO BOARD_NOTICE (
                         BOARD_TTL,
                         BOARD_CNTN,
@@ -54,20 +54,20 @@
     <!-- VIEW -->
     <select id="selectOne" resultType="com.example.demo.vo.board.BoardNoticeVo"> 
         SELECT * FROM BOARD_NOTICE
-        WHERE board_no = #{board_no} AND is_del = 'N'
+        WHERE board_no = #{boardNo} AND is_del = 'N'
     </select>
 
     <!-- DELETE -->
     <update id="delOne">
         UPDATE BOARD_NOTICE
         SET is_del = 'Y'
-        WHERE board_no = #{board_no}
+        WHERE board_no = #{boardNo}
     </update>
 
     <!-- REPLY_COUNT -->
     <select id ="noticeReplyCnt" resultType="int">
         SELECT COUNT(*) FROM REPLY_NOTICE
-        WHERE board_no = #{board_no} AND is_del = 'N'
+        WHERE board_no = #{boardNo} AND is_del = 'N'
     </select>
 
     <!-- REPLY_LIST -->
@@ -81,18 +81,44 @@
               ,CRT_DT
               ,MOD_DT
         FROM REPLY_NOTICE
-        WHERE board_no = #{board_no} AND is_del = 'N'
+        WHERE board_no = #{boardNo} AND is_del = 'N'
         ORDER BY crt_dt desc
     </select>
-    <!-- REPLY_WRITE -->
 
+    <!-- REPLY_WRITE -->
+    <insert id="noticeReplyWrite" parameterType="com.example.demo.vo.reply.ReplyVo">
+        INSERT INTO REPLY_NOTICE(
+                        BOARD_NO,
+                        REPLY_CNTN,
+                        UP_REPLY_NO,
+                        IS_DEL,
+                        REG_MEM_ID,
+                        CRT_DT,
+                        MOD_DT
+                        )
+                VALUES (
+                    #{boardNo},
+                    #{replyCntn},
+                    #{upReplyNo},
+                    'N',
+                    #{regMemId},
+                    NOW(),
+                    NOW()
+                )
+    </insert>
+    
     <!-- REPLY_EDIT -->
+    <update id="noticeReplyEdit">
+        UPDATE REPLY_NOTICE
+        SET reply_cntn = #{replyCntn}
+        WHERE reply_no = #{replyNo}
+    </update>
 
     <!-- REPLY_DELETE -->
     <update id="noticeReplyDel">
         UPDATE REPLY_NOTICE
         SET is_del = 'Y'
-        WHERE reply_no = #{reply_no}
+        WHERE reply_no = #{replyNo}
     </update>
 
 </mapper>

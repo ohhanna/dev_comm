@@ -89,11 +89,26 @@ public class BoardNoticeController {
     }
 
     // REPLY - WRITE
+    @PostMapping("/notice-page/view/replyWrite")
+    public int noticeReplyWrite(@RequestBody ReplyVo replyVo) {
+        System.out.println("(한나) BoardNoticeController - /notice-page/view/replyWrite");
+        if(replyVo.getUpReplyNo() == null){
+            // 대댓이 아닌 경우 :D
+            replyVo.setUpReplyNo("0");
+        }
+        return boardNoticeService.noticeReplyWrite(replyVo);
+    }
 
     // REPLY - EDIT
+    @PostMapping("/notice-page/view/replyEdit")
+    public int noticeReplyEdit(@RequestBody ReplyVo replyVo) {
+        System.out.println("(한나) BoardNoticeController - /notice-page/view/replyEdit");
+
+        return boardNoticeService.noticeReplyEdit(replyVo);
+    }
 
     // REPLY - DELETE
-    @GetMapping("/notice-page/view/replydelete/{replyNo}")
+    @GetMapping("/notice-page/view/replyDelete/{replyNo}")
     public int noticeReplyDel(@PathVariable int replyNo){
         System.out.println("(한나) BoardNoticeController - /notice-page/view/reply-delete/{replyNo}");
         int result = boardNoticeService.noticeReplyDel(replyNo);
