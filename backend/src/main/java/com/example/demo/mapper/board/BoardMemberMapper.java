@@ -17,4 +17,5 @@ public interface BoardMemberMapper {
     int insertBoardDtl(BoardMemberVo boardMemberVo);
     ArrayList<ReplyVo> selectReply(ReplyVo replyVo);
     int insertReply(ReplyVo replyVo);
+    void deleteReply(ReplyVo replyVo);
 }

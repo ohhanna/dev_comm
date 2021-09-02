@@ -16,6 +16,9 @@ import '@toast-ui/editor-plugin-color-syntax/dist/toastui-editor-plugin-color-sy
 import colorSyntax from '@toast-ui/editor-plugin-color-syntax';
 import Authentication from 'views/authentication/AuthenticationService.js';
 
+import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
+import { faTrashAlt, faPencilAlt, faWrench } from "@fortawesome/free-solid-svg-icons";
+
 // reactstrap components
 import {
   Container,
@@ -44,6 +47,7 @@ function MemberBoardEdit(prop) {
   const [replyCntn, setReplyCntn] = useState('');
   const [replyNo, setReplyNo] = useState(null);
   const [alrmReplyCntn, setAlrmReplyCntn] = useState('');
+  const [modReplyNo, setModReplyNo] = useState('');
 
   const [logindUser, setLoginUser] = useState(Authentication.getLoggedInUserName());
 
@@ -158,9 +162,9 @@ function MemberBoardEdit(prop) {
               ).then(function(response){
                 alert("저장이 완료되었습니다.");
 
-                console.log(response);
+                setReplyCntn('');
+                setStateReply(null, null);
                 getBoardDtl();
-                console.log(2);
               }).catch(function(error){
                 alert(error);
                 alert("System Error");
@@ -184,6 +188,39 @@ function MemberBoardEdit(prop) {
       popRef.current.toggle();
     }
 
+  }
+
+  function deleteReply(targetReplyNo){
+    if(confirm("댓글을 삭제하시겠습니까?")){
+
+      const api = axios.create({
+        baseURL: "/board/member"
+      });
+
+      api.post('/deleteReply', null, { params : {
+                                      replyNo: targetReplyNo
+                                      } 
+                                    }
+              ).then(function(response){
+                console.log(2);
+                alert("댓글이 삭제되었습니다.");
+                getBoardDtl();
+              }).catch(function(error){
+                alert(error);
+                alert("System Error");
+              });
+    }
+  }
+
+  function modifyReply(targetReplyNo){
+    console.log("modReplyNo : " + modReplyNo);
+    console.log("targetReplyNo : " + targetReplyNo);
+    if(modReplyNo == targetReplyNo){
+      setModReplyNo('');
+    }else{
+      setModReplyNo(targetReplyNo);
+    }
+    
   }
 
   function cancelReply(){
@@ -304,12 +341,41 @@ function MemberBoardEdit(prop) {
                 </Col>
                 <Col sm={10 - reply.replyDepth}>
                     <p>
-                      {reply.replyCntn} 
-                      <span style={{cursor: 'pointer'}}
-                            onClick={(e)=>{writeReply(reply.replyNo, reply.replyCntn)}}
-                        >
-                              &nbsp; ✎
-                      </span>
+                      { /* 댓글 수정.. */
+                        reply.replyNo != modReplyNo?
+                        reply.replyCntn
+                        :
+                        <Input></Input>
+                      }
+                      {
+                        modReplyNo != reply.replyNo 
+                        ?
+                          <>
+                          <span style={{cursor: 'pointer'}}
+                                onClick={(e)=>{writeReply(reply.replyNo, reply.replyCntn)}}
+                            >
+                                  &nbsp;&nbsp; <FontAwesomeIcon icon={faPencilAlt} size="sm" onClick={()=>{deleteReply(reply.replyNo)}}/>
+                          </span>
+                          {
+                            logindUser == reply.regMemId 
+                            ? 
+                            <>
+                            <span style={{cursor: 'pointer'}}>
+                              &nbsp;&nbsp;<FontAwesomeIcon icon={faWrench} size="sm" onClick={()=>{modifyReply(reply.replyNo)}}/>
+                            </span>
+                            <span style={{cursor: 'pointer'}}>
+                              &nbsp;&nbsp;<FontAwesomeIcon icon={faTrashAlt} size="sm" onClick={()=>{deleteReply(reply.replyNo)}}/>
+                            </span>
+                            </>
+                            :
+                            <div></div>
+                          }
+                          </>
+                        :
+                        <span style={{cursor: 'pointer'}}>
+                          &nbsp;&nbsp;<FontAwesomeIcon icon={faWrench} size="sm" onClick={()=>{modifyReply(reply.replyNo)}}/>
+                        </span>
+                      }
                     </p>
                 </Col>
                 <Col sm="1"  className="align-self-center">

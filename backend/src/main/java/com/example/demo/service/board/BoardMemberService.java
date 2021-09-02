@@ -35,4 +35,8 @@ public class BoardMemberService {
     public int insertReply(ReplyVo replyVo){
         return mapper.insertReply(replyVo);
     }
+
+    public void deleteReply(ReplyVo replyVo){
+        mapper.deleteReply(replyVo);
+    }
 }

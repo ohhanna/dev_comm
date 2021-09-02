@@ -98,9 +98,11 @@
         )
         SELECT C.REPLY_NO
               ,C.BOARD_NO
-              ,C.REPLY_CNTN
-              ,C.UP_REPLY_NO
+              ,CASE WHEN C.IS_DEL = 'Y' THEN '(삭제된 댓글입니다.)'
+                    ELSE C.REPLY_CNTN
+               END AS REPLY_CNTN
               ,C.IS_DEL
+              ,C.UP_REPLY_NO
               ,C.REG_MEM_ID
               ,C.CRT_DT
               ,C.MOD_DT
@@ -148,4 +150,10 @@
                                ,NOW()
                               )
     </insert>
+
+    <delete id="deleteReply" parameterType="com.example.demo.vo.reply.ReplyVo">
+        UPDATE REPLY_MEM
+           SET IS_DEL = 'Y'
+         WHERE REPLY_NO = #{replyNo}
+    </delete>
 </mapper>

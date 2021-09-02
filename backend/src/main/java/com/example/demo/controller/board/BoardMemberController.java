@@ -72,4 +72,12 @@ public class BoardMemberController {
 
         return Integer.toString(result);
     }
+
+    @RequestMapping("/board/member/deleteReply")
+    @ResponseBody
+    public void deleteReply(ReplyVo replyVo){
+        System.out.println("delete reply : " + replyVo.getReplyNo());
+
+        boardMemberService.deleteReply(replyVo);
+    } 
 }
