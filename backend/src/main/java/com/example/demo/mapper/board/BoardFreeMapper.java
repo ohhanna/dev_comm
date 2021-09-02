@@ -37,4 +37,7 @@ public interface BoardFreeMapper {
 
     //댓글 등록
     int freeReplyAdd(ReplyFreeVo replyFreeVo);
+
+    //댓글 삭제
+    int freeReplyDelete(int replyNo);
 }

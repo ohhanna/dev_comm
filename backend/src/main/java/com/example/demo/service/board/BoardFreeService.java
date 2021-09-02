@@ -56,4 +56,9 @@ public class BoardFreeService {
         return mapper.freeReplyAdd(replyFreeVo);
     }
 
+    //댓글 삭제
+    public int freeReplyDelete(int replyNo) {
+        return mapper.freeReplyDelete(replyNo);
+    }
+
 }

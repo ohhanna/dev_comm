@@ -8,7 +8,7 @@ public class ReplyFreeVo {
     private String replyPw;
     private String replyCntn;
     private String upReplyNo;
-    private String depth;
+    private int depthLevel;
     private String isDel;
     private String regMemId;
     private Date crtDt;
@@ -54,12 +54,12 @@ public class ReplyFreeVo {
         this.upReplyNo = upReplyNo;
     }
 
-    public String getDepth() {
-        return this.depth;
+    public int getDepthLevel() {
+        return this.depthLevel;
     }
 
-    public void setDepth(String depth) {
-        this.depth = depth;
+    public void setDepthLevel(int depthLevel) {
+        this.depthLevel = depthLevel;
     }
 
     public String getIsDel() {

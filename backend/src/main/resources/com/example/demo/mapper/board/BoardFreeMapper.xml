@@ -77,6 +77,7 @@
                   ,UP_REPLY_NO
                   ,IS_DEL
                   ,REG_MEM_ID
+                  ,CRT_DT
                   ,MOD_DT
                   ,0 AS DEPTH_LEVEL
               FROM REPLY_FREE
@@ -89,16 +90,17 @@
                   ,B.UP_REPLY_NO
                   ,B.IS_DEL
                   ,B.REG_MEM_ID
+                  ,B.CRT_DT
                   ,B.MOD_DT
                   ,DEPTH_LEVEL + 1 AS DEPTH_LEVEL
               FROM REPLY_FREE B
         INNER JOIN REPLY_LAYER C 
                 ON B.UP_REPLY_NO = C.REPLY_NO
-             WHERE B.BOARD_NO = 1006
+             WHERE B.BOARD_NO = #{boardNo}
         )
         SELECT * 
           FROM REPLY_LAYER C
-      ORDER BY MOD_DT DESC, 
+      ORDER BY CRT_DT DESC, 
                DEPTH_LEVEL
          LIMIT #{pageSize}
         OFFSET #{pageNum}
@@ -137,5 +139,13 @@
                        ,NOW()
                        ,#{replyPw})
     </insert>
+
+    <update id="freeReplyDelete" parameterType="com.example.demo.vo.reply.ReplyFreeVo">
+        /*freeReplyDelete*/
+        UPDATE REPLY_FREE
+           SET REPLY_CNTN = '삭제된 댓글입니다'
+              ,IS_DEL = 'Y'
+        WHERE REPLY_NO = #{REPLY_NO}
+    </update>
 
 </mapper>
