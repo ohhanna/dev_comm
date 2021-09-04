@@ -35,8 +35,10 @@ public interface BoardNoticeMapper {
     List<ReplyVo> noticeReplyList(int boardNo);
 
     // REPLY - WRITE
+    int noticeReplyWrite(ReplyVo replyVo);
 
     // REPLY - EDIT
+    int noticeReplyEdit(ReplyVo replyVo);
 
     // REPLY - DELETE
     int noticeReplyDel(int replyNo);

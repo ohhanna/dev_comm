@@ -55,8 +55,14 @@ public class BoardNoticeService {
     }
 
     // REPLY - WRITE
+    public int noticeReplyWrite(ReplyVo replyVo){
+        return boardNoticeMapper.noticeReplyWrite(replyVo);
+    }
 
     // REPLY - EDIT
+    public int noticeReplyEdit(ReplyVo replyVo){
+        return boardNoticeMapper.noticeReplyEdit(replyVo);
+    }
 
     // REPLY - DELETE
     public int noticeReplyDel(int replyNo){

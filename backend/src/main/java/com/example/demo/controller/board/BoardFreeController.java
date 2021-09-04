@@ -87,7 +87,7 @@ public class BoardFreeController {
 
     @GetMapping("/freeBoard/reply/list")
     public Map<String, Object> freeReplyList(@RequestParam(value = "boardNo", required=false) Integer boardNo) {
-        System.out.println("freeBoardList Controller ReplyList");
+        System.out.println("freeBoardList Controller replyList");
 
         int pageNum = 1;
         int pageSize = 10;
@@ -105,9 +105,22 @@ public class BoardFreeController {
 
     @PostMapping("/freeBoard/reply/add")
     public void freeReplyAdd(@RequestBody ReplyFreeVo replyFreeVo) {
-        System.out.println("freeBoardList Controller ReplyAdd");
+        System.out.println("freeBoardList Controller replyAdd");
 
         boardFreeService.freeReplyAdd(replyFreeVo);
+    }
+
+    @PostMapping("/freeBoard/reply/modify")
+    public void freeReplyModify(@RequestParam(value = "replyCntn", required=false) String replyCntn) {
+        System.out.println("freeBoardList Controller replyModify");
+        System.out.println(replyCntn);
+    }
+
+    @PostMapping("/freeBoard/reply/delete")
+    public void freeReplyDelete(@RequestParam(value = "replyNo", required=false) Integer replyNo) {
+        System.out.println("freeBoardList Controller replyDelete");
+
+        boardFreeService.freeReplyDelete(replyNo);
     }
 
 }

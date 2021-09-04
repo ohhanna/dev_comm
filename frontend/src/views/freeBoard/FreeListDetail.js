@@ -14,6 +14,7 @@ import {
 function FreeListDetail(props) {
 
     let [datas, setDatas] = useState([{}]);
+
     let [replyDatas, setReplyDatas] = useState({
       replyCount : '',
       replyList : []
@@ -22,6 +23,10 @@ function FreeListDetail(props) {
     let [regMemId, setregMemId] = useState('');
     let [replyPw, setreplyPw] = useState('');
     let [replyCntn, setReplyCntn] = useState('');
+
+    let [modYn, setModYn] = useState('');
+    let [replyModCntn, setReplyModCntn] = useState('');
+
     let editorRef = useRef();
     let history = useHistory();
 
@@ -46,7 +51,7 @@ function FreeListDetail(props) {
                               replyCount: replyDatas.replyCount,
                               replyList: replyDatas.replyList
                             })
-          })
+          ; console.log(replyDatas)})
      .catch(err => { console.log('error' + JSON.stringify(err))});
     }, []);
 
@@ -77,6 +82,17 @@ function FreeListDetail(props) {
           setReplyCntn('');
         }
       })
+    }
+
+    function freeReplyModify() {
+      console.log(replyModCntn);
+      fetch('/freeBoard/reply/modify?' + new URLSearchParams({replyCntn : replyModCntn}),{
+        method: 'POST'})
+    }
+
+    function freeReplyDelete(props) {
+      fetch('/freeBoard/reply/delete?' + new URLSearchParams({replyNo : props}),{
+        method: 'POST'})
     }
 
     return (
@@ -136,10 +152,11 @@ function FreeListDetail(props) {
                             </fieldset>
                             <ul className="custom-reply-ul-free pl-3">
                                 { replyDatas.replyList.map(replyData => {
-                                    return <li className="custom-reply-li-free mb-3">
+                                    return <li className={"custom-reply-li-free mb-3 pl-" + (replyData.depthLevel * 2)}
+                                               key={replyData.replyNo}>
                                             <div className="custom-reply-flex-free mt-3 mb-2">
-                                              <img alt="..." class="custom-reply-img-free" src="/paper-kit-react/static/media/kaci-baum-2.9b929eea.jpg" />
-                                              <div className="ml-2">
+                                              {/* <img alt="..." class="custom-reply-img-free" src="/paper-kit-react/static/media/kaci-baum-2.9b929eea.jpg" /> */}
+                                              <div>
                                                 <b>{replyData.regMemId}</b>
                                                 <div>
                                                   <Moment format="YYYY/MM/DD">
@@ -147,12 +164,28 @@ function FreeListDetail(props) {
                                                   </Moment>  
                                                 </div>
                                               </div>
+                                              { replyData.isDel == 'N'? 
                                               <div className="custom-reply-buttons-free">
-                                                <button className="mr-1 btn btn-outline-success btn-sm">수정</button>
-                                                <button className="mr-1 btn btn-outline-danger btn-sm">삭제</button>
+                                                <button className="mr-1 btn btn-outline-success btn-sm"
+                                                        onClick={ () => { setModYn(replyData.replyNo); setReplyModCntn(replyData.replyCntn) } }
+                                                >수정</button>
+                                                <button className="mr-1 btn btn-outline-danger btn-sm"
+                                                        onClick={ () => { freeReplyDelete(replyData.replyNo) } }>
+                                                        삭제
+                                                </button>
                                               </div>
+                                              : null}
                                             </div>
-                                              <p>{replyData.replyCntn}</p>
+                                              { modYn != replyData.replyNo ? 
+                                              <p>{replyData.replyCntn}</p> :
+                                              <div>
+                                                <textarea value={replyModCntn}
+                                                          onChange={ (e) => { setReplyModCntn(e.target.value) } }>
+                                                </textarea>
+                                                <button onClick={ () => { freeReplyModify() } }>등록</button>
+                                                <button onClick={ () => {setModYn('')} }>취소</button>
+                                              </div>
+                                              }
                                             </li>
                                 }) }
                             </ul>                            
