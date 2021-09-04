@@ -82,7 +82,50 @@
               ,MOD_DT
         FROM REPLY_NOTICE
         WHERE board_no = #{boardNo} AND is_del = 'N'
-        ORDER BY crt_dt desc
+        ORDER BY crt_dt
+
+        <!-- WITH RECURSIVE CTE AS (
+            SELECT A.REPLY_NO,
+                   A.BOARD_NO,
+                   A.REPLY_CNTN,
+                   A.UP_REPLY_NO,
+                   A.IS_DEL,
+                   A.CRT_DT,
+                   A.MOD_DT,
+                   CAST(REPLY_NO AS CHAR(100)) AS LEVEL,
+                   0 AS DEPTH_LEVEL
+            FROM REPLY_NOTICE A
+            WHERE A.UP_REPLY_NO = 0
+            AND A.BOARD_NO = #{boardNo}
+            AND IS_DEL = 'N'
+
+            UNION ALL
+
+            SELECT B.REPLY_NO,
+                   B.BOARD_NO,
+                   B.REPLY_CNTN,
+                   B.UP_REPLY_NO,
+                   B.IS_DEL,
+                   B.CRT_DT,
+                   B.MOD_DT,
+                   CONCAT(C.LEVEL, "," B.REPLY_NO) AS LEVEL,
+                   DEPTH_LEVEL + 1 AS DEPTH_LEVEL
+            FROM REPLY_NOTICE B
+
+            INNER JOIN CTE C ON B.UP_REPLY_NO = C.REPLY_NO
+            WHERE B.BOARD_NO = #{boardNo}
+        )
+
+        SELECT C.REPLY_NO,
+               C.BOARD_NO,
+               C.REPLY_CNTN,
+               C.UP_REPLY_NO,
+               C.IS_DEL,
+               C.CRT_DT,
+               C.MOD_DT,
+               C.LEVEL,
+               C.DEPTH_LEVEL
+        FROM CTE C -->
     </select>
 
     <!-- REPLY_WRITE -->

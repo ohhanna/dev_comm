@@ -85,6 +85,25 @@ public class BoardNoticeController {
         replyMap.put("replyCnt", replyCnt);
         replyMap.put("replyList", replyList);
 
+        // List<ReplyVo> orderedList = new ArrayList<ReplyVo>();
+
+        // for(int i=0; i<replyList.size(); i++){
+        //     for(int j=1; j<replyList.size(); j++){
+        //         if(replyList.get(j).getUpReplyNo() == replyList.get(i).getReplyNo()){
+        //             orderedList.add(i+1, replyList.get(j));
+        //             break;
+        //         } else {
+        //             orderedList.add(i, replyList.get(i));
+        //             break;
+        //         }
+        //     }
+        // }
+
+        // System.out.println(orderedList.size());
+        // for(int i=0; i<orderedList.size(); i++){
+        //     System.out.println(orderedList.get(i).getReplyNo());
+        // }
+
         return replyMap;
     }
 
