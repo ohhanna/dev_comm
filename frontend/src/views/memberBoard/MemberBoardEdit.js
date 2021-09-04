@@ -48,12 +48,17 @@ function MemberBoardEdit(prop) {
   const [replyNo, setReplyNo] = useState(null);
   const [alrmReplyCntn, setAlrmReplyCntn] = useState('');
   const [modReplyNo, setModReplyNo] = useState('');
+  const [modReplyCntn, setModReplyCntn] = useState('');
 
   const [logindUser, setLoginUser] = useState(Authentication.getLoggedInUserName());
 
   const history = useHistory();
   const editorRef = useRef();
   const popRef = useRef();
+
+  const api = axios.create({
+    baseURL: "/board/member"
+  });
 
   useEffect(() => {
     if(prop.match.params.boardNo != "new" ){
@@ -64,10 +69,11 @@ function MemberBoardEdit(prop) {
 
   // axios function
   function getBoardDtl(){
+    getBoardAxios(api);
+    getReplyAxios(api);
+  }
 
-    const api = axios.create({
-      baseURL: "/board/member"
-    });
+  function getBoardAxios(api){
     api.get('/getDetail', { params : {boardNo : prop.match.params.boardNo} }
             ).then(function(response){
               
@@ -90,7 +96,9 @@ function MemberBoardEdit(prop) {
             }).catch(function(error){
               alert(error);
             });
-            
+  }
+
+  function getReplyAxios(api){
     api.get('/getReply', { params : {boardNo : prop.match.params.boardNo} }
             ).then(function(response){
               setReplyList(response.data);
@@ -100,30 +108,32 @@ function MemberBoardEdit(prop) {
   }
 
   function saveDtl(){
-    const boardDtlState = {...boardDtl};
-    boardDtlState.boardCntn = editorRef.current.getInstance().getHTML();
-    setBoardDtl(boardDtlState);
+    if(confirm("저장하시겠습니까?")){
+      const boardDtlState = {...boardDtl};
+      boardDtlState.boardCntn = editorRef.current.getInstance().getHTML();
+      setBoardDtl(boardDtlState);
 
-    const api = axios.create({
-      baseURL: "/board/member"
-    });
+      const api = axios.create({
+        baseURL: "/board/member"
+      });
 
-    api.post('/save', null, { params : {
-                                    boardNo : boardDtl.boardNo,
-                                    boardTtl : boardTitle,
-                                    boardCntn : editorRef.current.getInstance().getHTML(),
-                                    regMemId : Authentication.getLoggedInUserName()
-                                  } }
-            ).then(function(response){
-              alert("저장이 완료되었습니다.");
+      api.post('/save', null, { params : {
+                                      boardNo : boardDtl.boardNo,
+                                      boardTtl : boardTitle,
+                                      boardCntn : editorRef.current.getInstance().getHTML(),
+                                      regMemId : Authentication.getLoggedInUserName()
+                                    } }
+              ).then(function(response){
+                alert("저장이 완료되었습니다.");
 
-              if(response.data != null && response.data != undefined){
-                history.push("/memberBoardList");
-              }
-            }).catch(function(error){
-              alert(error);
-              alert("System Error");
-            });
+                if(response.data != null && response.data != undefined){
+                  history.push("/memberBoardList");
+                }
+              }).catch(function(error){
+                alert(error);
+                alert("System Error");
+              });
+    }
   }
 
   function inputChange(e){
@@ -204,7 +214,7 @@ function MemberBoardEdit(prop) {
               ).then(function(response){
                 console.log(2);
                 alert("댓글이 삭제되었습니다.");
-                getBoardDtl();
+                getReplyAxios(api);
               }).catch(function(error){
                 alert(error);
                 alert("System Error");
@@ -212,12 +222,13 @@ function MemberBoardEdit(prop) {
     }
   }
 
-  function modifyReply(targetReplyNo){
+  function modifyReply(targetReplyNo, targetReplyCntn){
     console.log("modReplyNo : " + modReplyNo);
-    console.log("targetReplyNo : " + targetReplyNo);
+    console.log("targetReplyNo : " + targetReplyCntn);
     if(modReplyNo == targetReplyNo){
       setModReplyNo('');
     }else{
+      setModReplyCntn(targetReplyCntn);
       setModReplyNo(targetReplyNo);
     }
     
@@ -231,6 +242,32 @@ function MemberBoardEdit(prop) {
   function setStateReply(targetReplyNo, targetReplyCntn){
     setReplyNo(targetReplyNo);
     setAlrmReplyCntn(targetReplyCntn);
+  }
+
+  function modReplyChange(e){
+    let modReplyCntnState = {...modReplyCntn};
+    modReplyCntnState = e.target.value;
+    setModReplyCntn(modReplyCntnState);
+  }
+
+  function saveModReply(targetReply){
+
+    if(confirm("수정하시겠습니까?")){
+      console.log(targetReply);
+      api.post('/updateReply', null, {params : {
+                                        replyNo : targetReply.replyNo,
+                                        replyCntn : modReplyCntn
+                                        }
+                                      }
+              ).then(function(response){
+                alert("댓글이 수정되었습니다.");
+                setModReplyNo('');
+                getReplyAxios(api);
+              }).catch(function(error){
+                alert(error);
+                alert("System Error");
+              });
+    }
   }
 
   return (
@@ -288,7 +325,6 @@ function MemberBoardEdit(prop) {
         
           <br/>
           <br/>
-
           
           <hr/>
           <Row>
@@ -345,35 +381,48 @@ function MemberBoardEdit(prop) {
                         reply.replyNo != modReplyNo?
                         reply.replyCntn
                         :
-                        <Input></Input>
+                        <>
+                        <Input className="mb-1" value={modReplyCntn} onChange={(e)=>{modReplyChange(e)}}></Input>
+                        <label className="label label-default mr-2" onClick={()=>{saveModReply(reply)}}>수정</label>
+                        </>
                       }
                       {
                         modReplyNo != reply.replyNo 
                         ?
                           <>
-                          <span style={{cursor: 'pointer'}}
-                                onClick={(e)=>{writeReply(reply.replyNo, reply.replyCntn)}}
-                            >
-                                  &nbsp;&nbsp; <FontAwesomeIcon icon={faPencilAlt} size="sm" onClick={()=>{deleteReply(reply.replyNo)}}/>
-                          </span>
                           {
-                            logindUser == reply.regMemId 
-                            ? 
+                            reply.isDel != "Y"
+                            ?
                             <>
-                            <span style={{cursor: 'pointer'}}>
-                              &nbsp;&nbsp;<FontAwesomeIcon icon={faWrench} size="sm" onClick={()=>{modifyReply(reply.replyNo)}}/>
+                            <span style={{cursor: 'pointer'}}
+                                  onClick={(e)=>{writeReply(reply.replyNo, reply.replyCntn)}}
+                              >
+                                    &nbsp;&nbsp; <FontAwesomeIcon icon={faPencilAlt} size="sm" onClick={()=>{writeReply(reply.replyNo)}}/>
                             </span>
-                            <span style={{cursor: 'pointer'}}>
-                              &nbsp;&nbsp;<FontAwesomeIcon icon={faTrashAlt} size="sm" onClick={()=>{deleteReply(reply.replyNo)}}/>
-                            </span>
+                            {
+                              logindUser == reply.regMemId 
+                              ? 
+                              <>
+                              {/* 수정 */}
+                              <span style={{cursor: 'pointer'}}>
+                                &nbsp;&nbsp;<FontAwesomeIcon icon={faWrench} size="sm" onClick={()=>{modifyReply(reply.replyNo, reply.replyCntn)}}/>
+                              </span>
+                              {/* 삭제 */}
+                              <span style={{cursor: 'pointer'}}>
+                                &nbsp;&nbsp;<FontAwesomeIcon icon={faTrashAlt} size="sm" onClick={()=>{deleteReply(reply.replyNo)}}/>
+                              </span>
+                              </>
+                              :
+                              <div></div>
+                            }
                             </>
                             :
                             <div></div>
                           }
                           </>
                         :
-                        <span style={{cursor: 'pointer'}}>
-                          &nbsp;&nbsp;<FontAwesomeIcon icon={faWrench} size="sm" onClick={()=>{modifyReply(reply.replyNo)}}/>
+                        <span className="align-self-center" style={{cursor: 'pointer'}}>
+                          <i className="nc-icon nc-simple-remove" onClick={()=>{modifyReply(reply.replyNo)}}/>
                         </span>
                       }
                     </p>

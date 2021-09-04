@@ -151,9 +151,16 @@
                               )
     </insert>
 
-    <delete id="deleteReply" parameterType="com.example.demo.vo.reply.ReplyVo">
+    <update id="deleteReply" parameterType="com.example.demo.vo.reply.ReplyVo">
         UPDATE REPLY_MEM
            SET IS_DEL = 'Y'
          WHERE REPLY_NO = #{replyNo}
-    </delete>
+    </update>
+
+    <update id="updateReply" parameterType="com.example.demo.vo.reply.ReplyVo">
+        UPDATE REPLY_MEM
+           SET REPLY_CNTN = #{replyCntn}
+              ,MOD_DT = NOW()
+         WHERE REPLY_NO = #{replyNo}
+    </update>
 </mapper>

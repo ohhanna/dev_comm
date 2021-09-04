@@ -39,4 +39,8 @@ public class BoardMemberService {
     public void deleteReply(ReplyVo replyVo){
         mapper.deleteReply(replyVo);
     }
+
+    public void updateReply(ReplyVo replyVo){
+        mapper.updateReply(replyVo);
+    }
 }

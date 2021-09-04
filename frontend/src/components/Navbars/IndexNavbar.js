@@ -1,4 +1,6 @@
 import React, { useState,useRef, useEffect } from "react";
+import { useHistory } from 'react-router-dom';
+
 // nodejs library that concatenates strings
 import classnames from "classnames";
 import { NavLink } from 'react-router-dom';
@@ -25,11 +27,14 @@ function IndexNavbar() {
   // 모달
   const [modal, setModal] = React.useState(false);
   const [isLogin, setIsLogin] = React.useState(false);
+  const [welcomeCntn, setWelcomeCntn] = React.useState('');
 
+  const history = useHistory();
 
   useEffect(() => {
     if(Authentication.isUserLoggedIn()){
       setIsLogin(true);
+      setWelcomeCntn(Authentication.getLoggedInUserName() + " 님 환영합니다!");
     }else{
       setIsLogin(false);
     }
@@ -76,6 +81,7 @@ function IndexNavbar() {
 
                     setModal(false);
                     setIsLogin(Authentication.isUserLoggedIn());
+                    setWelcomeCntn(Authentication.getLoggedInUserName() + " 님 환영합니다");
                   })
                   .catch((err)=>{
                     alert("아이디 및 비밀번호를 확인해주세요.");
@@ -83,14 +89,25 @@ function IndexNavbar() {
   }; 
 
   function logoutClickHandler(){
-    Authentication.logout();
+    if(window.confirm("로그아웃 하시겠습니까?")){
+      Authentication.logout();
 
-    const data = {...userInfo};
-    data.memId = '';
-    data.memPw = '';
-    setUserInfo(data);
+      const data = {...userInfo};
+      data.memId = '';
+      data.memPw = '';
+      setUserInfo(data);
+      setIsLogin(Authentication.isUserLoggedIn());
+  
+      history.push("/");
+    }
+  }
 
-    setIsLogin(Authentication.isUserLoggedIn());
+  function logOutMouseEnter(){
+    setWelcomeCntn(Authentication.getLoggedInUserName() + " 님 떠나시게요?");
+  }
+
+  function logOutMouseLeave(){
+    setWelcomeCntn(Authentication.getLoggedInUserName() + " 님 환영합니다");
   }
 
   function registerHandler(){
@@ -203,8 +220,10 @@ function IndexNavbar() {
               <Button
                   className="btn-round mr-1 btn btn-outline-default"
                   onClick={logoutClickHandler}
+                  onMouseEnter={()=>{logOutMouseEnter()}}
+                  onMouseLeave={()=> {logOutMouseLeave()}}
                 >
-                  로그아웃
+                  {welcomeCntn} 
               </Button>
             }
               {/* Modal */}

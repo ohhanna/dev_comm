@@ -80,4 +80,12 @@ public class BoardMemberController {
 
         boardMemberService.deleteReply(replyVo);
     } 
+
+    @RequestMapping("/board/member/updateReply")
+    @ResponseBody
+    public void updateReply(ReplyVo replyVo){
+        System.out.println("updateReply : " + replyVo.getReplyNo());
+        boardMemberService.updateReply(replyVo);
+    } 
+    
 }

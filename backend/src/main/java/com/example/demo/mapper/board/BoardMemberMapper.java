@@ -18,4 +18,5 @@ public interface BoardMemberMapper {
     ArrayList<ReplyVo> selectReply(ReplyVo replyVo);
     int insertReply(ReplyVo replyVo);
     void deleteReply(ReplyVo replyVo);
+    void updateReply(ReplyVo replyVo);
 }
