@@ -20,8 +20,8 @@ public class BoardFreeService {
     }
 
     //게시판 리스트 get
-    public List<BoardFreeVo> boardFreeList(int pageNum, int pageSize) {
-        return mapper.boardFreeList(pageNum, pageSize);
+    public List<BoardFreeVo> boardFreeList(int pageNum, int pageSize, String type, String keyword) {
+        return mapper.boardFreeList(pageNum, pageSize, type, keyword);
     }
 
     //게시판 리스트 글 상세보기
@@ -47,13 +47,18 @@ public class BoardFreeService {
     }
 
     //댓글 리스트 get
-    public List<ReplyFreeVo> freeReplyList(int boardNo, int pageNum, int pageSize) {
-        return mapper.freeReplyList(boardNo, pageNum, pageSize);
+    public List<ReplyFreeVo> freeReplyList(int boardNo) {
+        return mapper.freeReplyList(boardNo);
     }
 
     //댓글 등록
     public int freeReplyAdd(ReplyFreeVo replyFreeVo) {
         return mapper.freeReplyAdd(replyFreeVo);
+    }
+
+    //댓글 수정
+    public int freeReplyModify(int replyNo, String replyCntn) {
+        return mapper.freeReplyModify(replyNo, replyCntn);
     }
 
     //댓글 삭제

@@ -13,6 +13,17 @@
               ,IS_DEL
           FROM BOARD_FREE
          WHERE IS_DEL = 'N'
+         <choose>                
+            <when test='type.equals("제목")'>
+                AND BOARD_TTL LIKE CONCAT('%',#{keyword},'%')
+            </when>
+            <when test='type.equals("작성자")'>
+                AND REG_MEM_ID LIKE CONCAT('%',#{keyword},'%')
+            </when>
+            <when test='type.equals("내용")'>
+                AND BOARD_CNTN LIKE CONCAT('%',#{keyword},'%')
+            </when>
+        </choose>
       ORDER BY BOARD_NO DESC
          LIMIT #{pageSize}
         OFFSET #{pageNum}
@@ -79,6 +90,7 @@
                   ,REG_MEM_ID
                   ,CRT_DT
                   ,MOD_DT
+                  ,CAST(REPLY_NO AS char(99)) ORDER_COL
                   ,0 AS DEPTH_LEVEL
               FROM REPLY_FREE
              WHERE UP_REPLY_NO IS NULL
@@ -92,6 +104,7 @@
                   ,B.REG_MEM_ID
                   ,B.CRT_DT
                   ,B.MOD_DT
+                  ,CONCAT(C.ORDER_COL, '-', B.REPLY_NO) ORDER_COL
                   ,DEPTH_LEVEL + 1 AS DEPTH_LEVEL
               FROM REPLY_FREE B
         INNER JOIN REPLY_LAYER C 
@@ -100,10 +113,7 @@
         )
         SELECT * 
           FROM REPLY_LAYER C
-      ORDER BY CRT_DT DESC, 
-               DEPTH_LEVEL
-         LIMIT #{pageSize}
-        OFFSET #{pageNum}
+      ORDER BY ORDER_COL
     </select>
 
     <select id="freeReplyCount" resultType="int">
@@ -131,7 +141,7 @@
                         null
                        ,#{boardNo}
                        ,#{replyCntn}
-                       ,null
+                       ,#{upReplyNo}
                        ,1
                        ,'N'
                        ,#{regMemId}
@@ -140,12 +150,19 @@
                        ,#{replyPw})
     </insert>
 
+    <update id="freeReplyModify" parameterType="com.example.demo.vo.reply.ReplyFreeVo">
+        /*freeReplyModify*/
+        UPDATE REPLY_FREE
+           SET REPLY_CNTN = #{replyCntn}
+         WHERE REPLY_NO = #{replyNo}
+    </update>
+
     <update id="freeReplyDelete" parameterType="com.example.demo.vo.reply.ReplyFreeVo">
         /*freeReplyDelete*/
         UPDATE REPLY_FREE
            SET REPLY_CNTN = '삭제된 댓글입니다'
               ,IS_DEL = 'Y'
-        WHERE REPLY_NO = #{REPLY_NO}
+        WHERE REPLY_NO = #{replyNo}
     </update>
 
 </mapper>
