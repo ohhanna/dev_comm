@@ -169,7 +169,7 @@ function FreeListDetail(props) {
                               </div>
                               <div className="custom-reply-textarea-free">
                                 <button className="btn-round float-right mt-2 mr-1 mb-2 btn btn-outline-default" 
-                                           onClick={ () => { setUpReplyNo(''); freeReplyAdd() } }>등록
+                                           onClick={ () => { setUpReplyNo(null); freeReplyAdd() } }>등록
                                 </button>
                               </div></> :
                               <><h4>{ replyToastYn }의 댓글</h4>
