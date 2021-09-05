@@ -16,7 +16,7 @@ public interface BoardFreeMapper {
     int boardFreeListCount();
 
     //게시판 리스트 get
-    List<BoardFreeVo> boardFreeList(int pageNum, int pageSize);
+    List<BoardFreeVo> boardFreeList(int pageNum, int pageSize, String type, String keyword);
 
     //게시판 리스트 글 상세보기
     List<BoardFreeVo> boardFreeDetail(int boardNo);
@@ -33,10 +33,13 @@ public interface BoardFreeMapper {
     int freeReplyCount(int boardNo);
 
     //댓글 리스트 get
-    List<ReplyFreeVo> freeReplyList(int boardNo, int pageNum, int pageSize);
+    List<ReplyFreeVo> freeReplyList(int boardNo);
 
     //댓글 등록
     int freeReplyAdd(ReplyFreeVo replyFreeVo);
+
+    //댓글 수정
+    int freeReplyModify(int replyNo, String replyCntn);
 
     //댓글 삭제
     int freeReplyDelete(int replyNo);

@@ -3,7 +3,7 @@ package com.example.demo.vo.reply;
 import java.util.Date;
 
 public class ReplyFreeVo {
-    private String replyNo;
+    private int replyNo;
     private String boardNo;
     private String replyPw;
     private String replyCntn;
@@ -14,11 +14,11 @@ public class ReplyFreeVo {
     private Date crtDt;
     private Date modDt;
 
-    public String getReplyNo() {
+    public int getReplyNo() {
         return this.replyNo;
     }
 
-    public void setReplyNo(String replyNo) {
+    public void setReplyNo(int replyNo) {
         this.replyNo = replyNo;
     }
 

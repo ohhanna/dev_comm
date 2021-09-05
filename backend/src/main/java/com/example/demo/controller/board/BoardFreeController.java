@@ -39,16 +39,20 @@ public class BoardFreeController {
     //게시판 리스트, 총 갯수 get
     @GetMapping("/freeBoard/list")
     public Map<String, Object> freeBoardList(@RequestParam(value = "currentPage", required=false) Integer pageNum,
-                                             @RequestParam(value = "pageSize", required=false) Integer pageSize) {
+                                             @RequestParam(value = "pageSize", required=false) Integer pageSize,
+                                             @RequestParam(value = "type", required=false) String type,
+                                             @RequestParam(value = "keyword", required=false) String keyword) {
 
         System.out.println("freeBoardList Controller");
         System.out.println("pageNum ::: " + pageNum);
         System.out.println("pageSize ::: " + pageSize);
+        System.out.println("type ::: " + type);
+        System.out.println("keyword ::: " + keyword);
 
         Map<String, Object> freeMap = new HashMap<String, Object>();
 
         int freeListCount = boardFreeService.boardFreeListCount();
-        List<BoardFreeVo> freeList =  boardFreeService.boardFreeList(pageNum, pageSize);
+        List<BoardFreeVo> freeList =  boardFreeService.boardFreeList(pageNum, pageSize, type, keyword);
 
         freeMap.put("freeListCount", freeListCount);
         freeMap.put("freeList", freeList);
@@ -89,13 +93,10 @@ public class BoardFreeController {
     public Map<String, Object> freeReplyList(@RequestParam(value = "boardNo", required=false) Integer boardNo) {
         System.out.println("freeBoardList Controller replyList");
 
-        int pageNum = 1;
-        int pageSize = 10;
-
         Map<String, Object> freeReplyMap = new HashMap<String, Object>();
 
         int replyCount = boardFreeService.freeReplyCount(boardNo);
-        List<ReplyFreeVo> replyList = boardFreeService.freeReplyList(boardNo, pageNum, pageSize);
+        List<ReplyFreeVo> replyList = boardFreeService.freeReplyList(boardNo);
 
         freeReplyMap.put("replyCount", replyCount);
         freeReplyMap.put("replyList", replyList);
@@ -111,16 +112,21 @@ public class BoardFreeController {
     }
 
     @PostMapping("/freeBoard/reply/modify")
-    public void freeReplyModify(@RequestParam(value = "replyCntn", required=false) String replyCntn) {
+    public void freeReplyModify(@RequestParam(value = "replyNo", required=false) Integer replyNo,
+                                @RequestParam(value = "replyCntn", required=false) String replyCntn) {
         System.out.println("freeBoardList Controller replyModify");
-        System.out.println(replyCntn);
+
+        boardFreeService.freeReplyModify(replyNo, replyCntn);
+        freeReplyList(replyNo);
+
     }
 
     @PostMapping("/freeBoard/reply/delete")
-    public void freeReplyDelete(@RequestParam(value = "replyNo", required=false) Integer replyNo) {
-        System.out.println("freeBoardList Controller replyDelete");
-
+    public String freeReplyDelete(@RequestParam(value = "replyNo", required=false) Integer replyNo) {
+        System.out.println("freeBoardList Controller replyDelete"); 
+        
         boardFreeService.freeReplyDelete(replyNo);
+        return "success";
     }
 
 }

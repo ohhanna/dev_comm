@@ -28,16 +28,20 @@ function FreeList() {
     freeListCount : '',
     freeList : []
   });
+
+  let[type, setType] = useState('');
+  let[keyword, setKeyword] = useState('');
+
   let history = useHistory();
 
   //목록 가져오기
   let url = '/freeBoard/list?' + new URLSearchParams({currentPage : pageSize * (currentPage - 1), 
-                                                      pageSize : pageSize})
+                                                      pageSize : pageSize,
+                                                      type : type,
+                                                      keyword : keyword})
   
-  //목록 setting
-  useEffect(() => {
-      setLoading(true);
-      fetch(url) 
+  function freeList() {
+    fetch(url) 
      .then(res => res.json())
      .then((datas) => {setDatas({
                           ...datas,
@@ -46,7 +50,13 @@ function FreeList() {
                       })
           })
      .then(res => setLoading(false))
-     .catch(err => { console.log('error' + JSON.stringify(err))});     
+     .catch(err => { console.log('error' + JSON.stringify(err))});
+  }                                                    
+
+  //목록 setting
+  useEffect(() => {
+      setLoading(true);
+      freeList();
   }, [currentPage]);
 
   //상세보기
@@ -74,26 +84,33 @@ function FreeList() {
                   data-toggle="dropdown"
                   href="#pablo"
                   id="dropdownMenuLink"
-                  onClick={e => e.preventDefault()}
+                  value={type}
+                  onClick={ () => { setType('') } }
                   role="button"
                 >
-                  검색어
+                  {type}
                 </DropdownToggle>
                 <DropdownMenu aria-labelledby="dropdownMenuLink">
-                  <DropdownItem href="#pablo" onClick={e => e.preventDefault()}>
+                  <DropdownItem href="#pablo" onClick={ () => { setType('제목') } }>
                     제목
                   </DropdownItem>
-                  <DropdownItem href="#pablo" onClick={e => e.preventDefault()}>
+                  <DropdownItem href="#pablo" onClick={ () => { setType('작성자') } }>
                     작성자
                   </DropdownItem>
-                  <DropdownItem href="#pablo" onClick={e => e.preventDefault()}>
+                  <DropdownItem href="#pablo" onClick={ () => { setType('내용') } }>
                     내용
                   </DropdownItem>
                 </DropdownMenu>
               </UncontrolledDropdown>
-              <Input placeholder="Please enter a search term" className="custom-item-free custom-search-input-free"/>
-              <Button type="button" className="btn mr-1 custom-item-free" color="default" outline
-                onClick={()=>{console.log('search')}}>
+              <Input placeholder="Please enter a search term" 
+                     className="custom-item-free custom-search-input-free"
+                     value={keyword}
+                     onChange={ (e) => { setKeyword(e.target.value) } }/>
+              <Button type="button" 
+                      className="btn mr-1 custom-item-free" 
+                      color="default" 
+                      outline
+                      onClick={()=>{ freeList() }}>
                 검색
               </Button>
             </div>          

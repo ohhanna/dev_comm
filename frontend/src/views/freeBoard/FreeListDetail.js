@@ -7,7 +7,8 @@ import { Viewer } from '@toast-ui/react-editor';
 import {
     Col,
     Table,
-    Container
+    Container,
+    Modal
   } from "reactstrap";
 
 
@@ -27,6 +28,9 @@ function FreeListDetail(props) {
     let [modYn, setModYn] = useState('');
     let [replyModCntn, setReplyModCntn] = useState('');
 
+    let[replyToastYn, setReplyToastYn] =useState('');
+    let[upReplyNo, setUpReplyNo] = useState('');
+
     let editorRef = useRef();
     let history = useHistory();
 
@@ -41,9 +45,14 @@ function FreeListDetail(props) {
        .then(datas => {setDatas(datas); editorRef.current.getInstance().setMarkdown(datas[0].boardCntn);} )
        .catch(err => { console.log('error' + JSON.stringify(err))});
     }, []);
+    
+    //글 수정
+    function listModify(props) {
+      history.push("/freeBoard/modify/" + props);
+    }
 
     //댓글 목록
-    useEffect(() => {
+    function replyList() {
       fetch(replyUrl)
      .then(res => res.json())
      .then((replyDatas) => {setReplyDatas({
@@ -51,17 +60,17 @@ function FreeListDetail(props) {
                               replyCount: replyDatas.replyCount,
                               replyList: replyDatas.replyList
                             })
-          ; console.log(replyDatas)})
+     })
      .catch(err => { console.log('error' + JSON.stringify(err))});
-    }, []);
-
-    
-    function ListModify(props) {
-      history.push("/freeBoard/modify/" + props);
     }
 
-    function FreeReplyAdd() {
+    useEffect(() => {
+      replyList()
+    }, []);
 
+    //댓글 등록
+    function freeReplyAdd() {
+      console.log(upReplyNo);
       fetch('/freeBoard/reply/add',{
         method: 'POST',
         headers: {
@@ -70,6 +79,7 @@ function FreeListDetail(props) {
         body: JSON.stringify({
             'boardNo' : datas[0].boardNo,
             'regMemId': regMemId,
+            'upReplyNo' : upReplyNo,
             'replyPw': replyPw,
             'replyCntn': replyCntn
         }),
@@ -80,20 +90,35 @@ function FreeListDetail(props) {
           setregMemId('');
           setreplyPw('');
           setReplyCntn('');
+          replyList();
+          alert('등록 완료!');
         }
       })
     }
 
-    function freeReplyModify() {
-      console.log(replyModCntn);
-      fetch('/freeBoard/reply/modify?' + new URLSearchParams({replyCntn : replyModCntn}),{
+    function freeReplyModify(props) {
+      fetch('/freeBoard/reply/modify?' + new URLSearchParams({replyCntn : replyModCntn, replyNo : props}),{
         method: 'POST'})
+      .then(response => {
+        if (response.status === 200) {
+          setModYn('');
+          replyList();
+          alert('수정 완료!');
+        }
+      })
     }
 
     function freeReplyDelete(props) {
       fetch('/freeBoard/reply/delete?' + new URLSearchParams({replyNo : props}),{
         method: 'POST'})
+      .then(response => {
+        if (response.status === 200) {
+          replyList();
+          alert('삭제 완료!');
+        }
+      })
     }
+
 
     return (
         <>
@@ -107,7 +132,7 @@ function FreeListDetail(props) {
                           <div>
                             <button type="button"
                                     className="btn-round ml-1 btn btn-success float-right"
-                                    onClick={ () => { ListModify(datas[0].boardNo) } }>
+                                    onClick={ () => { listModify(datas[0].boardNo) } }>
                                       수정하기
                             </button>
                           </div>
@@ -122,33 +147,60 @@ function FreeListDetail(props) {
                               </tbody>
                             </Table>
                             <fieldset className="custom-fieldset-free">
-                              <h4>{ replyDatas.replyCount }개의 댓글</h4>
+                              { replyToastYn == '' ? 
+                              <><h4>{ replyDatas.replyCount }개의 댓글</h4>
+                              {/* <ReplyAddForm /> */}
                               <div className="custom-reply-flex-free">
-                                
-                                  <input className="form-control custom-reply-input-free"
-                                         value={ regMemId }
-                                         placeholder='Name'
-                                         onChange={ (e) => { setregMemId(e.target.value) } } />
-                                
-                                
-                                  <input className="form-control custom-reply-input-free"
-                                         value={ replyPw }
-                                         placeholder='Password'
-                                         type='password'
-                                         onChange={ (e) => { setreplyPw(e.target.value) } } />
-                                
-                              </div>
+                                <input className="form-control custom-reply-input-free"
+                                        placeholder='Name'
+                                        value={regMemId}
+                                        onChange={ (e) => { setregMemId(e.target.value) } } />
+                                <input className="form-control custom-reply-input-free"
+                                      placeholder='Password'
+                                      value={replyPw}
+                                      type='password'
+                                      onChange={ (e) => { setreplyPw(e.target.value) } } />
+                            </div>
                               <div>
                                 <textarea className="form-control custom-reply-textarea-free"
-                                          value={ replyCntn } 
+                                          value={replyCntn}
                                           onChange={ (e) => { setReplyCntn(e.target.value) } } >
                                 </textarea>
                               </div>
                               <div className="custom-reply-textarea-free">
                                 <button className="btn-round float-right mt-2 mr-1 mb-2 btn btn-outline-default" 
-                                           onClick={ () => { FreeReplyAdd() } }>등록
+                                           onClick={ () => { setUpReplyNo(''); freeReplyAdd() } }>등록
                                 </button>
+                              </div></> :
+                              <><h4>{ replyToastYn }의 댓글</h4>
+                              {/* <ReplyAddForm /> */}
+                              <div className="custom-reply-flex-free">
+                                <input className="form-control custom-reply-input-free"
+                                        placeholder='Name'
+                                        value={regMemId}
+                                        onChange={ (e) => { setregMemId(e.target.value) } } />
+                                <input className="form-control custom-reply-input-free"
+                                      placeholder='Password'
+                                      value={replyPw}
+                                      type='password'
+                                      onChange={ (e) => { setreplyPw(e.target.value) } } />
+                            </div>
+                              <div>
+                                <textarea className="form-control custom-reply-textarea-free"
+                                          value={replyCntn}
+                                          onChange={ (e) => { setReplyCntn(e.target.value) } } >
+                                </textarea>
                               </div>
+                              <div className="custom-reply-textarea-free">
+                                <button className="btn-round float-right mt-2 mr-1 mb-2 btn btn-outline-default" 
+                                           onClick={ () => { freeReplyAdd() } }>등록
+                                </button>    
+                                <button className="btn-round float-right mt-2 mr-1 mb-2 btn btn-outline-danger" 
+                                           onClick={ () => { setReplyToastYn(''); 
+                                                             setUpReplyNo(''); } }>취소
+                                </button>                            
+                              </div></>
+                              }
                             </fieldset>
                             <ul className="custom-reply-ul-free pl-3">
                                 { replyDatas.replyList.map(replyData => {
@@ -164,27 +216,43 @@ function FreeListDetail(props) {
                                                   </Moment>  
                                                 </div>
                                               </div>
-                                              { replyData.isDel == 'N'? 
+                                              { replyData.isDel == 'N'?
                                               <div className="custom-reply-buttons-free">
+                                                <button className="mr-1 btn btn-outline-default btn-sm"
+                                                        onClick={ () => { setReplyToastYn(replyData.replyNo); 
+                                                                          setUpReplyNo(replyData.replyNo); } }>
+                                                  댓글 달기
+                                                </button>
                                                 <button className="mr-1 btn btn-outline-success btn-sm"
-                                                        onClick={ () => { setModYn(replyData.replyNo); setReplyModCntn(replyData.replyCntn) } }
-                                                >수정</button>
+                                                        onClick={ () => { setModYn(replyData.replyNo); 
+                                                                          setReplyModCntn(replyData.replyCntn) } }>
+                                                  수정
+                                                </button>
                                                 <button className="mr-1 btn btn-outline-danger btn-sm"
                                                         onClick={ () => { freeReplyDelete(replyData.replyNo) } }>
-                                                        삭제
+                                                  삭제
                                                 </button>
                                               </div>
                                               : null}
                                             </div>
-                                              { modYn != replyData.replyNo ? 
-                                              <p>{replyData.replyCntn}</p> :
-                                              <div>
-                                                <textarea value={replyModCntn}
-                                                          onChange={ (e) => { setReplyModCntn(e.target.value) } }>
-                                                </textarea>
-                                                <button onClick={ () => { freeReplyModify() } }>등록</button>
-                                                <button onClick={ () => {setModYn('')} }>취소</button>
-                                              </div>
+                                              { modYn != replyData.replyNo ?
+                                                <p>{replyData.replyCntn}</p>:
+                                                <div className="custom-replyToast-free">
+                                                  <textarea className="form-control custom-reply-textarea-free"
+                                                            value={replyModCntn}
+                                                            onChange={ (e) => { setReplyModCntn(e.target.value) } }>
+                                                  </textarea>
+                                                  <div className="custom-reply-buttons-free mt-2">
+                                                    <button className="mr-1 btn btn-outline-default btn-sm"
+                                                            onClick={ () => { freeReplyModify(replyData.replyNo); } }>
+                                                      등록
+                                                    </button>
+                                                    <button className="mr-1 btn btn-outline-danger btn-sm"
+                                                            onClick={ () => {setModYn('')} }>
+                                                      취소
+                                                    </button>
+                                                  </div>
+                                                </div>
                                               }
                                             </li>
                                 }) }
@@ -196,6 +264,36 @@ function FreeListDetail(props) {
           </div>
           </>
       )
+
+      
 };
+
+// function ReplyAddForm() {
+//   const [regMemId, setregMemId] = useState('');
+//   const [replyPw, setreplyPw] = useState('');
+//   const [replyCntn, setReplyCntn] = useState('');
+
+//   return (
+//     <>
+//     <div className="custom-reply-flex-free">
+//         <input className="form-control custom-reply-input-free"
+//                 placeholder='Name'
+//                 value={regMemId}
+//                 onChange={ (e) => { setregMemId(e.target.value) } } />
+//         <input className="form-control custom-reply-input-free"
+//               placeholder='Password'
+//               value={replyPw}
+//               type='password'
+//               onChange={ (e) => { setreplyPw(e.target.value) } } />
+//     </div>
+//       <div>
+//         <textarea className="form-control custom-reply-textarea-free"
+//                   value={replyCntn}
+//                   onChange={ (e) => { setReplyCntn(e.target.value) } } >
+//         </textarea>
+//       </div>
+//       </>
+//   )
+// }
 
 export default FreeListDetail;

@@ -38,6 +38,27 @@ public class BoardNoticeController {
         return noticeMap;
     }
 
+    // LIST - SEARCH
+    @GetMapping("/notice-page/list/search")
+    public Map<String, Object> noticeSearchList(
+        @RequestParam(value = "currentPage", required=false) Integer pageNum,
+        @RequestParam(value = "pageSize", required=false) Integer pageSize,
+        @RequestParam(value = "searchType", required=false) String searchType,
+        @RequestParam(value = "searchKeyWord", required=false) String searchKeyWord)
+    {
+
+        System.out.println("(한나) BoardNoticeController - /notice-page/list/search");
+        
+        Map<String, Object> noticeMap = new HashMap<String, Object>();
+        int noticeListCount = boardNoticeService.boardNoticeListCount();
+        List<BoardNoticeVo> noticeList = boardNoticeService.boardNoticeList(pageNum, pageSize);
+
+        noticeMap.put("noticeListCount", noticeListCount);
+        noticeMap.put("noticeList", noticeList);
+
+        return noticeMap;
+    }
+
     // VIEW, EDIT 하나 불러오기
     @GetMapping("/notice-page/view/{boardNo}")
     public BoardNoticeVo noticeView(@PathVariable int boardNo){
@@ -84,6 +105,25 @@ public class BoardNoticeController {
 
         replyMap.put("replyCnt", replyCnt);
         replyMap.put("replyList", replyList);
+
+        // List<ReplyVo> orderedList = new ArrayList<ReplyVo>();
+
+        // for(int i=0; i<replyList.size(); i++){
+        //     for(int j=1; j<replyList.size(); j++){
+        //         if(replyList.get(j).getUpReplyNo() == replyList.get(i).getReplyNo()){
+        //             orderedList.add(i+1, replyList.get(j));
+        //             break;
+        //         } else {
+        //             orderedList.add(i, replyList.get(i));
+        //             break;
+        //         }
+        //     }
+        // }
+
+        // System.out.println(orderedList.size());
+        // for(int i=0; i<orderedList.size(); i++){
+        //     System.out.println(orderedList.get(i).getReplyNo());
+        // }
 
         return replyMap;
     }
