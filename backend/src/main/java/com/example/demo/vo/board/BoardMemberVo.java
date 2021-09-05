@@ -4,7 +4,7 @@ import org.springframework.stereotype.Component;
 import java.util.Date;
 
 @Component
-public class BoardMemberVo {
+public class BoardMemberVo extends PageVo{
 
 	private String boardNo;
 	private int boardNoProperty;
@@ -15,9 +15,27 @@ public class BoardMemberVo {
     private String regMemId;
     private String isDel;
 	private int totCnt;
+	private String searchCondition;
+	private String searchCode;
+
+	public String getSearchCode() {
+		return this.searchCode;
+	}
+
+	public void setSearchCode(String searchCode) {
+		this.searchCode = searchCode;
+	}
 
 	public String getBoardNo() {
 		return this.boardNo;
+	}
+
+	public String getSearchCondition() {
+		return searchCondition;
+	}
+
+	public void setSearchCondition(String searchCondition) {
+		this.searchCondition = searchCondition;
 	}
 
 	public int getBoardNoProperty() {

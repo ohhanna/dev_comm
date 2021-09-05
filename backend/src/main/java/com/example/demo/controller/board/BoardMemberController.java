@@ -22,10 +22,11 @@ public class BoardMemberController {
 
     @RequestMapping("/board/member/list")
     @ResponseBody
-    public ArrayList<BoardMemberVo> getBoardList(PageVo pageVo) {
+    public ArrayList<BoardMemberVo> getBoardList(BoardMemberVo pageVo) {
         // start page setting
         pageVo.createStartPage(pageVo.getPageIndex(), pageVo.getPageSize());
 
+        System.out.println("SEARCH CONDITION : >>> " + pageVo.getSearchCondition());
         ArrayList<BoardMemberVo> list = boardMemberService.selectBoardList(pageVo);
         
         return list;

@@ -15,7 +15,11 @@ import {
   Container,
   Row,
   Col,
-  Alert
+  Alert,
+  UncontrolledDropdown,
+  DropdownToggle,
+  DropdownItem,
+  DropdownMenu
 } from "reactstrap";
 
 // core components
@@ -36,6 +40,11 @@ function MemberBoardList() {
   const [totCnt, setTotCnt] = useState(0);
   const [boardList, setBoardList] = useState([]);
   const [isLoad, setIsLoad] = useState(false);
+
+  const [searchCondition, setSearchCondition] = useState('');
+  const [searchCode, setSearchCode] = useState('ALL');
+  const [searchCntn, setSearchCntn] = useState('통합');
+
   const history = useHistory();
 
   ////////////////////////////////////////////////////////////////////
@@ -71,7 +80,13 @@ function MemberBoardList() {
 
   function getBoardList(option){
     setIsLoad(true);
-    axios.post('/board/member/list', null, { params : { pageIndex : option.data.pageIndex, pageSize : option.data.pageSize } }
+    axios.post('/board/member/list', null, { params : { 
+                                                        pageIndex : option.data.pageIndex, 
+                                                        pageSize : option.data.pageSize,
+                                                        searchCode : searchCode,
+                                                        searchCondition : searchCondition
+                                                      } 
+                                            }
             ).then(function(response){
               setIsLoad(false);
               // SEARCH 전 기존 state 초기화
@@ -89,6 +104,26 @@ function MemberBoardList() {
   function goToDetail(boardNo){
     let boardNoUrl = boardNo == null && boardNo == undefined ? 'new' : boardNo;
     history.push("/memberBoardEdit/" + boardNoUrl);
+  }
+
+  function pickSearchCondition(targetSearchCode){
+    setSearchCode(targetSearchCode);
+
+    if (targetSearchCode == "ALL"){
+      setSearchCntn("통합");
+    }
+    else if (targetSearchCode == "TTL"){
+      setSearchCntn("제목");
+    }
+    else if (targetSearchCode == "MEM"){
+      setSearchCntn("작성자");
+    }
+  }
+
+  function inputChange(e){
+    let searchConditionState = {...searchCondition};
+    searchConditionState = e.target.value;
+    setSearchCondition(searchConditionState);
   }
 
   ////////////////////////////////////////////////////////////////////
@@ -133,37 +168,72 @@ function MemberBoardList() {
               <p className="h3 font-weight-bold float-left">Member Board</p>
           </div>
           <Row>
-            <Col >
-              <FormGroup>
-                <Input type="text" size="sm" onChange={(e)=>{console.log(e.target.value)}}/>
-              </FormGroup>
+            <Col sm="2">
+              <UncontrolledDropdown className="custom-item-free" style={{width:"100%"}}>
+                <DropdownToggle
+                  aria-expanded={false}
+                  aria-haspopup={true}
+                  caret
+                  color="secondary"
+                  data-toggle="dropdown"
+                  href="#pablo"
+                  id="dropdownMenuLink"
+                  onClick={e => e.preventDefault()}
+                  role="button"
+                  style={{width:"100%"}}
+                >
+                  {searchCntn}
+                </DropdownToggle>
+                <DropdownMenu aria-labelledby="dropdownMenuLink">
+                  <DropdownItem href="#pablo" onClick={e => pickSearchCondition("ALL")}>
+                    통합
+                  </DropdownItem>
+                  <DropdownItem href="#pablo" onClick={e => pickSearchCondition("TTL")}>
+                    제목
+                  </DropdownItem>
+                  <DropdownItem href="#pablo" onClick={e => pickSearchCondition("MEM")}>
+                    작성자
+                  </DropdownItem>
+                </DropdownMenu>
+              </UncontrolledDropdown>
             </Col>
-            <Col sm="0">
-              <Button
-                className="btn-round mr-1"
-                color="default"
-                size="sm"
-                outline
-                type="button"
-                onClick={()=>{getBoardList(option)}}
-              >
-                Search
-              </Button>
-
-              <Button
-                className="btn-round mr-1 "
-                color="default"
-                size="sm"
-                outline
-                type="button"
-                onClick={()=>{goToDetail()}}
-              >
-                Write
-              </Button>
+            <Col sm="10">
+              <FormGroup>
+                <Input type="text" size="sm" onChange={(e)=>{inputChange(e)}}/>
+              </FormGroup>
             </Col>
           </Row>
 
-
+          <Row>
+            <Col sm="2">
+              <Button
+                    className="btn-round mr-1 mb-2"
+                    color="default"
+                    size="sm"
+                    outline
+                    type="button"
+                    onClick={()=>{getBoardList(option)}}
+                    style={{width:"100%"}}
+                  >
+                    Search
+              </Button>
+            </Col>
+            <Col sm="8">
+            </Col>
+            <Col sm="2">
+              <Button
+                    className="btn-round mr-1 mb-2"
+                    color="default"
+                    size="sm"
+                    outline
+                    type="button"
+                    onClick={()=>{goToDetail()}}
+                    style={{width:"100%"}}
+                  >
+                    Write
+              </Button>
+              </Col>
+          </Row>
           {/* Board List Component */}
           <BoardList getBoardList={getBoardList} boardListState={boardList} goToDetail={goToDetail}/>
           <br />

@@ -2,11 +2,13 @@
 <!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd"> 
 
 <mapper namespace="com.example.demo.mapper.board.BoardMemberMapper"> 
-    <select id="selectBoardList" resultType="com.example.demo.vo.board.BoardMemberVo"> 
-    <![CDATA[
+    <select id="selectBoardList" parameterType="com.example.demo.vo.board.BoardMemberVo" resultType="com.example.demo.vo.board.BoardMemberVo"> 
+    
         SELECT BOARD_NO
               ,BOARD_TTL
+            <![CDATA[
               ,LEFT(REGEXP_REPLACE(BOARD_CNTN, '<(/)?(img|label|table|thead|tbody|tfoot|tr|td|p|br|div|span|font|strong|b)(.|\s|\t|\n|\r\n)*?>', ''),200) AS BOARD_CNTN
+            ]]>
               ,CRT_DT
               ,MOD_DT
               ,REG_MEM_ID
@@ -15,10 +17,20 @@
                   FROM BOARD_MEM
                  WHERE IS_DEL = 'N') AS TOT_CNT
           FROM BOARD_MEM
-         WHERE IS_DEL = 'N'
+         WHERE IS_DEL = 'N' 
+    <if test='searchCondition != null and searchCondition != "" and searchCode == "ALL"'>
+           AND (   UPPER(BOARD_TTL)  LIKE CONCAT('%', UPPER(#{searchCondition}), '%') 
+                OR UPPER(REG_MEM_ID) LIKE CONCAT('%', UPPER(#{searchCondition}), '%') 
+                OR UPPER(BOARD_CNTN) LIKE CONCAT('%', UPPER(#{searchCondition}), '%') )
+    </if>
+    <if test='searchCondition != null and searchCondition != "" and searchCode == "TTL"'>
+           AND UPPER(BOARD_TTL) LIKE CONCAT('%', UPPER(#{searchCondition}), '%') 
+    </if>
+    <if test='searchCondition != null and searchCondition != "" and searchCode == "MEM"'>
+           AND UPPER(REG_MEM_ID) LIKE CONCAT('%', UPPER(#{searchCondition}), '%') 
+    </if>
       ORDER BY MOD_DT DESC
       LIMIT #{startPage}, #{pageSize}
-    ]]>
     </select> 
 
     <select id="selectBoardDtl" resultType="com.example.demo.vo.board.BoardMemberVo">
