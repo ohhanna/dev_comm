@@ -135,7 +135,7 @@ const NoticeEditForm = ({match}) => {
                                                 <th>
                                                     <input type="text"
                                                            className="form-control"
-                                                           value={data.boardTtl}
+                                                           value={title}
                                                            onChange={(e) => setTitle(e.target.value)}/>
                                                 </th>
                                             </tr>

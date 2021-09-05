@@ -238,7 +238,7 @@ const NoticeView = ({match}) => {
                                                                 </Button>
                                                                 <Button type="button" color="default" outline
                                                                     className="btn mr-1 float-right"
-                                                                    onClick={()=>{setEditRepNo(replyData.replyNo); setReRepNo('');}}>
+                                                                    onClick={()=>{setEditRepNo(replyData.replyNo); setReRepNo(''); setEditCntn(replyData.replyCntn);}}>
                                                                         수정
                                                                 </Button>
                                                                 </>
@@ -263,7 +263,7 @@ const NoticeView = ({match}) => {
                                                         <tr>
                                                             <td colSpan="2">
                                                                 <textarea className="form-control"
-                                                                        // value={replyData.replyCntn}
+                                                                        value={editCntn}
                                                                         onChange={(e)=>{setEditCntn(e.target.value)}}
                                                                 />
                                                             </td>
