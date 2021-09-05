@@ -211,7 +211,6 @@ const NoticeView = ({match}) => {
                                             <tr>
                                                 <td colSpan="2" height="200px">
                                                     <div dangerouslySetInnerHTML={ {__html: viewData.boardCntn} }/>
-                                                    {/* {data.boardCntn} */}
                                                 </td>
                                             </tr>
 
@@ -224,33 +223,30 @@ const NoticeView = ({match}) => {
                                                     <>
                                                     <tr>
                                                         <td align="left">
-                                                            <h6 style={{display:'inline'}}>{replyData.regMemId}</h6> / <Moment format="YYYY/MM/DD">{replyData.crtDt}</Moment>
+                                                            
+                                                            <h6 style={{display:'inline'}}>{ replyData.upReplyNo > 0 ? "　➥" : ""}{replyData.regMemId}</h6> / <Moment format="YYYY/MM/DD">{replyData.crtDt}</Moment>
                                                         </td>
                                                         <td align="right">
-                                                            {/* <ReplyBtn replyData={replyData}/> */}
                                                             {
                                                                 loginId == replyData.regMemId
                                                                 ?
                                                                 <>
-                                                                <Button type="button"
+                                                                <Button type="button" color="default" outline
                                                                     className="btn mr-1 float-right"
-                                                                    color="default" outline
                                                                     onClick={()=>{replyDelete(replyData.replyNo)}}>
                                                                         삭제
                                                                 </Button>
-                                                                <Button type="button"
+                                                                <Button type="button" color="default" outline
                                                                     className="btn mr-1 float-right"
-                                                                    color="default" outline
-                                                                    onClick={()=>{setEditRepNo(replyData.replyNo)}}>
+                                                                    onClick={()=>{setEditRepNo(replyData.replyNo); setReRepNo('');}}>
                                                                         수정
                                                                 </Button>
                                                                 </>
                                                                 :
                                                                 <>
-                                                                <Button type="button"
+                                                                <Button type="button" color="default" outline
                                                                     className="btn mr-1 float-right"
-                                                                    color="default" outline
-                                                                    onClick={()=>{setReRepNo(replyData.replyNo)}}>
+                                                                    onClick={()=>{setReRepNo(replyData.replyNo); setEditRepNo('');}}>
                                                                         답글
                                                                 </Button>
                                                                 </>
@@ -258,7 +254,7 @@ const NoticeView = ({match}) => {
                                                         </td>
                                                     </tr>
                                                     <tr>
-                                                        <td align="left" colSpan="2">{replyData.replyCntn}</td>
+                                                        <td align="left" colSpan="2">{ replyData.upReplyNo > 0 ? "　　" : ""}{replyData.replyCntn}</td>
                                                     </tr>
                                                     {
                                                         replyData.replyNo == editRepNo
@@ -267,7 +263,7 @@ const NoticeView = ({match}) => {
                                                         <tr>
                                                             <td colSpan="2">
                                                                 <textarea className="form-control"
-                                                                        value={replyData.replyCntn}
+                                                                        // value={replyData.replyCntn}
                                                                         onChange={(e)=>{setEditCntn(e.target.value)}}
                                                                 />
                                                             </td>
