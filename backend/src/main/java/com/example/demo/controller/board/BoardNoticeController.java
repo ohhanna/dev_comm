@@ -132,10 +132,6 @@ public class BoardNoticeController {
     @PostMapping("/notice-page/view/replyWrite")
     public int noticeReplyWrite(@RequestBody ReplyVo replyVo) {
         System.out.println("(한나) BoardNoticeController - /notice-page/view/replyWrite");
-        if(replyVo.getUpReplyNo() == null){
-            // 대댓이 아닌 경우 :D
-            replyVo.setUpReplyNo("0");
-        }
         return boardNoticeService.noticeReplyWrite(replyVo);
     }
 
