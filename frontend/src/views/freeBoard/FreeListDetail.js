@@ -91,6 +91,7 @@ function FreeListDetail(props) {
           setreplyPw('');
           setReplyCntn('');
           replyList();
+          alert('등록 완료!');
         }
       })
     }
@@ -100,7 +101,9 @@ function FreeListDetail(props) {
         method: 'POST'})
       .then(response => {
         if (response.status === 200) {
+          setModYn('');
           replyList();
+          alert('수정 완료!');
         }
       })
     }
@@ -111,6 +114,7 @@ function FreeListDetail(props) {
       .then(response => {
         if (response.status === 200) {
           replyList();
+          alert('삭제 완료!');
         }
       })
     }
@@ -240,7 +244,7 @@ function FreeListDetail(props) {
                                                   </textarea>
                                                   <div className="custom-reply-buttons-free mt-2">
                                                     <button className="mr-1 btn btn-outline-default btn-sm"
-                                                            onClick={ () => { freeReplyModify(replyData.replyNo) } }>
+                                                            onClick={ () => { freeReplyModify(replyData.replyNo); } }>
                                                       등록
                                                     </button>
                                                     <button className="mr-1 btn btn-outline-danger btn-sm"
