@@ -15,8 +15,8 @@ public class BoardFreeService {
     public BoardFreeMapper mapper;
 
     //게시판 글 총 갯수
-    public int boardFreeListCount() {
-        return mapper.boardFreeListCount();
+    public int boardFreeListCount(String type, String keyword) {
+        return mapper.boardFreeListCount(type, keyword);
     }
 
     //게시판 리스트 get
@@ -37,6 +37,11 @@ public class BoardFreeService {
     //게시판 글 수정
     public int boardFreeModify(BoardFreeVo boardFreeVo) {
         return mapper.boardFreeModify(boardFreeVo);
+    }
+
+    //게시판 글 삭제
+    public int boardFreeDelete(int boardNo) {
+        return mapper.boardFreeDelete(boardNo);
     }
 
     /* 댓글 시작 */

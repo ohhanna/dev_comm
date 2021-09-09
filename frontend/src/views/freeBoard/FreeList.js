@@ -1,4 +1,4 @@
-import React, { useEffect, useState } from 'react';
+import React, { useEffect, useState, useRef } from 'react';
 import { Link, useHistory } from 'react-router-dom';
 import Moment from 'react-moment';
 import Pagination from 'react-js-pagination';
@@ -20,6 +20,7 @@ import {
   } from "reactstrap";
 
 function FreeList() {
+  let searchFocus = useRef(null);
   
   let [loading, setLoading] = useState(null);
   let [currentPage, setCurrentPage] = useState(1);  //현재 페이지
@@ -33,6 +34,7 @@ function FreeList() {
   let[keyword, setKeyword] = useState('');
 
   let history = useHistory();
+  
 
   //목록 가져오기
   let url = '/freeBoard/list?' + new URLSearchParams({currentPage : pageSize * (currentPage - 1), 
@@ -58,6 +60,18 @@ function FreeList() {
       setLoading(true);
       freeList();
   }, [currentPage]);
+
+  //enter로 검색
+  let enterEffect = (e) => {
+    if(e.key == 'Enter') {
+      freeList();
+    }
+  }
+
+  //search input에 focus주기
+  function focusOnSearch() {
+    searchFocus.current.focus();
+  };
 
   //상세보기
   function ListDetail(props) {
@@ -85,43 +99,48 @@ function FreeList() {
                   href="#pablo"
                   id="dropdownMenuLink"
                   value={type}
-                  onClick={ () => { setType('') } }
+                  onClick={ () => { setType(''); focusOnSearch(); } }
                   role="button"
                 >
                   {type}
                 </DropdownToggle>
                 <DropdownMenu aria-labelledby="dropdownMenuLink">
-                  <DropdownItem href="#pablo" onClick={ () => { setType('제목') } }>
+                  <DropdownItem href="#pablo" onClick={ () => { setType('제목'); focusOnSearch(); }}>
                     제목
                   </DropdownItem>
-                  <DropdownItem href="#pablo" onClick={ () => { setType('작성자') } }>
+                  <DropdownItem href="#pablo" onClick={ () => { setType('작성자'); focusOnSearch(); } }>
                     작성자
                   </DropdownItem>
-                  <DropdownItem href="#pablo" onClick={ () => { setType('내용') } }>
+                  <DropdownItem href="#pablo" onClick={ () => { setType('내용'); focusOnSearch(); } }>
                     내용
                   </DropdownItem>
                 </DropdownMenu>
               </UncontrolledDropdown>
-              <Input placeholder="Please enter a search term" 
-                     className="custom-item-free custom-search-input-free"
+              <input placeholder="Please enter a search term" 
+                     className="form-control custom-item-free custom-search-input-free"
                      value={keyword}
-                     onChange={ (e) => { setKeyword(e.target.value) } }/>
-              <Button type="button" 
-                      className="btn mr-1 custom-item-free" 
-                      color="default" 
-                      outline
+                     onChange={ (e) => { setKeyword(e.target.value) } }
+                     onKeyPress={enterEffect}
+                     ref={searchFocus}/>
+              <button className="vmr-1 custom-item-free custom-transparent"
                       onClick={()=>{ freeList() }}>
-                검색
-              </Button>
+                <img alt="검색"
+                     src={
+                          require("assets/img/search.png").default
+                         }/>
+              </button>
             </div>          
             </Container>
           </div>
-          <Button type="button"
-                  className="btn-round ml-1 btn btn-success float-right"
-                  tag={Link} 
-                  to="/freeBoard/addForm">
-             새 글 쓰기
-          </Button>
+
+          <button className="float-right custom-transparent">
+            <Link to="/freeBoard/addForm">
+             <img alt="새 글 작성"
+                  src={
+                        require("assets/img/add.png").default
+                      }/>
+            </Link>
+          </button>
           <br/><br/><br/>
 
           <Table>

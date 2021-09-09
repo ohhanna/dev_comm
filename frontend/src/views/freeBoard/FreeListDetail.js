@@ -29,13 +29,14 @@ function FreeListDetail(props) {
     let [replyModCntn, setReplyModCntn] = useState('');
 
     let[replyToastYn, setReplyToastYn] =useState('');
-    let[upReplyNo, setUpReplyNo] = useState('');
+    let[upReplyNo, setUpReplyNo] = useState(null);
 
     let editorRef = useRef();
     let history = useHistory();
 
     let boardNo = props.match.params.param;
     let detailUrl = '/freeBoard/detail?' + new URLSearchParams({boardNo : boardNo});
+    let deleteUrl = '/freeBoard/delete?' + new URLSearchParams({boardNo : boardNo});
     let replyUrl  = '/freeBoard/reply/list?' + new URLSearchParams({boardNo : boardNo});
 
     //상세보기
@@ -49,6 +50,21 @@ function FreeListDetail(props) {
     //글 수정
     function listModify(props) {
       history.push("/freeBoard/modify/" + props);
+    }
+
+    //글 삭제
+    function listDelete() {
+      if(window.confirm("정말 삭제하시겠습니까?")) {
+         fetch(deleteUrl, {method: 'POST'})
+         .then(response => {
+          if (response.status === 200) {
+            alert('삭제 완료!');
+            history.push('/freeBoard/list');
+          }
+        })
+      } else {
+        return false;
+      }
     }
 
     //댓글 목록
@@ -70,7 +86,6 @@ function FreeListDetail(props) {
 
     //댓글 등록
     function freeReplyAdd() {
-      console.log(upReplyNo);
       fetch('/freeBoard/reply/add',{
         method: 'POST',
         headers: {
@@ -90,8 +105,9 @@ function FreeListDetail(props) {
           setregMemId('');
           setreplyPw('');
           setReplyCntn('');
-          replyList();
+          
           alert('등록 완료!');
+          replyList();
         }
       })
     }
@@ -130,10 +146,19 @@ function FreeListDetail(props) {
                           <h2 className="text-center">{ datas[0].boardTtl }</h2>
                           <br/>
                           <div>
-                            <button type="button"
-                                    className="btn-round ml-1 btn btn-success float-right"
+                          <button className="ml-1 custom-transparent"
+                                    onClick={ () => { listDelete() } }>
+                              <img alt="삭제하기"
+                                  src={
+                                        require("assets/img/delete.png").default
+                                      }/>
+                            </button>
+                            <button className="ml-1 float-right custom-transparent"
                                     onClick={ () => { listModify(datas[0].boardNo) } }>
-                                      수정하기
+                              <img alt="수정하기"
+                                  src={
+                                        require("assets/img/modify.png").default
+                                      }/>
                             </button>
                           </div>
                           <br/><br/><br/>
@@ -269,9 +294,6 @@ function FreeListDetail(props) {
 };
 
 // function ReplyAddForm() {
-//   const [regMemId, setregMemId] = useState('');
-//   const [replyPw, setreplyPw] = useState('');
-//   const [replyCntn, setReplyCntn] = useState('');
 
 //   return (
 //     <>

@@ -13,7 +13,7 @@ import org.springframework.stereotype.Repository;
 public interface BoardFreeMapper {
 
     //게시판 글 총 갯수
-    int boardFreeListCount();
+    int boardFreeListCount(String type, String keyword);
 
     //게시판 리스트 get
     List<BoardFreeVo> boardFreeList(int pageNum, int pageSize, String type, String keyword);
@@ -26,6 +26,9 @@ public interface BoardFreeMapper {
     
     //게시판 글 수정
     int boardFreeModify(BoardFreeVo boardFreeVo);
+
+    //게시판 글 삭제
+    int boardFreeDelete(int boardNo);
 
     /*댓글 시작*/
 

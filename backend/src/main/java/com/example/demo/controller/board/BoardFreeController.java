@@ -51,7 +51,7 @@ public class BoardFreeController {
 
         Map<String, Object> freeMap = new HashMap<String, Object>();
 
-        int freeListCount = boardFreeService.boardFreeListCount();
+        int freeListCount = boardFreeService.boardFreeListCount(type, keyword);
         List<BoardFreeVo> freeList =  boardFreeService.boardFreeList(pageNum, pageSize, type, keyword);
 
         freeMap.put("freeListCount", freeListCount);
@@ -85,6 +85,14 @@ public class BoardFreeController {
         System.out.println("freeBoardList Controller Modify");
 
         boardFreeService.boardFreeModify(boardFreeVo);
+    }
+
+    //게시판 글 삭제
+    @PostMapping("/freeBoard/delete")
+    public void freeBoardDelete(@RequestParam(value = "boardNo", required=false) Integer boardNo) {
+        System.out.println("freeBoardList Controller Delete");
+
+        boardFreeService.boardFreeDelete(boardNo);
     }
 
     /* 댓글 시작 */

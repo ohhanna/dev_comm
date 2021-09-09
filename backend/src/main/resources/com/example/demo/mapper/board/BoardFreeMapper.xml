@@ -3,7 +3,7 @@
 
 <mapper namespace="com.example.demo.mapper.board.BoardFreeMapper">
     <select id="boardFreeList" resultType="com.example.demo.vo.board.BoardFreeVo">
-        /*BoardFreeList*/
+        /*boardFreeList*/
         SELECT BOARD_NO
               ,BOARD_TTL
               ,BOARD_CNTN
@@ -23,6 +23,11 @@
             <when test='type.equals("내용")'>
                 AND BOARD_CNTN LIKE CONCAT('%',#{keyword},'%')
             </when>
+            <otherwise>
+                AND (BOARD_TTL LIKE CONCAT('%',#{keyword},'%'))
+                 OR (REG_MEM_ID LIKE CONCAT('%',#{keyword},'%'))
+                 OR (BOARD_CNTN LIKE CONCAT('%',#{keyword},'%'))
+            </otherwise>
         </choose>
       ORDER BY BOARD_NO DESC
          LIMIT #{pageSize}
@@ -30,14 +35,30 @@
     </select>
 
     <select id="boardFreeListCount" resultType="int">
-        /*BoardFreeListCount*/
+        /*boardFreeListCount*/
         SELECT COUNT(*)
           FROM BOARD_FREE
          WHERE IS_DEL = 'N'
+         <choose>                
+            <when test='type.equals("제목")'>
+                AND BOARD_TTL LIKE CONCAT('%',#{keyword},'%')
+            </when>
+            <when test='type.equals("작성자")'>
+                AND REG_MEM_ID LIKE CONCAT('%',#{keyword},'%')
+            </when>
+            <when test='type.equals("내용")'>
+                AND BOARD_CNTN LIKE CONCAT('%',#{keyword},'%')
+            </when>
+            <otherwise>
+                AND (BOARD_TTL LIKE CONCAT('%',#{keyword},'%'))
+                 OR (REG_MEM_ID LIKE CONCAT('%',#{keyword},'%'))
+                 OR (BOARD_CNTN LIKE CONCAT('%',#{keyword},'%'))
+            </otherwise>
+        </choose>
     </select>
 
     <select id="boardFreeDetail" resultType="com.example.demo.vo.board.BoardFreeVo">
-        /*BoardFreeListGetOne*/
+        /*boardFreeDetail*/
         SELECT BOARD_NO
               ,BOARD_TTL
               ,BOARD_CNTN
@@ -50,7 +71,7 @@
     </select>
 
     <insert id="boardFreeAdd" parameterType="com.example.demo.vo.board.BoardFreeVo">
-        /*BoardFreeAdd*/
+        /*boardFreeAdd*/
         INSERT INTO BOARD_FREE (
                         BOARD_NO
                        ,BOARD_TTL
@@ -70,10 +91,20 @@
     </insert>
 
     <update id="boardFreeModify" parameterType="com.example.demo.vo.board.BoardFreeVo">
-        /*BoardFreeModify*/
+        /*boardFreeModify*/
         UPDATE BOARD_FREE
            SET BOARD_TTL = #{boardTtl}
               ,BOARD_CNTN = #{boardCntn}
+        WHERE BOARD_NO = #{boardNo}
+    </update>
+
+    <update id="boardFreeDelete" parameterType="com.example.demo.vo.board.BoardFreeVo">
+        /*boardFreeDelete*/
+        UPDATE BOARD_FREE
+           SET BOARD_TTL = '삭제된 글입니다'
+              ,BOARD_CNTN = '삭제된 글입니다'
+              ,REG_MEM_ID = 'UNKNOWN'
+              ,IS_DEL = 'Y'
         WHERE BOARD_NO = #{boardNo}
     </update>
 
