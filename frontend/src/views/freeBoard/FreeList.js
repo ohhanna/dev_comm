@@ -157,12 +157,16 @@ function FreeList() {
             { 
               datas && datas.freeList.map(data => {
                 return <tr key = {data.boardNo}>
-                          <td> {data.boardNo} </td>
-                          <td>
-                            <a onClick={ () => { ListDetail(data.boardNo) } } href="#!"> 
-                              {data.boardTtl} 
-                            </a>
-                          </td>
+                          <td> {data.boardNo} </td>                          
+                          { data.isDel == 'N'?
+                            <td>
+                              <a onClick={ () => { ListDetail(data.boardNo) } } href="#!"> 
+                                {data.boardTtl} 
+                              </a> 
+                            </td> :
+                            <td> {data.boardTtl} </td>
+                          }                            
+                          
                           <td><Moment format="YYYY/MM/DD">
                                 {data.crtDt}
                               </Moment>

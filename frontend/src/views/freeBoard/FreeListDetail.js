@@ -47,6 +47,11 @@ function FreeListDetail(props) {
        .catch(err => { console.log('error' + JSON.stringify(err))});
     }, []);
     
+    //목록으로 돌아가기
+    function goBackToList() {
+      
+    }
+
     //글 수정
     function listModify(props) {
       history.push("/freeBoard/modify/" + props);
@@ -146,6 +151,13 @@ function FreeListDetail(props) {
                           <h2 className="text-center">{ datas[0].boardTtl }</h2>
                           <br/>
                           <div>
+                          <button className="ml-1 custom-transparent"
+                                  onClick={ () => { goBackToList() } }>
+                            <img alt="목록"
+                                src={
+                                      require("assets/img/menu.png").default
+                                    }/>
+                          </button>  
                           <button className="ml-1 custom-transparent"
                                     onClick={ () => { listDelete() } }>
                               <img alt="삭제하기"

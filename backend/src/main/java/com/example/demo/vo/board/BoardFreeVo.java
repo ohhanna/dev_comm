@@ -6,7 +6,7 @@ import org.springframework.stereotype.Component;
 
 @Component
 public class BoardFreeVo {
-	private String boardNo;
+	private int boardNo;
 	private String boardTtl;
     private String boardCntn;
     private Date crtDt;
@@ -14,11 +14,11 @@ public class BoardFreeVo {
     private String regMemId;
     private String isDel;
 
-	public String getBoardNo() {
+	public int getBoardNo() {
 		return this.boardNo;
 	}
 
-	public void setBoardNo(String boardNo) {
+	public void setBoardNo(int boardNo) {
 		this.boardNo = boardNo;
 	}
 
