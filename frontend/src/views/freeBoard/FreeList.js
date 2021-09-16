@@ -3,6 +3,7 @@ import { Link, useHistory } from 'react-router-dom';
 import Moment from 'react-moment';
 import Pagination from 'react-js-pagination';
 import Loader from './Loader';
+import Authentication from 'views/authentication/AuthenticationService.js';
 
 // reactstrap components
 import {
@@ -132,17 +133,20 @@ function FreeList() {
             </div>          
             </Container>
           </div>
-
-          <button className="float-right custom-transparent">
-            <Link to="/freeBoard/addForm">
-             <img alt="새 글 작성"
-                  src={
-                        require("assets/img/add.png").default
-                      }/>
-            </Link>
-          </button>
-          <br/><br/><br/>
-
+           { Authentication.getLoggedInUserAuth() == '' ?
+             null :         
+             <>
+              <button className="float-right custom-transparent">
+                <Link to="/freeBoard/addForm">
+                <img alt="새 글 작성"
+                      src={
+                            require("assets/img/add.png").default
+                          }/>
+                </Link>
+              </button>
+             </>
+          }
+          <br/><br/><br/>        
           <Table>
             <thead>
               <tr>

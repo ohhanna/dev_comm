@@ -3,6 +3,7 @@ import { useHistory } from 'react-router-dom';
 import Moment from 'react-moment';
 import '@toast-ui/editor/dist/toastui-editor.css';
 import { Viewer } from '@toast-ui/react-editor';
+import Authentication from 'views/authentication/AuthenticationService.js';
 
 import {
     Col,
@@ -157,8 +158,10 @@ function FreeListDetail(props) {
                                 src={
                                       require("assets/img/menu.png").default
                                     }/>
-                          </button>  
-                          <button className="ml-1 custom-transparent"
+                          </button>
+                          { Authentication.getLoggedInUserName() == datas[0].regMemId ?
+                          <>
+                            <button className="ml-1 custom-transparent"
                                     onClick={ () => { listDelete() } }>
                               <img alt="삭제하기"
                                   src={
@@ -172,6 +175,9 @@ function FreeListDetail(props) {
                                         require("assets/img/modify.png").default
                                       }/>
                             </button>
+                          </> :
+                          null
+                          }
                           </div>
                           <br/><br/><br/>
                             <Table>
